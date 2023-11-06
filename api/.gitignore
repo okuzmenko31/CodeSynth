@@ -101,7 +101,8 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+.env.local
+.env.production
 .venv
 env/
 venv/
@@ -168,6 +169,8 @@ node_modules
 .DS_Store
 ../DS_Store
 .env.local
+.env.main
+.env.global
 .env.development.local
 .env.test.local
 .env.production.local
