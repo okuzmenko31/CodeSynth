@@ -22,6 +22,21 @@ class DBSettings(BaseSettings):
     db_port: str = Field('5432', json_schema_extra={'env': 'DB_PORT'})
 
 
+class JWTTokensSettings(BaseSettings):
+    access_token_expire_minutes: int = Field(
+        'access_token_expire_minutes',
+        json_schema_extra={'env': 'ACCESS_TOKEN_EXPIRE_MINUTES'}
+    )
+    refresh_token_expire_minutes: int = Field(
+        'refresh_token_expire_minutes',
+        json_schema_extra={'env': 'REFRESH_TOKEN_EXPIRE_MINUTES'}
+    )
+    jwt_algorithm: str = Field(
+        'jwt_algorithm',
+        json_schema_extra={'env': 'JWT_ALGORITHM'}
+    )
+
+
 class MainSettings(BaseSettings):
     debug: bool = dbg.debug
     secret_key: str = Field(
@@ -33,6 +48,7 @@ class MainSettings(BaseSettings):
 
     # DATABASE
     db: DBSettings = Field(default_factory=DBSettings)
+    jwt: JWTTokensSettings = Field(default_factory=JWTTokensSettings)
 
 
 settings = MainSettings()
