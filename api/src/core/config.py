@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from pydantic import Field
 from pydantic_settings import BaseSettings
 
-from utils import DebugHelper
+from .debug_helper import DebugHelper
 
 dbg = DebugHelper()
 
@@ -36,3 +36,4 @@ class MainSettings(BaseSettings):
 
 
 settings = MainSettings()
+print(settings.secure_protocol)
