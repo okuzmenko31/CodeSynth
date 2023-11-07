@@ -28,6 +28,16 @@ class JWTBlackListTokensService(BaseService):
             await self.uow.commit()
             return token_id
 
+    async def token_in_blacklist(
+            self,
+            access_token: str
+    ):
+        async with self.uow:
+            exists = await self.uow.jwt_black_list.check_exists_by_data({
+                'jwt_token': access_token
+            })
+            return exists
+
 
 class JwtTokensMixin:
 
@@ -74,3 +84,28 @@ class AdminAuthService(JwtTokensMixin):
             'access_token': encoded_jwt_access,
             'refresh_token': encoded_jwt_refresh
         })
+
+
+class TokensVerifyService:
+
+    @staticmethod
+    async def get_decoded_token(token: str):
+        return jwt.decode(token, settings.secret_key, algorithms=[settings.jwt.jwt_algorithm])
+
+    async def check_token_expired(self, token: str):
+        try:
+            decoded_token = await self.get_decoded_token(token)
+            exp = decoded_token.get('exp')
+
+            if exp is None:
+                return True
+            current_time = datetime.datetime.utcnow()
+            if current_time < datetime.datetime.utcfromtimestamp(exp):
+                return False
+            else:
+                return True
+        except jwt.ExpiredSignatureError:
+            return True
+        except (Exception,):
+            return True
+

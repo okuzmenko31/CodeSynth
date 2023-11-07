@@ -2,7 +2,9 @@ from fastapi import APIRouter, status, Depends
 from starlette.responses import JSONResponse
 
 from .schemas import AdminSecretKeySchema, AccessTokenSchema
-from .services import AdminAuthService, JWTBlackListTokensService
+from .services import (AdminAuthService,
+                       JWTBlackListTokensService,
+                       TokensVerifyService)
 
 from src.core.utils.dependencies import uowDEP
 
@@ -20,6 +22,27 @@ async def admin_auth(data: AdminSecretKeySchema):
             'error': error
         }, status_code=status.HTTP_400_BAD_REQUEST)
     return JSONResponse(content=tokens_data, status_code=status.HTTP_200_OK)
+
+
+@router.post('/admin/access_token_verify/')
+async def verify_access_token(
+        data: AccessTokenSchema,
+        uow: uowDEP
+):
+    blacklist_service = JWTBlackListTokensService(uow)
+    verify_service = TokensVerifyService()
+
+    token = data.access_token
+    if await blacklist_service.token_in_blacklist(token):
+        return JSONResponse(content={
+            'error': 'This token is not valid. It was deleted after logging out.'
+        }, status_code=status.HTTP_400_BAD_REQUEST)
+
+    if await verify_service.check_token_expired(token):
+        return JSONResponse(content={
+            'error': 'This token is invalid or expired!'
+        }, status_code=status.HTTP_400_BAD_REQUEST)
+    return JSONResponse(content=True, status_code=status.HTTP_200_OK)
 
 
 @router.post('/admin/logout/')

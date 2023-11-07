@@ -4,7 +4,7 @@ from src.core.database import Base
 
 
 class JWTTokensBlackList(Base):
-    __tablename__ = 'jwt_tokens_blacklist'
+    __tablename__ = 'jwt_tokens_blacklist'  # noqa
 
     id: Mapped[int] = mapped_column(primary_key=True,
                                     autoincrement=True)
