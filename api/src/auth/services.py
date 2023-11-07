@@ -7,11 +7,26 @@ from typing import NamedTuple, Optional
 from jose import jwt
 
 from src.core.config import settings
+from src.core.utils.service import BaseService
 
 
 class AdminAuthData(NamedTuple):
     data: Optional[dict] = None
     error: Optional[str] = None
+
+
+class JWTBlackListTokensService(BaseService):
+
+    async def add_token_to_blacklist(
+            self,
+            access_token: str
+    ):
+        async with self.uow:
+            token_id = await self.uow.jwt_black_list.insert_by_data({
+                'jwt_token': access_token
+            })
+            await self.uow.commit()
+            return token_id
 
 
 class JwtTokensMixin:

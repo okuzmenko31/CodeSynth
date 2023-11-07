@@ -54,14 +54,12 @@ class SQLAlchemyRepository(AbstractRepository):
 
         if operation_type != STMTOperations.insert:
             stmt = operation.where(
-                getattr(self.model, k) for k, v in data.items()  # noqa
+                getattr(self.model, k) == v for k, v in data.items()  # noqa
             )
             if operation_type == STMTOperations.exists:
                 stmt = stmt.select()
             return stmt
-        stmt = operation.values(
-            getattr(self.model, k) for k, v in data.items()  # noqa
-        ).returning(self.model.id)
+        stmt = operation.values(data).returning(self.model.id)
         return stmt
 
     async def select_by_data(self, data: dict):
@@ -78,7 +76,7 @@ class SQLAlchemyRepository(AbstractRepository):
             return result[0]
         return None
 
-    async def create_by_data(self, data: dict) -> int:
+    async def insert_by_data(self, data: dict) -> int:
         stmt = await self.get_operation_stmt_by_data(
             data,
             STMTOperations.insert
@@ -86,3 +84,11 @@ class SQLAlchemyRepository(AbstractRepository):
         res = await self.session.execute(stmt)
         result = res.scalar()
         return result
+
+    async def check_exists_by_data(self, data: dict) -> bool:
+        stmt = await self.get_operation_stmt_by_data(
+            data,
+            STMTOperations.exists
+        )
+        res = await self.session.execute(stmt)
+        return res.scalar()

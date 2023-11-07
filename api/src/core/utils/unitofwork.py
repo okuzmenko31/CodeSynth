@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 
 from src.core.database import async_session_maker
 
-# from src.core.repositories.repos import UserRepository
+from src.core.repositories.repos import JWTTokensBlackListRepository
 
 
 class AbstractUnitOfWork(ABC):
-    # users: UserRepository
+    jwt_black_list: JWTTokensBlackListRepository
 
     @abstractmethod
     async def __aenter__(self):
@@ -30,7 +30,7 @@ class UnitOfWork(AbstractUnitOfWork):
     async def __aenter__(self):
         self.session = async_session_maker()
 
-        # self.users = UserRepository(self.session)
+        self.jwt_black_list = JWTTokensBlackListRepository(self.session)
 
     async def __aexit__(self, *args):
         await self.rollback()

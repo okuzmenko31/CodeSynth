@@ -52,4 +52,3 @@ class MainSettings(BaseSettings):
 
 
 settings = MainSettings()
-print(settings.secure_protocol)
