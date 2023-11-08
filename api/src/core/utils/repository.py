@@ -15,16 +15,16 @@ class STMTOperations(str, Enum):
 class AbstractRepository(ABC):
     model = None
 
+    @abstractmethod
     async def get_all(self):
         raise NotImplementedError()
 
+    @abstractmethod
     async def get_one_by_id(self, *args):
         raise NotImplementedError()
 
+    @abstractmethod
     async def get_one_by_data(self, *args):
-        raise NotImplementedError()
-
-    async def add_one_by_data(self, data: dict):
         raise NotImplementedError()
 
 
@@ -51,10 +51,9 @@ class SQLAlchemyRepository(AbstractRepository):
             operation_type: STMTOperations
     ):
         operation = await self.get_operation(operation_type)
-
         if operation_type != STMTOperations.insert:
             stmt = operation.where(
-                getattr(self.model, k) == v for k, v in data.items()  # noqa
+                *[getattr(self.model, k) == v for k, v in data.items()]  # noqa
             )
             if operation_type == STMTOperations.exists:
                 stmt = stmt.select()
@@ -92,3 +91,11 @@ class SQLAlchemyRepository(AbstractRepository):
         )
         res = await self.session.execute(stmt)
         return res.scalar()
+
+    async def get_all(self):
+        stmt = select(self.model)
+        res = await self.session.execute(stmt)
+        return res.fetchall()
+
+    async def get_one_by_id(self, obj_id: int):
+        return await self.select_by_data({'id': obj_id})
