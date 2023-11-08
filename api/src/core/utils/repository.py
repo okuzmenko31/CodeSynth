@@ -67,12 +67,12 @@ class SQLAlchemyRepository(AbstractRepository):
             STMTOperations.select
         )
         res = await self.session.execute(stmt)
-        return res.all()
+        return res.fetchall()
 
     async def get_one_by_data(self, data: dict):
         result = await self.select_by_data(data)
         if len(result) > 0:
-            return result[0]
+            return result[0][0]
         return None
 
     async def insert_by_data(self, data: dict) -> int:
@@ -98,4 +98,4 @@ class SQLAlchemyRepository(AbstractRepository):
         return res.fetchall()
 
     async def get_one_by_id(self, obj_id: int):
-        return await self.select_by_data({'id': obj_id})
+        return await self.get_one_by_data({'id': obj_id})

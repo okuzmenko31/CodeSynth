@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 # from src.api_key import get_api_key
+from src.core.config import settings
+
 from src.auth.api import router as auth_router
 from src.projects.api import router as projects_router
 
@@ -13,7 +15,11 @@ routers = [auth_router, projects_router]
 app = FastAPI(
     title='Portfolio'
 )
-app.mount('/media', StaticFiles(directory='media'), name='media')
+app.mount(
+    f'/{settings.media.media_file_path_start}',
+    StaticFiles(directory=f'{settings.media.media_directory}'),
+    name=f'{settings.media.media_name}'
+)
 
 for router in routers:
     app.include_router(router, prefix='/api/v1')
