@@ -5,5 +5,5 @@ class AdminSecretKeySchema(BaseModel):
     secret_key: str
 
 
-class AccessTokenSchema(BaseModel):
-    access_token: str
+class AccessOrRefreshTokenSchema(BaseModel):
+    access_or_refresh_token: str
