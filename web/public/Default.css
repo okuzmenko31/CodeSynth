@@ -1,0 +1,139 @@
+* {
+    font-family: "Bebas Neue";
+    color: #ffffff;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #181818;
+}
+
+html,
+body,
+#root,
+.App {
+    width: 100%;
+    height: 100%;
+}
+
+#root {
+    position: relative;
+    z-index: 100;
+}
+
+.App {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.big-text {
+    font-size: 102px;
+}
+
+.mid-text {
+    font-size: 52px;
+}
+
+.small-text {
+    color: #ADADAD;
+    font-size: 25px;
+    font-family: 'Inconsolata';
+}
+
+.button {
+    display: inline-flex;
+    height: 63px;
+    padding: 9px 27px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    background: linear-gradient(98deg, #00000000 50%, #8F00FF 50.71%, #FF00D6 110%);
+    border: 1px solid #8F00FF;
+    background-size: 255%;
+    color: #FF00D6;
+    font-size: 25px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.button:hover {
+    color: #181818;
+    border: 1px solid linear-gradient(98deg, #8F00FF, #FF00D6);
+    background-position: 97%;
+}
+
+.button-fill {
+    display: inline-flex;
+    height: 63px;
+    padding: 9px 27px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    color: #181818;
+    background: linear-gradient(98deg,#8F00FF 4.71%, #FF00D6 101.04%);
+    border: 1px solid #8F00FF;
+    background-size: 255%;
+    font-size: 25px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.codesynth-text {
+    position: relative;
+    background-image: linear-gradient(90deg,#ffffff,#ffffff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.codesynth-text::after {
+    position: absolute;
+    content: 'CodeSynth - web studio with many perspectives.';
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background-color: rgba(26,26,26,.5);
+    color: #ADADAD;
+    opacity: 0;
+    top: 100%;
+    font-family: 'Inconsolata';
+    font-size: 25px;
+    right: 20px;
+    left: 20px;
+    border-radius: 20px;
+    border-top: 1px solid #fff;
+    border-left: 1px solid #fff;
+    padding: 10px;
+    transition: .3s;
+}
+
+.codesynth-text::before {
+    position: absolute;
+    content: attr(data-text);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(90deg, #FF00D6 0%, #882EFD 100%, rgba(255, 255, 255, 0.00) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: opacity .3s ease-in-out;
+    opacity: 0;
+}
+
+.codesynth-text:hover::after {
+    opacity: 1; 
+}
+
+.codesynth-text:hover::before {
+    opacity: 1;
+}
+
+.rotated-text {
+    transform: rotate(-90deg);
+}
