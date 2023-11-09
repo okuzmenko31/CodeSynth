@@ -14,3 +14,7 @@ class ProjectSchema(MainSchema):
     source_link: str
     tags: list[int]
     text: str
+
+
+class ProjectReturnSchema(ProjectSchema):
+    tags: list[ProjectTagSchema]

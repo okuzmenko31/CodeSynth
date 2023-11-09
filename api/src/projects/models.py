@@ -39,7 +39,7 @@ class Project(Base):
     source_link: Mapped[str] = mapped_column(nullable=True)
     tags: Mapped[list[ProjectTag]] = relationship(
         secondary=project_tags_association_table,
-        cascade=''
+        lazy='selectin'
     )
     text: Mapped[str] = mapped_column(Text, nullable=False)
 

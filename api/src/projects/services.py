@@ -1,9 +1,13 @@
 from typing import NamedTuple, Optional
 
 from src.core.utils.service import BaseService
-from src.core.utils.media_files import get_media_file_link, save_media_file
+from src.core.utils.media_files import (get_media_file_link,
+                                        save_media_file)
 
-from .schemas import ProjectSchema
+from .schemas import (ProjectSchema,
+                      ProjectTagSchema,
+                      ProjectReturnSchema)
+from .models import Project, ProjectTag
 
 
 class ProjectData(NamedTuple):
@@ -74,3 +78,23 @@ class ProjectService(ProjectTagService):
             await self.uow.add(project)
             await self.uow.commit()
             return project
+
+    async def get_projects(
+            self
+    ) -> list[ProjectSchema]:
+        async with self.uow:
+            data_lst = []
+            projects = await self.uow.projects.get_all()
+
+            for project in projects:
+                project = project[0]
+                data_lst.append(
+                    ProjectReturnSchema(
+                        name=project.name,
+                        preview_image=project.preview_image,
+                        source_link=project.source_link,
+                        tags=[ProjectTagSchema(name=tag.name, img=tag.img) for tag in project.tags],
+                        text=project.text
+                    )
+                )
+            return data_lst

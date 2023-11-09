@@ -2,7 +2,9 @@ from typing import Annotated
 
 from fastapi import APIRouter, UploadFile, File, Form
 
-from .schemas import ProjectSchema, ProjectTagSchema
+from .schemas import (ProjectSchema,
+                      ProjectTagSchema,
+                      ProjectReturnSchema)
 from .services import ProjectService, ProjectTagService
 from src.core.utils.dependencies import uowDEP
 
@@ -23,7 +25,7 @@ async def create_tag(
     return ProjectTagSchema(name=tag.name, img=tag.img)
 
 
-@router.post('/create_project/', response_model=ProjectSchema)
+@router.post('/create/', response_model=ProjectSchema)
 async def create_project(
         uow: uowDEP,
         name: Annotated[str, Form(...)],
@@ -42,3 +44,12 @@ async def create_project(
     )
     await service.create_project(data, preview_image)
     return data
+
+
+@router.get('/all/', response_model=list[ProjectReturnSchema])
+async def get_all_projects(
+        uow: uowDEP
+):
+    service = ProjectService(uow)
+    projects = await service.get_projects()
+    return projects

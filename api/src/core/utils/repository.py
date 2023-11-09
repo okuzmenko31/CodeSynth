@@ -95,8 +95,10 @@ class SQLAlchemyRepository(AbstractRepository):
         res = await self.session.execute(stmt)
         return res.scalar()
 
-    async def get_all(self):
+    async def get_all(self, with_join=False, join_clause: list = None):
         stmt = select(self.model)
+        if with_join:
+            stmt = stmt.join(*join_clause, isouter=True)
         res = await self.session.execute(stmt)
         return res.fetchall()
 
