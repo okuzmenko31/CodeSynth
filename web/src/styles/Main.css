@@ -1,0 +1,51 @@
+.main-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding-top: 150px;
+    gap: 150px;
+}
+
+.what-is {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+}
+
+.what-is-text p {
+    margin: 0;
+}
+
+.what-is-buttons {
+    display: flex;
+    width: 40%;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.projects-container {
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 100px;
+}
+
+.side-text {
+    will-change: transform;
+    position: absolute;
+    left: -200px;
+    white-space: nowrap;
+    font-size: 102px;
+    color: rgba(255,255,255,.05);
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: rgba(255,255,255,.5);
+    text-transform: uppercase;
+}
