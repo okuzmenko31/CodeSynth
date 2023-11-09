@@ -84,6 +84,9 @@ class SQLAlchemyRepository(AbstractRepository):
         result = res.scalar()
         return result
 
+    async def create_instance_by_data(self, data: dict):
+        return self.model(**data)
+
     async def check_exists_by_data(self, data: dict) -> bool:
         stmt = await self.get_operation_stmt_by_data(
             data,

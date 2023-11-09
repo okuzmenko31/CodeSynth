@@ -35,8 +35,12 @@ class Project(Base):
                                     autoincrement=True)
     name: Mapped[str] = mapped_column(String(250),
                                       nullable=False)
+    preview_image: Mapped[str] = mapped_column(nullable=False)
     source_link: Mapped[str] = mapped_column(nullable=True)
-    tags: Mapped[list[ProjectTag]] = relationship(secondary=project_tags_association_table)
+    tags: Mapped[list[ProjectTag]] = relationship(
+        secondary=project_tags_association_table,
+        cascade=''
+    )
     text: Mapped[str] = mapped_column(Text, nullable=False)
 
     def __repr__(self):

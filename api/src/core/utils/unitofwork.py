@@ -32,6 +32,9 @@ class AbstractUnitOfWork(ABC):
     async def expunge(self, instance):
         raise NotImplementedError()
 
+    async def add(self, instance):
+        raise NotImplementedError()
+
 
 class UnitOfWork(AbstractUnitOfWork):
 
@@ -45,6 +48,9 @@ class UnitOfWork(AbstractUnitOfWork):
     async def __aexit__(self, *args):
         await self.rollback()
         await self.session.close()
+
+    async def add(self, instance):
+        self.session.add(instance)
 
     async def commit(self):
         await self.session.commit()

@@ -1,4 +1,3 @@
-import shutil
 from typing import NamedTuple, Optional
 
 from src.core.utils.service import BaseService
@@ -48,21 +47,30 @@ class ProjectTagService(BaseService):
 
 class ProjectService(ProjectTagService):
 
+    async def get_project_by_id(
+            self,
+            project_id
+    ):
+        async with self.uow:
+            project = await self.uow.projects.get_one_by_id(project_id)
+            await self.uow.expunge(instance=project)
+            return project
+
     async def create_project(
             self,
-            data: ProjectSchema
+            data: ProjectSchema,
+            image_file
     ):
         tags, error = await self.get_tags_lst_by_ids(data.tags)
         if error is not None:
             return ProjectData(error=error)
         tags = tags['tags']
 
+        await save_media_file(image_file)
         async with self.uow:
-            project_id = await self.uow.projects.insert_by_data({
-                'name': data.name,
-                'source_link': data.source_link,
-                'tags': tags,
-                'text': data.text
-            })
+            project = await self.uow.projects.create_instance_by_data(dict(data))
+            project.tags = tags
+            project.preview_image = await get_media_file_link(image_file.filename)
+            await self.uow.add(project)
             await self.uow.commit()
-            return project_id
+            return project

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from src.core.schemas import MainSchema
 
 
@@ -8,6 +10,7 @@ class ProjectTagSchema(MainSchema):
 
 class ProjectSchema(MainSchema):
     name: str
+    preview_image: Optional[str] = None
     source_link: str
     tags: list[int]
     text: str
