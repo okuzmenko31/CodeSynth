@@ -19,16 +19,18 @@ const Language = ({name, frameworks, additional, image}: { name: string, framewo
                 }
             </ul>
 
-            <ul className="language-additional-tools mid-text">
-            {additional && additional.length > 0 && <p>ADDITIONAL TOOLS:</p>}
-                {
-                    additional &&
-                    additional.map((tool: string) => (
-                        <li>{tool}</li>
-                    ))
-                }
-                {additional && additional.length > 0 && <p>AND OTHERS</p>}
-            </ul>
+            {additional &&
+                <ul className="language-additional-tools mid-text">
+                <p>ADDITIONAL TOOLS:</p>
+                    {
+                        additional &&
+                        additional.map((tool: string) => (
+                            <li>{tool}</li>
+                        ))
+                    }
+                    <p>AND OTHERS</p>
+                </ul>
+            }
         </div>
     )
 }
