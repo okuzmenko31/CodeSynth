@@ -10,15 +10,21 @@
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "babel": "^6.23.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-particles": "^2.12.2",
     "react-router-dom": "^6.18.0",
     "react-scripts": "5.0.1",
+    "tsparticles": "^2.12.0",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  },
   "scripts": {
-    "serve": "react-scripts start",
+    "serve": "react-scripts start NODE_OPTIONS=--trace-deprecation",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

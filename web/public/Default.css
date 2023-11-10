@@ -20,21 +20,24 @@ body,
 
 #root {
     position: relative;
-    z-index: 100;
 }
 
 .App {
+    position: relative;
     display: flex;
     align-items: center;
     flex-direction: column;
+    z-index: 100;
 }
 
 .big-text {
     font-size: 102px;
+    text-transform: uppercase;
 }
 
 .mid-text {
     font-size: 52px;
+    text-transform: uppercase;
 }
 
 .small-text {
