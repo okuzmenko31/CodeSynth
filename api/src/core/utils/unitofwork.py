@@ -4,13 +4,15 @@ from src.core.database import async_session_maker
 
 from src.core.repositories.repos import (JWTTokensBlackListRepository,
                                          ProjectRepository,
-                                         ProjectTagRepository)
+                                         ProjectTagRepository,
+                                         ProjectFilterTypeRepository)
 
 
 class AbstractUnitOfWork(ABC):
     jwt_black_list: JWTTokensBlackListRepository
     projects: ProjectRepository
     project_tags: ProjectTagRepository
+    project_types: ProjectFilterTypeRepository
 
     @abstractmethod
     async def __aenter__(self):
@@ -44,6 +46,7 @@ class UnitOfWork(AbstractUnitOfWork):
         self.jwt_black_list = JWTTokensBlackListRepository(self.session)
         self.projects = ProjectRepository(self.session)
         self.project_tags = ProjectTagRepository(self.session)
+        self.project_types = ProjectFilterTypeRepository(self.session)
 
     async def __aexit__(self, *args):
         await self.rollback()

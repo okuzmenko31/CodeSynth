@@ -10,6 +10,7 @@ class ProjectTagSchema(MainSchema):
 
 class ProjectSchema(MainSchema):
     name: str
+    filter_type_id: int
     preview_image: Optional[str] = None
     source_link: str
     tags: list[int]
@@ -18,3 +19,8 @@ class ProjectSchema(MainSchema):
 
 class ProjectReturnSchema(ProjectSchema):
     tags: list[ProjectTagSchema]
+    filter_type: Optional[str] = None
+
+
+class ProjectFilterTypeSchema(MainSchema):
+    name: str

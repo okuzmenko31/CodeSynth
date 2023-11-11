@@ -6,13 +6,28 @@ from src.core.utils.media_files import (get_media_file_link,
 
 from .schemas import (ProjectSchema,
                       ProjectTagSchema,
-                      ProjectReturnSchema)
-from .models import Project, ProjectTag
+                      ProjectReturnSchema,
+                      ProjectFilterTypeSchema)
 
 
 class ProjectData(NamedTuple):
     data: Optional[dict] = None
     error: Optional[str] = None
+
+
+class ProjectFilterTypeService(BaseService):
+
+    async def create_type(
+            self,
+            data: ProjectFilterTypeSchema
+    ):
+        async with self.uow:
+            type_id = await self.uow.project_types.insert_by_data(dict(data))
+            await self.uow.commit()
+            type_instance = await self.uow.project_types.get_one_by_id(type_id)
+            return ProjectFilterTypeSchema(
+                name=type_instance.name
+            )
 
 
 class ProjectTagService(BaseService):
@@ -77,24 +92,50 @@ class ProjectService(ProjectTagService):
             project.preview_image = await get_media_file_link(image_file.filename)
             await self.uow.add(project)
             await self.uow.commit()
-            return project
+            return ProjectReturnSchema(
+                name=project.name,
+                filter_type_id=project.filter_type_id,
+                source_link=project.source_link,
+                tags=project.tags,
+                text=project.text
+            )
+
+    async def data_by_fetched_projects(
+            self,
+            projects
+    ):
+        data_lst = []
+
+        for project in projects:
+            project = project[0]
+            data_lst.append(
+                ProjectReturnSchema(
+                    name=project.name,
+                    filter_type_id=project.filter_type_id,
+                    filter_type=project.filter_type.name,
+                    preview_image=project.preview_image,
+                    source_link=project.source_link,
+                    tags=[
+                        ProjectTagSchema(name=tag.name, img=tag.img) for tag in project.tags
+                    ],
+                    text=project.text
+                )
+            )
+        return data_lst
 
     async def get_projects(
             self
     ) -> list[ProjectSchema]:
         async with self.uow:
-            data_lst = []
             projects = await self.uow.projects.get_all()
+            return await self.data_by_fetched_projects(projects)
 
-            for project in projects:
-                project = project[0]
-                data_lst.append(
-                    ProjectReturnSchema(
-                        name=project.name,
-                        preview_image=project.preview_image,
-                        source_link=project.source_link,
-                        tags=[ProjectTagSchema(name=tag.name, img=tag.img) for tag in project.tags],
-                        text=project.text
-                    )
-                )
-            return data_lst
+    async def get_projects_by_filter_type(
+            self,
+            filter_type_id: int
+    ):
+        async with self.uow:
+            projects = await self.uow.projects.select_by_data({
+                'filter_type_id': filter_type_id
+            })
+            return await self.data_by_fetched_projects(projects)

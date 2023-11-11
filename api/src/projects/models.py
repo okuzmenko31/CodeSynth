@@ -28,6 +28,22 @@ class ProjectTag(Base):
         return self.__repr__()
 
 
+class ProjectFilterType(Base):
+    __tablename__ = 'project_filter_types'  # noqa
+
+    id: Mapped[int] = mapped_column(primary_key=True,
+                                    autoincrement=True)
+    name: Mapped[str] = mapped_column(String(150),
+                                      unique=True,
+                                      nullable=False)
+
+    def __repr__(self):
+        return f'Type: {self.name}'
+
+    def __str__(self):
+        return self.__repr__()
+
+
 class Project(Base):
     __tablename__ = 'projects'  # noqa
 
@@ -41,6 +57,8 @@ class Project(Base):
         secondary=project_tags_association_table,
         lazy='selectin'
     )
+    filter_type_id: Mapped[int] = mapped_column(ForeignKey('project_filter_types.id'))
+    filter_type: Mapped[ProjectFilterType] = relationship(lazy='selectin')
     text: Mapped[str] = mapped_column(Text, nullable=False)
 
     def __repr__(self):
