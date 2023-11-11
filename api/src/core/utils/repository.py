@@ -3,6 +3,7 @@ from enum import Enum
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, insert, exists, delete
+from sqlalchemy.orm import joinedload
 
 
 class STMTOperations(str, Enum):
@@ -51,6 +52,7 @@ class SQLAlchemyRepository(AbstractRepository):
             operation_type: STMTOperations
     ):
         operation = await self.get_operation(operation_type)
+
         if operation_type != STMTOperations.insert:
             stmt = operation.where(
                 *[getattr(self.model, k) == v for k, v in data.items()]  # noqa
@@ -66,6 +68,18 @@ class SQLAlchemyRepository(AbstractRepository):
             data,
             STMTOperations.select
         )
+        res = await self.session.execute(stmt)
+        return res.fetchall()
+
+    async def filter_by_ids_list(
+            self,
+            ids_list: list,
+            model_id_field=None
+    ):
+        filter_field = self.model.id
+        if model_id_field is not None:
+            filter_field = model_id_field
+        stmt = select(self.model).where(filter_field.in_(ids_list))
         res = await self.session.execute(stmt)
         return res.fetchall()
 

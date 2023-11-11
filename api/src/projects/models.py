@@ -58,7 +58,7 @@ class Project(Base):
         lazy='selectin'
     )
     filter_type_id: Mapped[int] = mapped_column(ForeignKey('project_filter_types.id'))
-    filter_type: Mapped[ProjectFilterType] = relationship(lazy='selectin')
+    filter_type: Mapped[ProjectFilterType] = relationship(lazy='joined')
     text: Mapped[str] = mapped_column(Text, nullable=False)
 
     def __repr__(self):

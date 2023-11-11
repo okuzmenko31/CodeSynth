@@ -5,8 +5,10 @@ from fastapi import APIRouter, UploadFile, File, Form
 from .schemas import (ProjectSchema,
                       ProjectTagSchema,
                       ProjectReturnSchema,
-                      ProjectFilterTypeSchema)
+                      ProjectFilterTypeSchema,
+                      ProjectFilterTypesSchema)
 from .services import ProjectService, ProjectTagService, ProjectFilterTypeService
+
 from src.core.utils.dependencies import uowDEP
 
 router = APIRouter(
@@ -60,4 +62,13 @@ async def get_all_projects(
         uow: uowDEP
 ):
     projects = await ProjectService(uow).get_projects()
+    return projects
+
+
+@router.post('/by_filter_types/', response_model=list[ProjectReturnSchema])
+async def get_projects_by_filter_type(
+    uow: uowDEP,
+    data: ProjectFilterTypesSchema
+):
+    projects = await ProjectService(uow).get_projects_by_filter_types(data.filter_types)
     return projects

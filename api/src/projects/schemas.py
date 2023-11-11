@@ -24,3 +24,7 @@ class ProjectReturnSchema(ProjectSchema):
 
 class ProjectFilterTypeSchema(MainSchema):
     name: str
+
+
+class ProjectFilterTypesSchema(MainSchema):
+    filter_types: list[int]

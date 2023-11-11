@@ -8,6 +8,7 @@ from .schemas import (ProjectSchema,
                       ProjectTagSchema,
                       ProjectReturnSchema,
                       ProjectFilterTypeSchema)
+from .models import Project
 
 
 class ProjectData(NamedTuple):
@@ -130,12 +131,13 @@ class ProjectService(ProjectTagService):
             projects = await self.uow.projects.get_all()
             return await self.data_by_fetched_projects(projects)
 
-    async def get_projects_by_filter_type(
+    async def get_projects_by_filter_types(
             self,
-            filter_type_id: int
+            filter_types_ids: list
     ):
         async with self.uow:
-            projects = await self.uow.projects.select_by_data({
-                'filter_type_id': filter_type_id
-            })
+            projects = await self.uow.projects.filter_by_ids_list(
+                ids_list=filter_types_ids,
+                model_id_field=Project.filter_type_id
+            )
             return await self.data_by_fetched_projects(projects)
