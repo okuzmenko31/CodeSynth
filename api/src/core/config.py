@@ -66,6 +66,12 @@ class MediaFilesSettings(BaseSettings):
     )
 
 
+class PaginationSettings(BaseSettings):
+    limit_per_page: int = Field(
+        'limit_per_page', json_schema_extra={'env': 'LIMIT_PER_PAGE'}
+    )
+
+
 class MainSettings(BaseSettings):
     debug: bool = dbg.debug
     secret_key: str = Field(
@@ -80,6 +86,7 @@ class MainSettings(BaseSettings):
     jwt: JWTTokensSettings = Field(default_factory=JWTTokensSettings)
     domains: DomainSettings = Field(default_factory=DomainSettings)
     media: MediaFilesSettings = Field(default_factory=MediaFilesSettings)
+    pagination: PaginationSettings = Field(default_factory=PaginationSettings)
 
 
 settings = MainSettings()

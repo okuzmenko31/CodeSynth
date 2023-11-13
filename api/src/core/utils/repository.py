@@ -63,6 +63,17 @@ class SQLAlchemyRepository(AbstractRepository):
         stmt = operation.values(data).returning(self.model.id)
         return stmt
 
+    @staticmethod
+    async def paginate_statement(
+            stmt,
+            pagination_data
+    ):
+        return stmt.offset(
+            pagination_data.get('offset')
+        ).limit(
+            pagination_data.get('limit')
+        )
+
     async def select_by_data(self, data: dict):
         stmt = await self.get_operation_stmt_by_data(
             data,
@@ -74,12 +85,16 @@ class SQLAlchemyRepository(AbstractRepository):
     async def filter_by_ids_list(
             self,
             ids_list: list,
-            model_id_field=None
+            model_id_field=None,
+            with_pagination=False,
+            pagination_data: dict = None
     ):
         filter_field = self.model.id
         if model_id_field is not None:
             filter_field = model_id_field
         stmt = select(self.model).where(filter_field.in_(ids_list))
+        if with_pagination:
+            stmt = await self.paginate_statement(stmt, pagination_data)
         res = await self.session.execute(stmt)
         return res.fetchall()
 
@@ -109,10 +124,14 @@ class SQLAlchemyRepository(AbstractRepository):
         res = await self.session.execute(stmt)
         return res.scalar()
 
-    async def get_all(self, with_join=False, join_clause: list = None):
+    async def get_all(
+            self,
+            with_pagination=False,
+            pagination_data: dict = None
+    ):
         stmt = select(self.model)
-        if with_join:
-            stmt = stmt.join(*join_clause, isouter=True)
+        if with_pagination:
+            stmt = await self.paginate_statement(stmt, pagination_data)
         res = await self.session.execute(stmt)
         return res.fetchall()
 

@@ -101,8 +101,8 @@ class ProjectService(ProjectTagService):
                 text=project.text
             )
 
+    @staticmethod
     async def data_by_fetched_projects(
-            self,
             projects
     ):
         data_lst = []
@@ -124,11 +124,39 @@ class ProjectService(ProjectTagService):
             )
         return data_lst
 
+    async def get_pagination_offsets(
+            self,
+            pagination_data: dict
+    ):
+        page = pagination_data.get('page')
+        size = pagination_data.get('size')
+
+        offset_min = page * size
+        offset_max = (page + 1) * size
+        return {
+            'offset_min': offset_min,
+            'offset_max': offset_max
+        }
+
     async def get_projects(
-            self
+            self,
+            with_pagination=False,
+            **kwargs
     ) -> list[ProjectSchema]:
         async with self.uow:
-            projects = await self.uow.projects.get_all()
+            pagination_data = None
+            if with_pagination:
+                pagination_data = kwargs.get('pagination_data')
+                offset = pagination_data['page'] * pagination_data['size']
+                pagination_data = {
+                    'offset': offset,
+                    'limit': pagination_data['size']
+                }
+            projects = await self.uow.projects.get_all(
+                with_pagination=with_pagination,
+                pagination_data=pagination_data
+            )
+
             return await self.data_by_fetched_projects(projects)
 
     async def get_projects_by_filter_types(

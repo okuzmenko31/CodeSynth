@@ -8,6 +8,7 @@ from .schemas import (ProjectSchema,
                       ProjectFilterTypeSchema,
                       ProjectFilterTypesSchema)
 from .services import ProjectService, ProjectTagService, ProjectFilterTypeService
+from .dependencies import pagination_params
 
 from src.core.utils.dependencies import uowDEP
 
@@ -18,8 +19,8 @@ router = APIRouter(
 
 @router.post('/create_filter_type/', response_model=ProjectFilterTypeSchema)
 async def create_filter_type(
-    uow: uowDEP,
-    data: ProjectFilterTypeSchema
+        uow: uowDEP,
+        data: ProjectFilterTypeSchema
 ):
     return_data = await ProjectFilterTypeService(uow).create_type(data)
     return return_data
@@ -59,16 +60,20 @@ async def create_project(
 
 @router.get('/all/', response_model=list[ProjectReturnSchema])
 async def get_all_projects(
-        uow: uowDEP
+        uow: uowDEP,
+        pag_params: pagination_params
 ):
-    projects = await ProjectService(uow).get_projects()
+    projects = await ProjectService(uow).get_projects(
+        with_pagination=True,
+        pagination_data={'page': pag_params.page, 'size': pag_params.size}
+    )
     return projects
 
 
 @router.post('/by_filter_types/', response_model=list[ProjectReturnSchema])
 async def get_projects_by_filter_type(
-    uow: uowDEP,
-    data: ProjectFilterTypesSchema
+        uow: uowDEP,
+        data: ProjectFilterTypesSchema
 ):
     projects = await ProjectService(uow).get_projects_by_filter_types(data.filter_types)
     return projects

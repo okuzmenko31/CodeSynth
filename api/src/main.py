@@ -2,6 +2,8 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from fastapi_pagination import add_pagination
+
 # from src.api_key import get_api_key
 from src.core.config import settings
 
@@ -31,3 +33,6 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*']
 )
+
+# Adding pagination to the app
+add_pagination(app)
