@@ -37,6 +37,41 @@ class JWTTokensSettings(BaseSettings):
     )
 
 
+class DomainSettings(BaseSettings):
+    backend_domain: str = Field(
+        'backend_domain', json_schema_extra={'env': 'BACKEND_DOMAIN'}
+    )
+    backend_domain_with_protocol: str = Field(
+        'backend_domain_with_protocol',
+        json_schema_extra={'env': 'BACKEND_DOMAIN_WITH_PROTOCOL'}
+    )
+    frontend_domain: str = Field(
+        'frontend_domain', json_schema_extra={'env': 'FRONTEND_DOMAIN'}
+    )
+    frontend_domain_with_protocol: str = Field(
+        'frontend_domain_with_protocol',
+        json_schema_extra={'env': 'FRONTEND_DOMAIN_WITH_PROTOCOL'}
+    )
+
+
+class MediaFilesSettings(BaseSettings):
+    media_file_path_start: str = Field(
+        'media_file_path_start', json_schema_extra={'env': 'MEDIA_FILE_PATH_START'}
+    )
+    media_directory: str = Field(
+        'media_directory', json_schema_extra={'env': 'MEDIA_DIRECTORY'}
+    )
+    media_name: str = Field(
+        'media_name', json_schema_extra={'env': 'MEDIA_NAME'}
+    )
+
+
+class PaginationSettings(BaseSettings):
+    limit_per_page: int = Field(
+        'limit_per_page', json_schema_extra={'env': 'LIMIT_PER_PAGE'}
+    )
+
+
 class MainSettings(BaseSettings):
     debug: bool = dbg.debug
     secret_key: str = Field(
@@ -48,7 +83,18 @@ class MainSettings(BaseSettings):
 
     # DATABASE
     db: DBSettings = Field(default_factory=DBSettings)
+
+    # JWT TOKENS
     jwt: JWTTokensSettings = Field(default_factory=JWTTokensSettings)
+
+    # DOMAINS
+    domains: DomainSettings = Field(default_factory=DomainSettings)
+
+    # MEDIA FILES
+    media: MediaFilesSettings = Field(default_factory=MediaFilesSettings)
+
+    # PAGINATION
+    pagination: PaginationSettings = Field(default_factory=PaginationSettings)
 
 
 settings = MainSettings()

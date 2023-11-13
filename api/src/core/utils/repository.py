@@ -3,6 +3,7 @@ from enum import Enum
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, insert, exists, delete
+from sqlalchemy.orm import joinedload
 
 
 class STMTOperations(str, Enum):
@@ -51,6 +52,7 @@ class SQLAlchemyRepository(AbstractRepository):
             operation_type: STMTOperations
     ):
         operation = await self.get_operation(operation_type)
+
         if operation_type != STMTOperations.insert:
             stmt = operation.where(
                 *[getattr(self.model, k) == v for k, v in data.items()]  # noqa
@@ -61,18 +63,45 @@ class SQLAlchemyRepository(AbstractRepository):
         stmt = operation.values(data).returning(self.model.id)
         return stmt
 
+    @staticmethod
+    async def paginate_statement(
+            stmt,
+            pagination_data
+    ):
+        return stmt.offset(
+            pagination_data.get('offset')
+        ).limit(
+            pagination_data.get('limit')
+        )
+
     async def select_by_data(self, data: dict):
         stmt = await self.get_operation_stmt_by_data(
             data,
             STMTOperations.select
         )
         res = await self.session.execute(stmt)
-        return res.all()
+        return res.fetchall()
+
+    async def filter_by_ids_list(
+            self,
+            ids_list: list,
+            model_id_field=None,
+            with_pagination=False,
+            pagination_data: dict = None
+    ):
+        filter_field = self.model.id
+        if model_id_field is not None:
+            filter_field = model_id_field
+        stmt = select(self.model).where(filter_field.in_(ids_list))
+        if with_pagination:
+            stmt = await self.paginate_statement(stmt, pagination_data)
+        res = await self.session.execute(stmt)
+        return res.fetchall()
 
     async def get_one_by_data(self, data: dict):
         result = await self.select_by_data(data)
         if len(result) > 0:
-            return result[0]
+            return result[0][0]
         return None
 
     async def insert_by_data(self, data: dict) -> int:
@@ -84,6 +113,9 @@ class SQLAlchemyRepository(AbstractRepository):
         result = res.scalar()
         return result
 
+    async def create_instance_by_data(self, data: dict):
+        return self.model(**data)
+
     async def check_exists_by_data(self, data: dict) -> bool:
         stmt = await self.get_operation_stmt_by_data(
             data,
@@ -92,10 +124,16 @@ class SQLAlchemyRepository(AbstractRepository):
         res = await self.session.execute(stmt)
         return res.scalar()
 
-    async def get_all(self):
+    async def get_all(
+            self,
+            with_pagination=False,
+            pagination_data: dict = None
+    ):
         stmt = select(self.model)
+        if with_pagination:
+            stmt = await self.paginate_statement(stmt, pagination_data)
         res = await self.session.execute(stmt)
         return res.fetchall()
 
     async def get_one_by_id(self, obj_id: int):
-        return await self.select_by_data({'id': obj_id})
+        return await self.get_one_by_data({'id': obj_id})

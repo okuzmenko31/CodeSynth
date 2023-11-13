@@ -1,5 +1,5 @@
 from src.auth.models import JWTTokensBlackList
-from src.projects.models import Project, ProjectTag
+from src.projects.models import Project, ProjectTag, ProjectFilterType
 from src.core.utils.repository import SQLAlchemyRepository
 
 
@@ -13,3 +13,7 @@ class ProjectRepository(SQLAlchemyRepository):
 
 class ProjectTagRepository(SQLAlchemyRepository):
     model = ProjectTag
+
+
+class ProjectFilterTypeRepository(SQLAlchemyRepository):
+    model = ProjectFilterType
