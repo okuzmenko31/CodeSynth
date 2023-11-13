@@ -6,7 +6,8 @@ from .schemas import (ProjectSchema,
                       ProjectTagSchema,
                       ProjectReturnSchema,
                       ProjectFilterTypeSchema,
-                      ProjectFilterTypesSchema)
+                      ProjectFilterTypesSchema,
+                      ProjectTagReturnSchema)
 from .services import ProjectService, ProjectTagService, ProjectFilterTypeService
 from .dependencies import pagination_params
 
@@ -26,6 +27,11 @@ async def create_filter_type(
     return return_data
 
 
+@router.get('/filter_types/', response_model=list[ProjectFilterTypeSchema])
+async def get_filter_types(uow: uowDEP):
+    return await ProjectFilterTypeService(uow).get_filter_types()
+
+
 @router.post('/create_tag/', response_model=ProjectTagSchema)
 async def create_tag(
         uow: uowDEP,
@@ -35,6 +41,11 @@ async def create_tag(
     tag_id = await ProjectTagService(uow).create_tag(name, image_file)
     tag = await ProjectTagService(uow).get_tag_by_id(tag_id)
     return ProjectTagSchema(name=tag.name, img=tag.img)
+
+
+@router.get('/tags/', response_model=list[ProjectTagReturnSchema])
+async def get_all_tags(uow: uowDEP):
+    return await ProjectTagService(uow).get_all_tags()
 
 
 @router.post('/create/', response_model=ProjectReturnSchema)
@@ -69,8 +80,8 @@ async def get_all_projects(
     return projects
 
 
-@router.post('/by_filter_types/', response_model=list[ProjectReturnSchema])
-async def get_projects_by_filter_type(
+@router.post('/filter_by_filter_types/', response_model=list[ProjectReturnSchema])
+async def filter_projects_by_filter_type(
         uow: uowDEP,
         data: ProjectFilterTypesSchema,
         pag_params: pagination_params

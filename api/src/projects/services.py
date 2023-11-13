@@ -7,7 +7,8 @@ from src.core.utils.media_files import (get_media_file_link,
 from .schemas import (ProjectSchema,
                       ProjectTagSchema,
                       ProjectReturnSchema,
-                      ProjectFilterTypeSchema)
+                      ProjectFilterTypeSchema,
+                      ProjectTagReturnSchema)
 from .models import Project
 
 
@@ -24,11 +25,26 @@ class ProjectFilterTypeService(BaseService):
     ):
         async with self.uow:
             type_id = await self.uow.project_types.insert_by_data(dict(data))
-            await self.uow.commit()
             type_instance = await self.uow.project_types.get_one_by_id(type_id)
+            await self.uow.commit()
             return ProjectFilterTypeSchema(
                 name=type_instance.name
             )
+
+    async def get_filter_types(
+            self
+    ) -> list[ProjectFilterTypeSchema]:
+        types_lst = []
+        async with self.uow:
+            types = await self.uow.project_types.get_all()
+
+            for filter_type in types:
+                filter_type = filter_type[0]
+
+                types_lst.append(ProjectFilterTypeSchema(
+                    name=filter_type.name
+                ))
+            return types_lst
 
 
 class ProjectTagService(BaseService):
@@ -63,6 +79,20 @@ class ProjectTagService(BaseService):
         return ProjectData(data={
             'tags': tags_lst
         })
+
+    async def get_all_tags(self) -> list[ProjectTagReturnSchema]:
+        tags_lst = []
+
+        async with self.uow:
+            tags = await self.uow.project_tags.get_all()
+            for tag in tags:
+                tag = tag[0]
+                tags_lst.append(ProjectTagReturnSchema(
+                    id=tag.id,
+                    name=tag.name,
+                    img=tag.img
+                ))
+            return tags_lst
 
 
 class ProjectService(ProjectTagService):
@@ -111,6 +141,7 @@ class ProjectService(ProjectTagService):
             project = project[0]
             data_lst.append(
                 ProjectReturnSchema(
+                    id=project.id,
                     name=project.name,
                     filter_type_id=project.filter_type_id,
                     filter_type=project.filter_type.name,
@@ -127,12 +158,12 @@ class ProjectService(ProjectTagService):
     @staticmethod
     async def get_pagination_data_for_stmt(pagination_data: dict):
         page = pagination_data.get('page')
-        size = pagination_data.get('size')
+        limit = pagination_data.get('limit')
 
-        offset = page * size
+        offset = page * limit
         return {
             'offset': offset,
-            'limit': size
+            'limit': limit
         }
 
     async def get_projects(
@@ -140,6 +171,7 @@ class ProjectService(ProjectTagService):
             pagination_data: dict
     ) -> list[ProjectSchema]:
         async with self.uow:
+            print(pagination_data)
             projects = await self.uow.projects.get_all(
                 with_pagination=True,
                 pagination_data=await self.get_pagination_data_for_stmt(pagination_data)
