@@ -124,48 +124,39 @@ class ProjectService(ProjectTagService):
             )
         return data_lst
 
-    async def get_pagination_offsets(
-            self,
-            pagination_data: dict
-    ):
+    @staticmethod
+    async def get_pagination_data_for_stmt(pagination_data: dict):
         page = pagination_data.get('page')
         size = pagination_data.get('size')
 
-        offset_min = page * size
-        offset_max = (page + 1) * size
+        offset = page * size
         return {
-            'offset_min': offset_min,
-            'offset_max': offset_max
+            'offset': offset,
+            'limit': size
         }
 
     async def get_projects(
             self,
-            with_pagination=False,
-            **kwargs
+            pagination_data: dict
     ) -> list[ProjectSchema]:
         async with self.uow:
-            pagination_data = None
-            if with_pagination:
-                pagination_data = kwargs.get('pagination_data')
-                offset = pagination_data['page'] * pagination_data['size']
-                pagination_data = {
-                    'offset': offset,
-                    'limit': pagination_data['size']
-                }
             projects = await self.uow.projects.get_all(
-                with_pagination=with_pagination,
-                pagination_data=pagination_data
+                with_pagination=True,
+                pagination_data=await self.get_pagination_data_for_stmt(pagination_data)
             )
 
             return await self.data_by_fetched_projects(projects)
 
     async def get_projects_by_filter_types(
             self,
-            filter_types_ids: list
+            filter_types_ids: list,
+            pagination_data: dict
     ):
         async with self.uow:
             projects = await self.uow.projects.filter_by_ids_list(
                 ids_list=filter_types_ids,
-                model_id_field=Project.filter_type_id
+                model_id_field=Project.filter_type_id,
+                with_pagination=True,
+                pagination_data=pagination_data
             )
             return await self.data_by_fetched_projects(projects)

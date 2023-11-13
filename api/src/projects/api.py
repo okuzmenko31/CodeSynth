@@ -64,8 +64,7 @@ async def get_all_projects(
         pag_params: pagination_params
 ):
     projects = await ProjectService(uow).get_projects(
-        with_pagination=True,
-        pagination_data={'page': pag_params.page, 'size': pag_params.size}
+        pagination_data=pag_params.params_dict
     )
     return projects
 
@@ -73,7 +72,11 @@ async def get_all_projects(
 @router.post('/by_filter_types/', response_model=list[ProjectReturnSchema])
 async def get_projects_by_filter_type(
         uow: uowDEP,
-        data: ProjectFilterTypesSchema
+        data: ProjectFilterTypesSchema,
+        pag_params: pagination_params
 ):
-    projects = await ProjectService(uow).get_projects_by_filter_types(data.filter_types)
+    projects = await ProjectService(uow).get_projects_by_filter_types(
+        data.filter_types,
+        pagination_data=pag_params.params_dict
+    )
     return projects

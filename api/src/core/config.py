@@ -83,9 +83,17 @@ class MainSettings(BaseSettings):
 
     # DATABASE
     db: DBSettings = Field(default_factory=DBSettings)
+
+    # JWT TOKENS
     jwt: JWTTokensSettings = Field(default_factory=JWTTokensSettings)
+
+    # DOMAINS
     domains: DomainSettings = Field(default_factory=DomainSettings)
+
+    # MEDIA FILES
     media: MediaFilesSettings = Field(default_factory=MediaFilesSettings)
+
+    # PAGINATION
     pagination: PaginationSettings = Field(default_factory=PaginationSettings)
 
 

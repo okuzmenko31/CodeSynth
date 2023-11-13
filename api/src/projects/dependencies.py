@@ -14,6 +14,13 @@ class PaginationParams:
         self.page = page
         self.size = size
 
+    @property
+    def params_dict(self):
+        return {
+            'page': self.page,
+            'limit': self.size
+        }
+
 
 def get_pagination_params(params: PaginationParams = Depends()):
     return params
