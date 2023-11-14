@@ -10,6 +10,7 @@ from .schemas import (ProjectSchema,
                       ProjectTagReturnSchema)
 from .services import ProjectService, ProjectTagService, ProjectFilterTypeService
 from .dependencies import pagination_params
+from .utils import json_response_with_error
 
 from src.core.utils.dependencies import uowDEP
 
@@ -23,8 +24,10 @@ async def create_filter_type(
         uow: uowDEP,
         data: ProjectFilterTypeSchema
 ):
-    return_data = await ProjectFilterTypeService(uow).create_type(data)
-    return return_data
+    return_data, error = await ProjectFilterTypeService(uow).create_type(data)
+    if error is not None:
+        return json_response_with_error(error)
+    return return_data['result']
 
 
 @router.get('/filter_types/', response_model=list[ProjectFilterTypeSchema])
@@ -38,9 +41,10 @@ async def create_tag(
         name: Annotated[str, Form(...)],
         image_file: UploadFile = File(...)
 ):
-    tag_id = await ProjectTagService(uow).create_tag(name, image_file)
-    tag = await ProjectTagService(uow).get_tag_by_id(tag_id)
-    return ProjectTagSchema(name=tag.name, img=tag.img)
+    return_data, error = await ProjectTagService(uow).create_tag(name, image_file)
+    if error is not None:
+        return json_response_with_error(error)
+    return return_data['result']
 
 
 @router.get('/tags/', response_model=list[ProjectTagReturnSchema])
@@ -66,7 +70,10 @@ async def create_project(
         tags=tags,
         text=text
     )
-    return await ProjectService(uow).create_project(data, preview_image)
+    result_data, error = await ProjectService(uow).create_project(data, preview_image)
+    if error is not None:
+        return json_response_with_error(error)
+    return result_data['result']
 
 
 @router.get('/all/', response_model=list[ProjectReturnSchema])
@@ -74,10 +81,12 @@ async def get_all_projects(
         uow: uowDEP,
         pag_params: pagination_params
 ):
-    projects = await ProjectService(uow).get_projects(
+    result_data, error = await ProjectService(uow).get_projects(
         pagination_data=pag_params.params_dict
     )
-    return projects
+    if error is not None:
+        return json_response_with_error(error)
+    return result_data['result']
 
 
 @router.post('/filter_by_filter_types/', response_model=list[ProjectReturnSchema])
@@ -86,8 +95,10 @@ async def filter_projects_by_filter_type(
         data: ProjectFilterTypesSchema,
         pag_params: pagination_params
 ):
-    projects = await ProjectService(uow).get_projects_by_filter_types(
+    return_data, error = await ProjectService(uow).get_projects_by_filter_types(
         data.filter_types,
         pagination_data=pag_params.params_dict
     )
-    return projects
+    if error is not None:
+        return json_response_with_error(error)
+    return return_data['result']

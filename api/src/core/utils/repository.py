@@ -3,7 +3,6 @@ from enum import Enum
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, insert, exists, delete
-from sqlalchemy.orm import joinedload
 
 
 class STMTOperations(str, Enum):
@@ -66,13 +65,14 @@ class SQLAlchemyRepository(AbstractRepository):
     @staticmethod
     async def paginate_statement(
             stmt,
-            pagination_data
+            pagination_data: dict
     ):
-        return stmt.offset(
-            pagination_data.get('offset')
-        ).limit(
-            pagination_data.get('limit')
-        )
+        offset = pagination_data.get('offset')
+        limit = pagination_data.get('limit')
+
+        if offset is not None and limit is not None:
+            return stmt.offset(offset).limit(limit)
+        raise ValueError('Offset and limit must be provided!')
 
     async def select_by_data(self, data: dict):
         stmt = await self.get_operation_stmt_by_data(
@@ -93,7 +93,7 @@ class SQLAlchemyRepository(AbstractRepository):
         if model_id_field is not None:
             filter_field = model_id_field
         stmt = select(self.model).where(filter_field.in_(ids_list))
-        if with_pagination:
+        if with_pagination and pagination_data is not None:
             stmt = await self.paginate_statement(stmt, pagination_data)
         res = await self.session.execute(stmt)
         return res.fetchall()
@@ -130,7 +130,7 @@ class SQLAlchemyRepository(AbstractRepository):
             pagination_data: dict = None
     ):
         stmt = select(self.model)
-        if with_pagination:
+        if with_pagination and pagination_data is not None:
             stmt = await self.paginate_statement(stmt, pagination_data)
         res = await self.session.execute(stmt)
         return res.fetchall()
