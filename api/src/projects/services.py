@@ -10,6 +10,7 @@ from .schemas import (ProjectSchema,
                       ProjectFilterTypeSchema,
                       ProjectTagReturnSchema)
 from .models import Project
+from src.core.utils.decorators import handle_errors
 
 
 class ProjectData(NamedTuple):
@@ -19,6 +20,7 @@ class ProjectData(NamedTuple):
 
 class ProjectFilterTypeService(BaseService):
 
+    @handle_errors
     async def create_type(
             self,
             data: ProjectFilterTypeSchema
@@ -49,6 +51,7 @@ class ProjectFilterTypeService(BaseService):
 
 class ProjectTagService(BaseService):
 
+    @handle_errors
     async def create_tag(
             self,
             tag_name,
@@ -60,12 +63,15 @@ class ProjectTagService(BaseService):
                 'name': tag_name,
                 'img': await get_media_file_link(image_file.filename)
             })
+            tag = await self.uow.project_tags.get_one_by_id(tag_id)
             await self.uow.commit()
-            return tag_id
+            return ProjectTagSchema(name=tag.name, img=tag.img)
 
     async def get_tag_by_id(self, tag_id: int):
         async with self.uow:
             tag = await self.uow.project_tags.get_one_by_id(tag_id)
+            if tag is None:
+                return None
             await self.uow.expunge(instance=tag)
             return tag
 
@@ -123,12 +129,17 @@ class ProjectService(ProjectTagService):
             project.preview_image = await get_media_file_link(image_file.filename)
             await self.uow.add(project)
             await self.uow.commit()
-            return ProjectReturnSchema(
-                name=project.name,
-                filter_type_id=project.filter_type_id,
-                source_link=project.source_link,
-                tags=project.tags,
-                text=project.text
+            return ProjectData(
+                data={
+                    'result': ProjectReturnSchema(
+                        id=project.id,
+                        name=project.name,
+                        filter_type_id=project.filter_type_id,
+                        source_link=project.source_link,
+                        tags=project.tags,
+                        text=project.text
+                    )
+                }
             )
 
     @staticmethod
@@ -166,19 +177,19 @@ class ProjectService(ProjectTagService):
             'limit': limit
         }
 
+    @handle_errors
     async def get_projects(
             self,
             pagination_data: dict
     ) -> list[ProjectSchema]:
         async with self.uow:
-            print(pagination_data)
             projects = await self.uow.projects.get_all(
                 with_pagination=True,
                 pagination_data=await self.get_pagination_data_for_stmt(pagination_data)
             )
-
             return await self.data_by_fetched_projects(projects)
 
+    @handle_errors
     async def get_projects_by_filter_types(
             self,
             filter_types_ids: list,
@@ -189,6 +200,6 @@ class ProjectService(ProjectTagService):
                 ids_list=filter_types_ids,
                 model_id_field=Project.filter_type_id,
                 with_pagination=True,
-                pagination_data=pagination_data
+                pagination_data=await self.get_pagination_data_for_stmt(pagination_data)
             )
             return await self.data_by_fetched_projects(projects)
