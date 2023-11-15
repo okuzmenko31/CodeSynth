@@ -2,12 +2,13 @@ from abc import ABC, abstractmethod
 from enum import Enum
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, insert, exists, delete
+from sqlalchemy import select, insert, exists, delete, update
 
 
 class STMTOperations(str, Enum):
     select = 'select'
     exists = 'exists'
+    update = 'update'
     delete = 'delete'
     insert = 'insert'
 
@@ -38,28 +39,53 @@ class SQLAlchemyRepository(AbstractRepository):
             STMTOperations.select: select,
             STMTOperations.exists: exists,
             STMTOperations.delete: delete,
-            STMTOperations.insert: insert
+            STMTOperations.insert: insert,
+            STMTOperations.update: update
         }
         for op in operations.keys():
             if op == operation:
                 return operations[operation](self.model)
         raise ValueError('This type of operation does not supported!')
 
+    async def get_insert_or_update_stmt(
+            self,
+            operation,
+            data: dict,
+            operation_type: STMTOperations,
+            **kwargs
+    ):
+        if operation_type == STMTOperations.insert:
+            return operation.values(data).returning(self.model.id)
+        if kwargs.get('update_instance_id') is None:
+            raise ValueError(
+                'If you are trying to update an object, you must provide instance id!'
+            )
+        return update(self.model).where(
+            self.model.id == kwargs.get('update_instance_id')  # noqa
+        ).values(data).returning(self.model.id)
+
     async def get_operation_stmt_by_data(
             self,
             data: dict,
-            operation_type: STMTOperations
+            operation_type: STMTOperations,
+            **kwargs
     ):
         operation = await self.get_operation(operation_type)
+        insert_update_lst = [STMTOperations.insert, STMTOperations.update]
 
-        if operation_type != STMTOperations.insert:
+        if operation_type not in insert_update_lst:
             stmt = operation.where(
                 *[getattr(self.model, k) == v for k, v in data.items()]  # noqa
             )
             if operation_type == STMTOperations.exists:
                 stmt = stmt.select()
             return stmt
-        stmt = operation.values(data).returning(self.model.id)
+        stmt = await self.get_insert_or_update_stmt(
+            operation=operation,
+            data=data,
+            operation_type=operation_type,
+            **kwargs
+        )
         return stmt
 
     @staticmethod
@@ -69,7 +95,6 @@ class SQLAlchemyRepository(AbstractRepository):
     ):
         offset = pagination_data.get('offset')
         limit = pagination_data.get('limit')
-
         if offset is not None and limit is not None:
             return stmt.offset(offset).limit(limit)
         raise ValueError('Offset and limit must be provided!')
@@ -137,3 +162,19 @@ class SQLAlchemyRepository(AbstractRepository):
 
     async def get_one_by_id(self, obj_id: int):
         return await self.get_one_by_data({'id': obj_id})
+
+    async def update_by_id(self, instance_id, data: dict):
+        stmt = await self.get_operation_stmt_by_data(
+            data,
+            STMTOperations.update,
+            update_instance_id=instance_id
+        )
+        res = await self.session.execute(stmt)
+        return res.scalar()
+
+    async def delete_by_id(self, instance_id):
+        stmt = await self.get_operation_stmt_by_data(
+            data={'id': instance_id},
+            operation_type=STMTOperations.delete
+        )
+        await self.session.execute(stmt)

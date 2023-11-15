@@ -1,5 +1,3 @@
-from typing import NamedTuple, Optional
-
 from src.core.utils.service import BaseService
 from src.core.utils.media_files import (get_media_file_link,
                                         save_media_file)
@@ -10,12 +8,9 @@ from .schemas import (ProjectSchema,
                       ProjectFilterTypeSchema,
                       ProjectTagReturnSchema)
 from .models import Project
+
 from src.core.utils.decorators import handle_errors
-
-
-class ProjectData(NamedTuple):
-    data: Optional[dict] = None
-    error: Optional[str] = None
+from src.core.utils.dataclasses import ReturnData
 
 
 class ProjectFilterTypeService(BaseService):
@@ -47,6 +42,33 @@ class ProjectFilterTypeService(BaseService):
                     name=filter_type.name
                 ))
             return types_lst
+
+    @handle_errors
+    async def update_filter_type(
+            self,
+            instance_id: int,
+            data: ProjectFilterTypeSchema
+    ):
+        async with self.uow:
+            filter_type_id = await self.uow.project_types.update_by_id(
+                instance_id,
+                dict(data)
+            )
+            await self.uow.commit()
+            filter_type = await self.uow.project_types.get_one_by_id(filter_type_id)
+            return ProjectFilterTypeSchema(
+                name=filter_type.name
+            )
+
+    @handle_errors
+    async def delete_filter_type(
+            self,
+            instance_id: int
+    ):
+        async with self.uow:
+            await self.uow.project_types.delete_by_id(instance_id)
+            await self.uow.commit()
+            return True
 
 
 class ProjectTagService(BaseService):
@@ -80,11 +102,9 @@ class ProjectTagService(BaseService):
         for tag_id in ids:
             tag = await self.get_tag_by_id(tag_id)
             if tag is None:
-                return ProjectData(error='Provided ids are wrong!')
+                return ReturnData(error='Provided tags ids are wrong!')
             tags_lst.append(tag)
-        return ProjectData(data={
-            'tags': tags_lst
-        })
+        return ReturnData(result=tags_lst)
 
     async def get_all_tags(self) -> list[ProjectTagReturnSchema]:
         tags_lst = []
@@ -117,29 +137,26 @@ class ProjectService(ProjectTagService):
             data: ProjectSchema,
             image_file
     ):
-        tags, error = await self.get_tags_lst_by_ids(data.tags)
-        if error is not None:
-            return ProjectData(error=error)
-        tags = tags['tags']
+        return_data = await self.get_tags_lst_by_ids(data.tags)
+        if return_data.error is not None:
+            return ReturnData(error=return_data.error)
 
         await save_media_file(image_file)
         async with self.uow:
             project = await self.uow.projects.create_instance_by_data(dict(data))
-            project.tags = tags
+            project.tags = return_data.result
             project.preview_image = await get_media_file_link(image_file.filename)
             await self.uow.add(project)
             await self.uow.commit()
-            return ProjectData(
-                data={
-                    'result': ProjectReturnSchema(
-                        id=project.id,
-                        name=project.name,
-                        filter_type_id=project.filter_type_id,
-                        source_link=project.source_link,
-                        tags=project.tags,
-                        text=project.text
-                    )
-                }
+            return ReturnData(
+                result=ProjectReturnSchema(
+                    id=project.id,
+                    name=project.name,
+                    filter_type_id=project.filter_type_id,
+                    source_link=project.source_link,
+                    tags=project.tags,
+                    text=project.text
+                )
             )
 
     @staticmethod
@@ -181,7 +198,7 @@ class ProjectService(ProjectTagService):
     async def get_projects(
             self,
             pagination_data: dict
-    ) -> list[ProjectSchema]:
+    ):
         async with self.uow:
             projects = await self.uow.projects.get_all(
                 with_pagination=True,

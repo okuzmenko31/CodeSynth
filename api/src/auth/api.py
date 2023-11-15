@@ -10,6 +10,7 @@ from src.core.utils.dependencies import uowDEP
 
 router = APIRouter(
     prefix='/auth',
+    tags=['Auth']
 )
 
 
