@@ -1,19 +1,15 @@
-from typing import Annotated, Optional
+from typing import Annotated
 
-from fastapi import APIRouter, UploadFile, File, Form, status
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, UploadFile, File, Form
 
-from .schemas import (ProjectSchema,
-                      ProjectTagSchema,
-                      ProjectReturnSchema,
-                      ProjectFilterTypeSchema,
-                      ProjectFilterTypesSchema,
-                      ProjectTagReturnSchema,
-                      ProjectUpdateSchema, ProjectTagsUpdateSchema)
-from .services import ProjectService, ProjectTagService, ProjectFilterTypeService
+from .schemas import *
+from .services import (ProjectService,
+                       ProjectTagService,
+                       ProjectFilterTypeService)
 from .dependencies import pagination_params, project_update_data
 
 from src.core.utils.dependencies import uowDEP
+from src.core.utils.service_utils import json_response_with_400_error
 
 router = APIRouter(
     prefix='/projects',
@@ -75,13 +71,10 @@ async def update_tag(
         image_file: UploadFile = File(None)
 ):
     if name is None and image_file is None:
-        return JSONResponse(content={
-            'error': (
-                'To update this tag, you have to provide'
-                ' new value at least for one of fields.'
-            )
-        }, status_code=status.HTTP_400_BAD_REQUEST)
-
+        return await json_response_with_400_error((
+            'To update this tag, you have to provide'
+            ' new value at least for one of fields.'
+        ))
     return_data = await ProjectTagService(uow).update_tag(
         tag_id,
         name,
@@ -122,11 +115,8 @@ async def create_project(
         text=text
     )
     project_data = await ProjectService(uow).create_project(data, preview_image)
-
     if project_data.error is not None:
-        return JSONResponse(content={
-            'error': project_data.error
-        })
+        return await json_response_with_400_error(project_data.error)
     return project_data.result
 
 
@@ -157,11 +147,9 @@ async def update_project_tags(
         data: ProjectTagsUpdateSchema
 ):
     return_data = await ProjectService(uow).add_project_tags(project_id, data)
-    if return_data.result.error is not None:
-        return JSONResponse(content={
-            'error': return_data.result.error
-        }, status_code=status.HTTP_400_BAD_REQUEST)
-    return return_data.result.result
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
 
 
 @router.patch('/remove_project_tag/{project_id}/')
@@ -171,11 +159,9 @@ async def remove_project_tag(
         data: ProjectTagsUpdateSchema
 ):
     return_data = await ProjectService(uow).remove_project_tags(project_id, data)
-    if return_data.result.error is not None:
-        return JSONResponse(content={
-            'error': return_data.result.error
-        }, status_code=status.HTTP_400_BAD_REQUEST)
-    return return_data.result.result
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
 
 
 @router.get('/all/', response_model=list[ProjectReturnSchema])
@@ -183,7 +169,9 @@ async def get_all_projects(
         uow: uowDEP,
         pag_params: pagination_params
 ):
-    return_data = await ProjectService(uow).get_projects(pagination_data=pag_params.params_dict)
+    return_data = await ProjectService(uow).get_projects(
+        pagination_data=pag_params.params_dict
+    )
     return return_data.result
 
 

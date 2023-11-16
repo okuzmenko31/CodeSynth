@@ -103,7 +103,7 @@ class ProjectTagService(BaseService):
         for tag_id in ids:
             tag = await self.get_tag_by_id(tag_id)
             if tag is None:
-                return ReturnData(error='Provided tags ids are wrong!')
+                return ReturnData(error='Provided ids are wrong!')
             tags_lst.append(tag)
         return ReturnData(result=tags_lst)
 
@@ -197,6 +197,7 @@ class ProjectService(ProjectTagService):
             project.preview_image = await get_media_file_link(image_file.filename)
             await self.uow.add(project)
             await self.uow.commit()
+            print(project.filter_type)
             return ReturnData(
                 result=await self.get_project_return_schema(project)
             )
