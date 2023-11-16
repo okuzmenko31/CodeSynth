@@ -120,7 +120,7 @@ async def create_project(
     return project_data.result
 
 
-@router.patch('/update/{project_id}/')
+@router.patch('/update/{project_id}/', response_model=ProjectReturnSchema)
 async def update_project(
         uow: uowDEP,
         project_id: int,
@@ -140,7 +140,7 @@ async def update_project(
     return return_data.result
 
 
-@router.patch('/update_project_tags/{project_id}/')
+@router.patch('/update_project_tags/{project_id}/', response_model=ProjectReturnSchema)
 async def update_project_tags(
         uow: uowDEP,
         project_id: int,
@@ -152,13 +152,24 @@ async def update_project_tags(
     return return_data.result
 
 
-@router.patch('/remove_project_tag/{project_id}/')
+@router.patch('/remove_project_tag/{project_id}/', response_model=bool)
 async def remove_project_tag(
         uow: uowDEP,
         project_id: int,
         data: ProjectTagsUpdateSchema
 ):
     return_data = await ProjectService(uow).remove_project_tags(project_id, data)
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
+
+
+@router.delete('/delete/{project_id}/', response_model=bool)
+async def delete_project(
+        uow: uowDEP,
+        project_id: int
+):
+    return_data = await ProjectService(uow).delete_project(project_id)
     if return_data.error is not None:
         return await json_response_with_400_error(return_data.error)
     return return_data.result

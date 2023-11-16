@@ -7,7 +7,7 @@ from src.core.database import Base
 project_tags_association_table = Table(
     'project_tags_association_table',
     Base.metadata,
-    Column('project_id', ForeignKey('projects.id')),
+    Column('project_id', ForeignKey('projects.id', ondelete='CASCADE')),
     Column('project_tag_id', ForeignKey('project_tags.id'))
 )
 

@@ -99,11 +99,10 @@ class ProjectTagService(BaseService):
             return tag
 
     async def get_tags_lst_by_ids(self, ids: list):
-        async with self.uow:
-            tags_lst = [
-                tag[0] for tag in await self.uow.project_tags.filter_by_ids_list(ids)
-            ]
-            return tags_lst
+        tags_lst = [
+            tag[0] for tag in await self.uow.project_tags.filter_by_ids_list(ids)
+        ]
+        return tags_lst
 
     async def get_all_tags(self) -> list[ProjectTagReturnSchema]:
         tags_lst = []
@@ -184,10 +183,9 @@ class ProjectService(ProjectTagService):
             data: ProjectSchema,
             image_file
     ):
-        tags_lst = await self.get_tags_lst_by_ids(data.tags)
-
         await save_media_file(image_file)
         async with self.uow:
+            tags_lst = await self.get_tags_lst_by_ids(data.tags)
             project = await self.uow.projects.create_instance_by_data(dict(data))
             project.tags = tags_lst
             project.preview_image = await get_media_file_link(image_file.filename)
@@ -272,10 +270,14 @@ class ProjectService(ProjectTagService):
             instance_id,
             data: ProjectTagsUpdateSchema
     ):
-        tags_lst = await self.get_tags_lst_by_ids(data.tags)
-
         async with self.uow:
+            tags_lst = await self.get_tags_lst_by_ids(data.tags)
             project: Project = await self.uow.projects.get_one_by_id(instance_id)
+            if project is None:
+                return ReturnData(
+                    error='This project doesn\'t exists!'  # noqa
+                )
+
             for tag in tags_lst:
                 if tag in project.tags:
                     return ReturnData(
@@ -291,18 +293,31 @@ class ProjectService(ProjectTagService):
             instance_id,
             data: ProjectTagsUpdateSchema
     ):
-        tags_lst = await self.get_tags_lst_by_ids(data.tags)
-
         async with self.uow:
+            tags_lst = await self.get_tags_lst_by_ids(data.tags)
             project: Project = await self.uow.projects.get_one_by_id(instance_id)
+            if project is None:
+                return ReturnData(
+                    error='This project doesn\'t exists!'  # noqa
+                )
 
             for tag in tags_lst:
                 if tag not in project.tags:
                     return ReturnData(
-                        error=f'This tag doesn\'t exists in project tags list!'  # noqa
+                        error=f'One of the tags doesn\'t exists in project tags list!'  # noqa
                     )
                 project.tags.remove(tag)
             await self.uow.commit()
             return ReturnData(
                 result=True
             )
+
+    @handle_errors
+    async def delete_project(
+            self,
+            instance_id
+    ):
+        async with self.uow:
+            await self.uow.projects.delete_by_id(instance_id)
+            await self.uow.commit()
+            return True
