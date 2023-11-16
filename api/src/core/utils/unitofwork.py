@@ -37,6 +37,9 @@ class AbstractUnitOfWork(ABC):
     async def add(self, instance):
         raise NotImplementedError()
 
+    async def refresh(self, instance, attribute_names: list):
+        raise NotImplementedError()
+
 
 class UnitOfWork(AbstractUnitOfWork):
 
@@ -63,3 +66,6 @@ class UnitOfWork(AbstractUnitOfWork):
 
     async def expunge(self, instance):
         self.session.expunge(instance)
+
+    async def refresh(self, instance, attribute_names: list):
+        await self.session.refresh(instance, attribute_names)

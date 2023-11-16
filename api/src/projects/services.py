@@ -99,13 +99,11 @@ class ProjectTagService(BaseService):
             return tag
 
     async def get_tags_lst_by_ids(self, ids: list):
-        tags_lst = []
-        for tag_id in ids:
-            tag = await self.get_tag_by_id(tag_id)
-            if tag is None:
-                return ReturnData(error='Provided ids are wrong!')
-            tags_lst.append(tag)
-        return ReturnData(result=tags_lst)
+        async with self.uow:
+            tags_lst = [
+                tag[0] for tag in await self.uow.project_tags.filter_by_ids_list(ids)
+            ]
+            return tags_lst
 
     async def get_all_tags(self) -> list[ProjectTagReturnSchema]:
         tags_lst = []
@@ -186,18 +184,16 @@ class ProjectService(ProjectTagService):
             data: ProjectSchema,
             image_file
     ):
-        tags_return_data = await self.get_tags_lst_by_ids(data.tags)
-        if tags_return_data.error is not None:
-            return ReturnData(error=tags_return_data.error)
+        tags_lst = await self.get_tags_lst_by_ids(data.tags)
 
         await save_media_file(image_file)
         async with self.uow:
             project = await self.uow.projects.create_instance_by_data(dict(data))
-            project.tags = tags_return_data.result
+            project.tags = tags_lst
             project.preview_image = await get_media_file_link(image_file.filename)
             await self.uow.add(project)
             await self.uow.commit()
-            print(project.filter_type)
+            await self.uow.refresh(project, attribute_names=['filter_type'])
             return ReturnData(
                 result=await self.get_project_return_schema(project)
             )
@@ -276,13 +272,11 @@ class ProjectService(ProjectTagService):
             instance_id,
             data: ProjectTagsUpdateSchema
     ):
-        tags_return_data = await self.get_tags_lst_by_ids(data.tags)
-        if tags_return_data.error is not None:
-            return ReturnData(error=tags_return_data.error)
+        tags_lst = await self.get_tags_lst_by_ids(data.tags)
 
         async with self.uow:
             project: Project = await self.uow.projects.get_one_by_id(instance_id)
-            for tag in tags_return_data.result:
+            for tag in tags_lst:
                 if tag in project.tags:
                     return ReturnData(
                         error='This tag is already added to this project!'
@@ -297,14 +291,12 @@ class ProjectService(ProjectTagService):
             instance_id,
             data: ProjectTagsUpdateSchema
     ):
-        tags_return_data = await self.get_tags_lst_by_ids(data.tags)
-        if tags_return_data.error is not None:
-            return ReturnData(error=tags_return_data.error)
+        tags_lst = await self.get_tags_lst_by_ids(data.tags)
 
         async with self.uow:
             project: Project = await self.uow.projects.get_one_by_id(instance_id)
 
-            for tag in tags_return_data.result:
+            for tag in tags_lst:
                 if tag not in project.tags:
                     return ReturnData(
                         error=f'This tag doesn\'t exists in project tags list!'  # noqa
