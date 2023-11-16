@@ -12,6 +12,11 @@ class ProjectTagReturnSchema(ProjectTagSchema):
     id: int
 
 
+class ProjectSchemaUpdate(MainSchema):
+    name: Optional[str] = None
+    img: Optional[str] = None
+
+
 class ProjectSchema(MainSchema):
     name: str
     filter_type_id: int
@@ -19,6 +24,14 @@ class ProjectSchema(MainSchema):
     source_link: str
     tags: list[int]
     text: str
+
+
+class ProjectUpdateSchema(MainSchema):
+    name: Optional[str] = None
+    filter_type_id: Optional[int] = None
+    preview_image: Optional[str] = None
+    source_link: Optional[str] = None
+    text: Optional[str] = None
 
 
 class ProjectReturnSchema(ProjectSchema):

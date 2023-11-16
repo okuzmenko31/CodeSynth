@@ -8,7 +8,7 @@ def handle_errors(func):
             return ReturnData(
                 result=await func(*args, **kwargs)
             )
-        except Exception:
-            raise ServiceMethodsException(func=func)
+        except Exception as e:
+            raise ServiceMethodsException(func=func, error=e)
 
     return wrapper

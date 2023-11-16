@@ -163,9 +163,27 @@ class SQLAlchemyRepository(AbstractRepository):
     async def get_one_by_id(self, obj_id: int):
         return await self.get_one_by_data({'id': obj_id})
 
+    @staticmethod
+    async def get_cleaned_data(
+            data: dict
+    ):
+        """
+        This method returns data dict without
+        keys with empty values.
+
+        :param data: data dict
+        :return: cleaned data dict
+        """
+        for key in data.keys():
+            data = data.copy()
+            if data[key] is None:
+                del data[key]
+        return data
+
     async def update_by_id(self, instance_id, data: dict):
+        cleaned_data = await self.get_cleaned_data(data)
         stmt = await self.get_operation_stmt_by_data(
-            data,
+            cleaned_data,
             STMTOperations.update,
             update_instance_id=instance_id
         )

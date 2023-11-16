@@ -1,6 +1,6 @@
-from typing import Annotated
+from typing import Annotated, Optional
 
-from fastapi import APIRouter, UploadFile, File, Form
+from fastapi import APIRouter, UploadFile, File, Form, status
 from fastapi.responses import JSONResponse
 
 from .schemas import (ProjectSchema,
@@ -8,9 +8,10 @@ from .schemas import (ProjectSchema,
                       ProjectReturnSchema,
                       ProjectFilterTypeSchema,
                       ProjectFilterTypesSchema,
-                      ProjectTagReturnSchema)
+                      ProjectTagReturnSchema,
+                      ProjectUpdateSchema)
 from .services import ProjectService, ProjectTagService, ProjectFilterTypeService
-from .dependencies import pagination_params
+from .dependencies import pagination_params, project_update_data
 
 from src.core.utils.dependencies import uowDEP
 
@@ -66,6 +67,38 @@ async def create_tag(
     return return_data.result
 
 
+@router.patch('/update_tag/{tag_id}/', response_model=ProjectTagSchema)
+async def update_tag(
+        uow: uowDEP,
+        tag_id: int,
+        name: Optional[str] = Form(None),
+        image_file: UploadFile = File(None)
+):
+    if name is None and image_file is None:
+        return JSONResponse(content={
+            'error': (
+                'To update this tag, you have to provide'
+                ' new value at least for one of fields.'
+            )
+        }, status_code=status.HTTP_400_BAD_REQUEST)
+
+    return_data = await ProjectTagService(uow).update_tag(
+        tag_id,
+        name,
+        image_file
+    )
+    return return_data.result
+
+
+@router.delete('/delete_tag/{tag_id}/', response_model=bool)
+async def delete_tag(
+        uow: uowDEP,
+        tag_id: int
+):
+    return_data = await ProjectTagService(uow).delete_tag(tag_id)
+    return return_data.result
+
+
 @router.get('/tags/', response_model=list[ProjectTagReturnSchema])
 async def get_all_tags(uow: uowDEP):
     return await ProjectTagService(uow).get_all_tags()
@@ -79,8 +112,7 @@ async def create_project(
         source_link: Annotated[str, Form(...)],
         tags: Annotated[list[int], Form(...)],
         text: Annotated[str, Form(...)],
-        preview_image: UploadFile = File(...),
-
+        preview_image: UploadFile = File(...)
 ):
     data = ProjectSchema(
         name=name,
@@ -96,6 +128,26 @@ async def create_project(
             'error': project_data.error
         })
     return project_data.result
+
+
+@router.patch('/update/{project_id}/')
+async def update_project(
+        uow: uowDEP,
+        instance_id: int,
+        project_data: project_update_data
+):
+    data = ProjectUpdateSchema(
+        name=project_data.name,
+        filter_type_id=project_data.filter_type_id,
+        source_link=project_data.source_link,
+        text=project_data.text
+    )
+    return_data = await ProjectService(uow).update_project(
+        instance_id,
+        data,
+        project_data.preview_image
+    )
+    return return_data.result
 
 
 @router.get('/all/', response_model=list[ProjectReturnSchema])

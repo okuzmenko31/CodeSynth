@@ -6,7 +6,8 @@ from .schemas import (ProjectSchema,
                       ProjectTagSchema,
                       ProjectReturnSchema,
                       ProjectFilterTypeSchema,
-                      ProjectTagReturnSchema)
+                      ProjectTagReturnSchema,
+                      ProjectUpdateSchema)
 from .models import Project
 
 from src.core.utils.decorators import handle_errors
@@ -120,8 +121,56 @@ class ProjectTagService(BaseService):
                 ))
             return tags_lst
 
+    @handle_errors
+    async def update_tag(
+            self,
+            instance_id,
+            tag_name: str = None,
+            image_file=None
+    ):
+        update_data = {
+            'name': tag_name
+        }
+        if image_file is not None:
+            await save_media_file(image_file)
+            update_data['img'] = await get_media_file_link(image_file.filename)
+
+        async with self.uow:
+            tag_id = await self.uow.project_tags.update_by_id(
+                instance_id,
+                update_data
+            )
+            await self.uow.commit()
+            tag = await self.uow.project_tags.get_one_by_id(tag_id)
+            return ProjectTagSchema(name=tag.name, img=tag.img)
+
+    @handle_errors
+    async def delete_tag(
+            self,
+            instance_id
+    ):
+        async with self.uow:
+            await self.uow.project_tags.delete_by_id(instance_id)
+            await self.uow.commit()
+            return True
+
 
 class ProjectService(ProjectTagService):
+
+    @staticmethod
+    async def get_project_return_schema(project: Project):
+        return ProjectReturnSchema(
+            id=project.id,
+            name=project.name,
+            filter_type_id=project.filter_type_id,
+            filter_type=project.filter_type.name,
+            preview_image=project.preview_image,
+            source_link=project.source_link,
+            tags=[
+                ProjectTagSchema(name=tag.name, img=tag.img) for tag in project.tags
+            ],
+            text=project.text
+        )
 
     async def get_project_by_id(
             self,
@@ -137,30 +186,23 @@ class ProjectService(ProjectTagService):
             data: ProjectSchema,
             image_file
     ):
-        return_data = await self.get_tags_lst_by_ids(data.tags)
-        if return_data.error is not None:
-            return ReturnData(error=return_data.error)
+        tags_return_data = await self.get_tags_lst_by_ids(data.tags)
+        if tags_return_data.error is not None:
+            return ReturnData(error=tags_return_data.error)
 
         await save_media_file(image_file)
         async with self.uow:
             project = await self.uow.projects.create_instance_by_data(dict(data))
-            project.tags = return_data.result
+            project.tags = tags_return_data.result
             project.preview_image = await get_media_file_link(image_file.filename)
             await self.uow.add(project)
             await self.uow.commit()
             return ReturnData(
-                result=ProjectReturnSchema(
-                    id=project.id,
-                    name=project.name,
-                    filter_type_id=project.filter_type_id,
-                    source_link=project.source_link,
-                    tags=project.tags,
-                    text=project.text
-                )
+                result=await self.get_project_return_schema(project)
             )
 
-    @staticmethod
     async def data_by_fetched_projects(
+            self,
             projects
     ):
         data_lst = []
@@ -168,18 +210,7 @@ class ProjectService(ProjectTagService):
         for project in projects:
             project = project[0]
             data_lst.append(
-                ProjectReturnSchema(
-                    id=project.id,
-                    name=project.name,
-                    filter_type_id=project.filter_type_id,
-                    filter_type=project.filter_type.name,
-                    preview_image=project.preview_image,
-                    source_link=project.source_link,
-                    tags=[
-                        ProjectTagSchema(name=tag.name, img=tag.img) for tag in project.tags
-                    ],
-                    text=project.text
-                )
+                await self.get_project_return_schema(project)
             )
         return data_lst
 
@@ -220,3 +251,37 @@ class ProjectService(ProjectTagService):
                 pagination_data=await self.get_pagination_data_for_stmt(pagination_data)
             )
             return await self.data_by_fetched_projects(projects)
+
+    @handle_errors
+    async def update_project(
+            self,
+            instance_id,
+            data: ProjectUpdateSchema,
+            image_file=None
+    ):
+        if image_file is not None:
+            await save_media_file(image_file)
+            data.preview_image = await get_media_file_link(image_file.filename)
+
+        # async with self.uow:
+        #     project = await self.uow.projects.create_instance_by_data(dict(data))
+        #     project.tags = tags_return_data.result
+        #     project.preview_image = await get_media_file_link(image_file.filename)
+        #     await self.uow.add(project)
+        #     await self.uow.commit()
+        #     return ReturnData(
+        #         result=ProjectReturnSchema(
+        #             id=project.id,
+        #             name=project.name,
+        #             filter_type_id=project.filter_type_id,
+        #             source_link=project.source_link,
+        #             tags=project.tags,
+        #             text=project.text
+        #         )
+        #     )
+
+        async with self.uow:
+            project_id = await self.uow.projects.update_by_id(instance_id, dict(data))
+            await self.uow.commit()
+            project = await self.uow.projects.get_one_by_id(project_id)
+            return await self.get_project_return_schema(project)

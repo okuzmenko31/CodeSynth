@@ -1,4 +1,6 @@
 class ServiceMethodsException(Exception):
 
-    def __init__(self, func):
-        self.add_note(f'Something went wrong in calling function/method {func}')
+    def __init__(self, func, error):
+        self.add_note(
+            f'\nSomething went wrong in calling function/method {func}\nError: {error}'
+        )
