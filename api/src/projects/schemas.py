@@ -34,6 +34,10 @@ class ProjectUpdateSchema(MainSchema):
     text: Optional[str] = None
 
 
+class ProjectTagsUpdateSchema(MainSchema):
+    tags: list[int]
+
+
 class ProjectReturnSchema(ProjectSchema):
     id: int
     tags: list[ProjectTagSchema]

@@ -9,7 +9,7 @@ from .schemas import (ProjectSchema,
                       ProjectFilterTypeSchema,
                       ProjectFilterTypesSchema,
                       ProjectTagReturnSchema,
-                      ProjectUpdateSchema)
+                      ProjectUpdateSchema, ProjectTagsUpdateSchema)
 from .services import ProjectService, ProjectTagService, ProjectFilterTypeService
 from .dependencies import pagination_params, project_update_data
 
@@ -133,7 +133,7 @@ async def create_project(
 @router.patch('/update/{project_id}/')
 async def update_project(
         uow: uowDEP,
-        instance_id: int,
+        project_id: int,
         project_data: project_update_data
 ):
     data = ProjectUpdateSchema(
@@ -143,11 +143,39 @@ async def update_project(
         text=project_data.text
     )
     return_data = await ProjectService(uow).update_project(
-        instance_id,
+        project_id,
         data,
         project_data.preview_image
     )
     return return_data.result
+
+
+@router.patch('/update_project_tags/{project_id}/')
+async def update_project_tags(
+        uow: uowDEP,
+        project_id: int,
+        data: ProjectTagsUpdateSchema
+):
+    return_data = await ProjectService(uow).add_project_tags(project_id, data)
+    if return_data.result.error is not None:
+        return JSONResponse(content={
+            'error': return_data.result.error
+        }, status_code=status.HTTP_400_BAD_REQUEST)
+    return return_data.result.result
+
+
+@router.patch('/remove_project_tag/{project_id}/')
+async def remove_project_tag(
+        uow: uowDEP,
+        project_id: int,
+        data: ProjectTagsUpdateSchema
+):
+    return_data = await ProjectService(uow).remove_project_tags(project_id, data)
+    if return_data.result.error is not None:
+        return JSONResponse(content={
+            'error': return_data.result.error
+        }, status_code=status.HTTP_400_BAD_REQUEST)
+    return return_data.result.result
 
 
 @router.get('/all/', response_model=list[ProjectReturnSchema])

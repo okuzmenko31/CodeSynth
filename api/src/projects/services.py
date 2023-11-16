@@ -7,8 +7,8 @@ from .schemas import (ProjectSchema,
                       ProjectReturnSchema,
                       ProjectFilterTypeSchema,
                       ProjectTagReturnSchema,
-                      ProjectUpdateSchema)
-from .models import Project
+                      ProjectUpdateSchema, ProjectTagsUpdateSchema)
+from .models import Project, ProjectTag
 
 from src.core.utils.decorators import handle_errors
 from src.core.utils.dataclasses import ReturnData
@@ -263,25 +263,53 @@ class ProjectService(ProjectTagService):
             await save_media_file(image_file)
             data.preview_image = await get_media_file_link(image_file.filename)
 
-        # async with self.uow:
-        #     project = await self.uow.projects.create_instance_by_data(dict(data))
-        #     project.tags = tags_return_data.result
-        #     project.preview_image = await get_media_file_link(image_file.filename)
-        #     await self.uow.add(project)
-        #     await self.uow.commit()
-        #     return ReturnData(
-        #         result=ProjectReturnSchema(
-        #             id=project.id,
-        #             name=project.name,
-        #             filter_type_id=project.filter_type_id,
-        #             source_link=project.source_link,
-        #             tags=project.tags,
-        #             text=project.text
-        #         )
-        #     )
-
         async with self.uow:
             project_id = await self.uow.projects.update_by_id(instance_id, dict(data))
             await self.uow.commit()
             project = await self.uow.projects.get_one_by_id(project_id)
             return await self.get_project_return_schema(project)
+
+    @handle_errors
+    async def add_project_tags(
+            self,
+            instance_id,
+            data: ProjectTagsUpdateSchema
+    ):
+        tags_return_data = await self.get_tags_lst_by_ids(data.tags)
+        if tags_return_data.error is not None:
+            return ReturnData(error=tags_return_data.error)
+
+        async with self.uow:
+            project: Project = await self.uow.projects.get_one_by_id(instance_id)
+            for tag in tags_return_data.result:
+                if tag in project.tags:
+                    return ReturnData(
+                        error='This tag is already added to this project!'
+                    )
+                project.tags.append(tag)
+            await self.uow.commit()
+            return ReturnData(result=await self.get_project_return_schema(project))
+
+    @handle_errors
+    async def remove_project_tags(
+            self,
+            instance_id,
+            data: ProjectTagsUpdateSchema
+    ):
+        tags_return_data = await self.get_tags_lst_by_ids(data.tags)
+        if tags_return_data.error is not None:
+            return ReturnData(error=tags_return_data.error)
+
+        async with self.uow:
+            project: Project = await self.uow.projects.get_one_by_id(instance_id)
+
+            for tag in tags_return_data.result:
+                if tag not in project.tags:
+                    return ReturnData(
+                        error=f'This tag doesn\'t exists in project tags list!'  # noqa
+                    )
+                project.tags.remove(tag)
+            await self.uow.commit()
+            return ReturnData(
+                result=True
+            )

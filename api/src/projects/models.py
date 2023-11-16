@@ -27,6 +27,11 @@ class ProjectTag(Base):
     def __str__(self):
         return self.__repr__()
 
+    def __eq__(self, other):
+        if isinstance(other, ProjectTag):
+            return self.id == other.id
+        return False
+
 
 class ProjectFilterType(Base):
     __tablename__ = 'project_filter_types'  # noqa
