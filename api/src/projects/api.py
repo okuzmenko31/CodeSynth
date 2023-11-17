@@ -53,6 +53,17 @@ async def get_filter_types(uow: uowDEP):
     return await ProjectFilterTypeService(uow).get_filter_types()
 
 
+@router.get('/filter_types/{filter_type_id}/', response_model=ProjectFilterTypeSchema)
+async def get_filter_type(
+        uow: uowDEP,
+        filter_type_id: int
+):
+    return_data = await ProjectFilterTypeService(uow).get_filter_type_by_id(filter_type_id)
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
+
+
 @router.post('/create_tag/', response_model=ProjectTagSchema)
 async def create_tag(
         uow: uowDEP,
@@ -97,6 +108,14 @@ async def get_all_tags(uow: uowDEP):
     return await ProjectTagService(uow).get_all_tags()
 
 
+@router.get('/tags/{tag_id}/', response_model=ProjectTagReturnSchema)
+async def get_tag(uow: uowDEP, tag_id: int):
+    return_data = await ProjectTagService(uow).get_tag_by_id(tag_id)
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
+
+
 @router.post('/create/', response_model=ProjectReturnSchema)
 async def create_project(
         uow: uowDEP,
@@ -137,6 +156,8 @@ async def update_project(
         data,
         project_data.preview_image
     )
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
     return return_data.result
 
 
@@ -183,6 +204,15 @@ async def get_all_projects(
     return_data = await ProjectService(uow).get_projects(
         pagination_data=pag_params.params_dict
     )
+    return return_data.result
+
+
+@router.get('/{project_id}/', response_model=ProjectReturnSchema)
+async def get_project(
+        uow: uowDEP,
+        project_id: int
+):
+    return_data = await ProjectService(uow).get_project_by_id(project_id)
     return return_data.result
 
 
