@@ -1,0 +1,43 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    padding: 50px 50px 200px 50px;
+    border-width: 1px;
+    border-style: solid;
+    border-image: linear-gradient(90deg, #00000000 0%, #ffffff 50%, #00000000 100%) 1 0 0 0;
+    background-color: #181818;
+    gap: 100px;
+    box-sizing: border-box;
+}
+
+.logo {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.logo img {
+    width: 82px;
+    height: 82px;
+}
+
+.categories {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.category {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.category p {
+    margin: 0;
+}
