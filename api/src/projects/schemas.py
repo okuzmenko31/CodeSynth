@@ -48,5 +48,9 @@ class ProjectFilterTypeSchema(MainSchema):
     name: str
 
 
+class ProjectFilterTypeReturnSchema(ProjectFilterTypeSchema):
+    id: int
+
+
 class ProjectFilterTypesSchema(MainSchema):
     filter_types: list[int]

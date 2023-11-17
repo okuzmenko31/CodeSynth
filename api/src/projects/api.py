@@ -17,7 +17,7 @@ router = APIRouter(
 )
 
 
-@router.post('/create_filter_type/', response_model=ProjectFilterTypeSchema)
+@router.post('/create_filter_type/', response_model=ProjectFilterTypeReturnSchema)
 async def create_filter_type(
         uow: uowDEP,
         data: ProjectFilterTypeSchema
@@ -26,7 +26,7 @@ async def create_filter_type(
     return return_data.result
 
 
-@router.patch('/update_filter_type/{instance_id}', response_model=ProjectFilterTypeSchema)
+@router.patch('/update_filter_type/{instance_id}', response_model=ProjectFilterTypeReturnSchema)
 async def update_filter_type(
         uow: uowDEP,
         data: ProjectFilterTypeSchema,
@@ -48,12 +48,12 @@ async def delete_filter_type(
     return return_data.result
 
 
-@router.get('/filter_types/', response_model=list[ProjectFilterTypeSchema])
+@router.get('/filter_types/', response_model=list[ProjectFilterTypeReturnSchema])
 async def get_filter_types(uow: uowDEP):
     return await ProjectFilterTypeService(uow).get_filter_types()
 
 
-@router.get('/filter_types/{filter_type_id}/', response_model=ProjectFilterTypeSchema)
+@router.get('/filter_types/{filter_type_id}/', response_model=ProjectFilterTypeReturnSchema)
 async def get_filter_type(
         uow: uowDEP,
         filter_type_id: int
@@ -64,7 +64,7 @@ async def get_filter_type(
     return return_data.result
 
 
-@router.post('/create_tag/', response_model=ProjectTagSchema)
+@router.post('/create_tag/', response_model=ProjectTagReturnSchema)
 async def create_tag(
         uow: uowDEP,
         name: Annotated[str, Form(...)],
@@ -74,7 +74,7 @@ async def create_tag(
     return return_data.result
 
 
-@router.patch('/update_tag/{tag_id}/', response_model=ProjectTagSchema)
+@router.patch('/update_tag/{tag_id}/', response_model=ProjectTagReturnSchema)
 async def update_tag(
         uow: uowDEP,
         tag_id: int,

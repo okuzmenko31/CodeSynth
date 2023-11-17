@@ -2,13 +2,8 @@ from src.core.utils.service import BaseService
 from src.core.utils.media_files import (get_media_file_link,
                                         save_media_file)
 
-from .schemas import (ProjectSchema,
-                      ProjectTagSchema,
-                      ProjectReturnSchema,
-                      ProjectFilterTypeSchema,
-                      ProjectTagReturnSchema,
-                      ProjectUpdateSchema, ProjectTagsUpdateSchema)
-from .models import Project, ProjectTag
+from .schemas import *
+from .models import Project
 
 from src.core.utils.decorators import handle_errors
 from src.core.utils.dataclasses import ReturnData
@@ -25,7 +20,8 @@ class ProjectFilterTypeService(BaseService):
             type_id = await self.uow.project_types.insert_by_data(dict(data))
             type_instance = await self.uow.project_types.get_one_by_id(type_id)
             await self.uow.commit()
-            return ProjectFilterTypeSchema(
+            return ProjectFilterTypeReturnSchema(
+                id=type_instance.id,
                 name=type_instance.name
             )
 
@@ -39,7 +35,8 @@ class ProjectFilterTypeService(BaseService):
             for filter_type in types:
                 filter_type = filter_type[0]
 
-                types_lst.append(ProjectFilterTypeSchema(
+                types_lst.append(ProjectFilterTypeReturnSchema(
+                    id=filter_type.id,
                     name=filter_type.name
                 ))
             return types_lst
@@ -57,7 +54,8 @@ class ProjectFilterTypeService(BaseService):
             )
             await self.uow.commit()
             filter_type = await self.uow.project_types.get_one_by_id(filter_type_id)
-            return ProjectFilterTypeSchema(
+            return ProjectFilterTypeReturnSchema(
+                id=filter_type.id,
                 name=filter_type.name
             )
 
@@ -82,7 +80,8 @@ class ProjectFilterTypeService(BaseService):
                 return ReturnData(
                     error='This filter type doesn\'t exists!'  # noqa
                 )
-            return ReturnData(result=ProjectFilterTypeSchema(
+            return ReturnData(result=ProjectFilterTypeReturnSchema(
+                id=filter_type.id,
                 name=filter_type.name
             ))
 
@@ -103,7 +102,7 @@ class ProjectTagService(BaseService):
             })
             tag = await self.uow.project_tags.get_one_by_id(tag_id)
             await self.uow.commit()
-            return ProjectTagSchema(name=tag.name, img=tag.img)
+            return ProjectTagReturnSchema(id=tag.id, name=tag.name, img=tag.img)
 
     @handle_errors
     async def get_tag_by_id(self, instance_id):
@@ -159,7 +158,7 @@ class ProjectTagService(BaseService):
             )
             await self.uow.commit()
             tag = await self.uow.project_tags.get_one_by_id(tag_id)
-            return ProjectTagSchema(name=tag.name, img=tag.img)
+            return ProjectTagReturnSchema(id=tag.id, name=tag.name, img=tag.img)
 
     @handle_errors
     async def delete_tag(
