@@ -1,9 +1,9 @@
 .service-block {
     display: flex;
     flex-direction: column;
-    border-width: 1px;
     width: 100%;
     overflow-wrap: normal;
+    border-width: 1px;
     border-style: solid;
     border-image: linear-gradient(90deg, #00000000 0%, #ffffff 50%, #00000000 100%) 0 0 1 0;
 }

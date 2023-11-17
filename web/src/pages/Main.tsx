@@ -2,6 +2,9 @@ import React from 'react';
 import Project from "../components/UI/ProjectTemplate"
 import Service from "../components/UI/ServicesTemplate"
 import Langauge from "../components/UI/LanguageTemplate"
+import Offer from "../components/UI/OfferTemplate"
+import Question from '../components/UI/QuestionTemplate';
+import Footer from '../components/Footer';
 import "../styles/Main.css"
 import { initParallaxEffect } from '../utils/parallax_effect';
 
@@ -62,7 +65,7 @@ const Main = () => {
                     <div className="services-title-wrapper">
                         <p className="big-text">SOLUTIONS TO YOUR NEEDS</p>
                         <p className="small-text">We offer a wide range of services designed to help you achieve your goals, from design and user experience to custom development and third-party integrations.</p>
-                        <button className="button">GET STARTER</button>
+                        <button className="button">GET STARTED</button>
                     </div>
 
                     <div className="services-items-wrapper">
@@ -89,6 +92,71 @@ const Main = () => {
                     <Langauge name='JavaScript' image={javascript} frameworks={javascriptFrameWorks} additional={javascriptAdditionalTools}/>
                 </div>
             </div>
+
+            <div className="we-can-offer-block">
+                <div className="we-can-offer-header">
+                    <div className="we-can-offer-title">
+                        <p className="big-text">WE DELIVER QUALITY</p>
+                        <p className="small-text">We prioritize quality of work and client experience. That's why you get a range of powerups when you work with us!</p>
+                    </div>
+
+                    <button className="button">START PROJECT</button>
+                </div>
+
+                <div className="we-can-offer-content">
+                    <Offer name='dsadasdsa' description='dsadasdas' image={python}/>
+                    <Offer name='dsada' description='ffffffffff' image={javascript}/>
+                    <Offer name='dsadasdsa' description='dsadasdas' image={python}/>
+                    <Offer name='dsada' description='ffffffffff' image={javascript}/>
+                    <Offer name='dsadasdsa' description='dsadasdas' image={python}/>
+                    <Offer name='dsada' description='ffffffffff' image={javascript}/>
+                    <Offer name='dsadasdsa' description='dsadasdas' image={python}/>
+                    <Offer name='dsada' description='ffffffffff' image={javascript}/>
+                    <Offer name='dsada' description='ffffffffff' image={javascript}/>
+                </div>
+            </div>
+
+            <div className="our-statistic">
+                <div className="our-statistic-block red">
+                    <p className="biggest-text">50</p>
+                    <p className="mid-text">finished projects</p>
+                </div>
+
+                <div className="our-statistic-block green">
+                    <p className="biggest-text">2</p>
+                    <p className="mid-text">Years of experience</p>
+                </div>
+
+                <div className="our-statistic-block blue">
+                    <p className="biggest-text">40</p>
+                    <p className="mid-text">Client worldwide</p>
+                </div>
+            </div>
+
+            <div className="questions-container">
+                <div className="questions-header">
+                    <p className="big-text">FAQs</p>
+                </div>
+                
+                <div className="questions-block">
+                    <Question answer='dsadas' question='dsadads'/>
+                    <Question answer='dsadas' question='dsadads'/>
+                    <Question answer='dsadas' question='dsadads'/>
+                    <Question answer='dsadas' question='dsadads'/>
+                    <Question answer='dsadas' question='dsadads'/>
+                </div>
+            </div>
+
+            <div className="user-offer-block">
+                <div className="user-offer-header">
+                    <p className="big-text">TIME TO START UP YOUR PROJECT</p>
+                    <p className="small-text">We are ready to realize your dreamed project</p>
+                </div>
+
+                <button className="button">Get started</button>
+            </div>
+
+            <Footer />
         </div>
     );
 }

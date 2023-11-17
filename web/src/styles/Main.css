@@ -131,3 +131,144 @@
     justify-content: center;
     width: 80%;
 }
+
+.we-can-offer-block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.we-can-offer-header {
+    display: flex;
+    width: 70%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.we-can-offer-title p {
+    margin: 0;
+    max-width: 50%;
+}
+
+.we-can-offer-content {
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: 20px;
+    border: 2px solid rgba(255,255,255,.2);
+    overflow: hidden;
+}
+
+.our-statistic {
+    width: 100%;
+    padding: 100px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    border-width: 1px;
+    border-style: solid;
+    border-image: linear-gradient(90deg, #00000000 0%, #ffffff 50%, #00000000 100%) 1 0 1 0;
+}
+
+.our-statistic-block {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.our-statistic-block::before {
+    position: absolute;
+    top: -50%;
+    right: 0;
+    content: '+';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 200px;
+}
+
+.our-statistic-block.red::before {
+    background: url("../assets/red_conic_gradient.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.our-statistic-block.green::before {
+    background: url("../assets/green_conic_gradient.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.our-statistic-block.blue::before {
+    background: url("../assets/purple_conic_gradient.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.our-statistic-block p {
+    margin: 0;
+    text-align: center;
+}
+
+.questions-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.questions-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.questions-header p {
+    margin: 0;
+}
+
+.questions-block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-offer-block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.user-offer-header {
+    width: 50%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-offer-header p {
+    margin: 0;
+    text-align: center;
+}

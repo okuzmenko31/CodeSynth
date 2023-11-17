@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Routes from "./routes"
 import ParticlesBackground from './components/ParticlesBackground';
 
-const App = () => {
+const App = () => { 
 
   return (
     <>

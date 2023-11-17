@@ -13,8 +13,8 @@ const Language = ({name, frameworks, additional, image}: { name: string, framewo
             <ul className="language-frame-works mid-text">
                 {
                     frameworks &&
-                    frameworks.map((framework: string) => (
-                        <li>{framework}</li>
+                    frameworks.map((framework: string, index: number) => (
+                        <li key={index}>{framework}</li>
                     ))
                 }
             </ul>
@@ -24,8 +24,8 @@ const Language = ({name, frameworks, additional, image}: { name: string, framewo
                 <p>ADDITIONAL TOOLS:</p>
                     {
                         additional &&
-                        additional.map((tool: string) => (
-                            <li>{tool}</li>
+                        additional.map((tool: string, index: number) => (
+                            <li key={index}>{tool}</li>
                         ))
                     }
                     <p>AND OTHERS</p>

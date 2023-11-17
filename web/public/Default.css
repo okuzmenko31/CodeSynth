@@ -3,6 +3,11 @@
     color: #ffffff;
 }
 
+html {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
 html,
 body {
     margin: 0;
@@ -30,20 +35,29 @@ body,
     z-index: 100;
 }
 
+.biggest-text {
+    font-size: 200px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
 .big-text {
     font-size: 102px;
     text-transform: uppercase;
+    text-decoration: none;
 }
 
 .mid-text {
     font-size: 52px;
     text-transform: uppercase;
+    text-decoration: none;
 }
 
 .small-text {
     color: #ADADAD;
     font-size: 25px;
     font-family: 'Inconsolata';
+    text-decoration: none;
 }
 
 .button {
@@ -91,7 +105,12 @@ body,
     background-image: linear-gradient(90deg,#ffffff,#ffffff);
     background-clip: text;
     -webkit-background-clip: text;
+    cursor: pointer;
     color: transparent;
+}
+
+.codesynth-text.no-table::after {
+    display: none;
 }
 
 .codesynth-text::after {
