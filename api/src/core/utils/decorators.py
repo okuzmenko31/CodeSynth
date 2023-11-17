@@ -1,20 +1,17 @@
-from typing import NamedTuple, Optional
-
-
-class ResultData(NamedTuple):
-    data: Optional[dict] = None
-    error: Optional[str] = None
+from .dataclasses import ReturnData
+from .exceptions import ServiceMethodsException
 
 
 def handle_errors(func):
-    async def wrapper(*args, **kwargs):
+    async def wrapper(*args, **kwargs) -> ReturnData:
         try:
-            return ResultData(
-                data={
-                    'result': await func(*args, **kwargs)
-                }
+            func_result = await func(*args, **kwargs)
+            if isinstance(func_result, ReturnData):
+                return func_result
+            return ReturnData(
+                result=func_result
             )
-        except (Exception,):
-            return ResultData(error='Something went wrong... Please, try again.')
+        except Exception as e:
+            raise ServiceMethodsException(func=func, error=e)
 
     return wrapper

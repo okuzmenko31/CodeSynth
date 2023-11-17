@@ -7,7 +7,7 @@ from src.core.database import Base
 project_tags_association_table = Table(
     'project_tags_association_table',
     Base.metadata,
-    Column('project_id', ForeignKey('projects.id')),
+    Column('project_id', ForeignKey('projects.id', ondelete='CASCADE')),
     Column('project_tag_id', ForeignKey('project_tags.id'))
 )
 
@@ -26,6 +26,11 @@ class ProjectTag(Base):
 
     def __str__(self):
         return self.__repr__()
+
+    def __eq__(self, other):
+        if isinstance(other, ProjectTag):
+            return self.id == other.id
+        return False
 
 
 class ProjectFilterType(Base):

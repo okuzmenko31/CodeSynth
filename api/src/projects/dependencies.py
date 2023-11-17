@@ -1,8 +1,9 @@
-from typing import Annotated
+from typing import Annotated, Optional
 
-from fastapi import Depends, Query
+from fastapi import Depends, Query, Form, UploadFile, File
 
 from src.core.config import settings
+from src.core.utils.dataclasses import ProjectUpdateData
 
 
 class PaginationParams:
@@ -26,4 +27,21 @@ def get_pagination_params(params: PaginationParams = Depends()):
     return params
 
 
+def project_update_data_depends(
+        name: Optional[str] = Form(None),
+        filter_type_id: Optional[int] = Form(None),
+        source_link: Optional[str] = Form(None),
+        text: Optional[str] = Form(None),
+        preview_image: UploadFile = File(None)
+) -> ProjectUpdateData:
+    return ProjectUpdateData(
+        name=name,
+        filter_type_id=filter_type_id,
+        source_link=source_link,
+        text=text,
+        preview_image=preview_image
+    )
+
+
 pagination_params = Annotated[PaginationParams, Depends(get_pagination_params)]
+project_update_data = Annotated[ProjectUpdateData, Depends(project_update_data_depends)]

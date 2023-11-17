@@ -1,21 +1,12 @@
-from typing import NamedTuple, Optional
-
 from src.core.utils.service import BaseService
 from src.core.utils.media_files import (get_media_file_link,
                                         save_media_file)
 
-from .schemas import (ProjectSchema,
-                      ProjectTagSchema,
-                      ProjectReturnSchema,
-                      ProjectFilterTypeSchema,
-                      ProjectTagReturnSchema)
+from .schemas import *
 from .models import Project
+
 from src.core.utils.decorators import handle_errors
-
-
-class ProjectData(NamedTuple):
-    data: Optional[dict] = None
-    error: Optional[str] = None
+from src.core.utils.dataclasses import ReturnData
 
 
 class ProjectFilterTypeService(BaseService):
@@ -29,7 +20,8 @@ class ProjectFilterTypeService(BaseService):
             type_id = await self.uow.project_types.insert_by_data(dict(data))
             type_instance = await self.uow.project_types.get_one_by_id(type_id)
             await self.uow.commit()
-            return ProjectFilterTypeSchema(
+            return ProjectFilterTypeReturnSchema(
+                id=type_instance.id,
                 name=type_instance.name
             )
 
@@ -43,10 +35,55 @@ class ProjectFilterTypeService(BaseService):
             for filter_type in types:
                 filter_type = filter_type[0]
 
-                types_lst.append(ProjectFilterTypeSchema(
+                types_lst.append(ProjectFilterTypeReturnSchema(
+                    id=filter_type.id,
                     name=filter_type.name
                 ))
             return types_lst
+
+    @handle_errors
+    async def update_filter_type(
+            self,
+            instance_id: int,
+            data: ProjectFilterTypeSchema
+    ):
+        async with self.uow:
+            filter_type_id = await self.uow.project_types.update_by_id(
+                instance_id,
+                dict(data)
+            )
+            await self.uow.commit()
+            filter_type = await self.uow.project_types.get_one_by_id(filter_type_id)
+            return ProjectFilterTypeReturnSchema(
+                id=filter_type.id,
+                name=filter_type.name
+            )
+
+    @handle_errors
+    async def delete_filter_type(
+            self,
+            instance_id: int
+    ):
+        async with self.uow:
+            await self.uow.project_types.delete_by_id(instance_id)
+            await self.uow.commit()
+            return True
+
+    @handle_errors
+    async def get_filter_type_by_id(
+            self,
+            instance_id
+    ):
+        async with self.uow:
+            filter_type = await self.uow.project_types.get_one_by_id(instance_id)
+            if filter_type is None:
+                return ReturnData(
+                    error='This filter type doesn\'t exists!'  # noqa
+                )
+            return ReturnData(result=ProjectFilterTypeReturnSchema(
+                id=filter_type.id,
+                name=filter_type.name
+            ))
 
 
 class ProjectTagService(BaseService):
@@ -65,26 +102,26 @@ class ProjectTagService(BaseService):
             })
             tag = await self.uow.project_tags.get_one_by_id(tag_id)
             await self.uow.commit()
-            return ProjectTagSchema(name=tag.name, img=tag.img)
+            return ProjectTagReturnSchema(id=tag.id, name=tag.name, img=tag.img)
 
-    async def get_tag_by_id(self, tag_id: int):
+    @handle_errors
+    async def get_tag_by_id(self, instance_id):
         async with self.uow:
-            tag = await self.uow.project_tags.get_one_by_id(tag_id)
+            tag = await self.uow.project_tags.get_one_by_id(instance_id)
+
             if tag is None:
-                return None
-            await self.uow.expunge(instance=tag)
-            return tag
+                return ReturnData(error='This tag doesn\'t exists!')  # noqa
+            return ReturnData(result=ProjectTagReturnSchema(
+                id=tag.id,
+                name=tag.name,
+                img=tag.img
+            ))
 
     async def get_tags_lst_by_ids(self, ids: list):
-        tags_lst = []
-        for tag_id in ids:
-            tag = await self.get_tag_by_id(tag_id)
-            if tag is None:
-                return ProjectData(error='Provided ids are wrong!')
-            tags_lst.append(tag)
-        return ProjectData(data={
-            'tags': tags_lst
-        })
+        tags_lst = [
+            tag[0] for tag in await self.uow.project_tags.filter_by_ids_list(ids)
+        ]
+        return tags_lst
 
     async def get_all_tags(self) -> list[ProjectTagReturnSchema]:
         tags_lst = []
@@ -100,50 +137,83 @@ class ProjectTagService(BaseService):
                 ))
             return tags_lst
 
+    @handle_errors
+    async def update_tag(
+            self,
+            instance_id,
+            tag_name: str = None,
+            image_file=None
+    ):
+        update_data = {
+            'name': tag_name
+        }
+        if image_file is not None:
+            await save_media_file(image_file)
+            update_data['img'] = await get_media_file_link(image_file.filename)
+
+        async with self.uow:
+            tag_id = await self.uow.project_tags.update_by_id(
+                instance_id,
+                update_data
+            )
+            await self.uow.commit()
+            tag = await self.uow.project_tags.get_one_by_id(tag_id)
+            return ProjectTagReturnSchema(id=tag.id, name=tag.name, img=tag.img)
+
+    @handle_errors
+    async def delete_tag(
+            self,
+            instance_id
+    ):
+        async with self.uow:
+            await self.uow.project_tags.delete_by_id(instance_id)
+            await self.uow.commit()
+            return True
+
 
 class ProjectService(ProjectTagService):
 
-    async def get_project_by_id(
-            self,
-            project_id
-    ):
-        async with self.uow:
-            project = await self.uow.projects.get_one_by_id(project_id)
-            await self.uow.expunge(instance=project)
-            return project
+    @staticmethod
+    async def project_does_not_exists():
+        return ReturnData(
+            error='This project doesn\'t exists!'  # noqa
+        )
+
+    @staticmethod
+    async def get_project_return_schema(project: Project):
+        return ProjectReturnSchema(
+            id=project.id,
+            name=project.name,
+            filter_type_id=project.filter_type_id,
+            filter_type=project.filter_type.name,
+            preview_image=project.preview_image,
+            source_link=project.source_link,
+            tags=[
+                ProjectTagSchema(name=tag.name, img=tag.img) for tag in project.tags
+            ],
+            text=project.text
+        )
 
     async def create_project(
             self,
             data: ProjectSchema,
             image_file
     ):
-        tags, error = await self.get_tags_lst_by_ids(data.tags)
-        if error is not None:
-            return ProjectData(error=error)
-        tags = tags['tags']
-
         await save_media_file(image_file)
         async with self.uow:
+            tags_lst = await self.get_tags_lst_by_ids(data.tags)
             project = await self.uow.projects.create_instance_by_data(dict(data))
-            project.tags = tags
+            project.tags = tags_lst
             project.preview_image = await get_media_file_link(image_file.filename)
             await self.uow.add(project)
             await self.uow.commit()
-            return ProjectData(
-                data={
-                    'result': ProjectReturnSchema(
-                        id=project.id,
-                        name=project.name,
-                        filter_type_id=project.filter_type_id,
-                        source_link=project.source_link,
-                        tags=project.tags,
-                        text=project.text
-                    )
-                }
+            await self.uow.refresh(project, attribute_names=['filter_type'])
+            return ReturnData(
+                result=await self.get_project_return_schema(project)
             )
 
-    @staticmethod
     async def data_by_fetched_projects(
+            self,
             projects
     ):
         data_lst = []
@@ -151,18 +221,7 @@ class ProjectService(ProjectTagService):
         for project in projects:
             project = project[0]
             data_lst.append(
-                ProjectReturnSchema(
-                    id=project.id,
-                    name=project.name,
-                    filter_type_id=project.filter_type_id,
-                    filter_type=project.filter_type.name,
-                    preview_image=project.preview_image,
-                    source_link=project.source_link,
-                    tags=[
-                        ProjectTagSchema(name=tag.name, img=tag.img) for tag in project.tags
-                    ],
-                    text=project.text
-                )
+                await self.get_project_return_schema(project)
             )
         return data_lst
 
@@ -181,7 +240,7 @@ class ProjectService(ProjectTagService):
     async def get_projects(
             self,
             pagination_data: dict
-    ) -> list[ProjectSchema]:
+    ):
         async with self.uow:
             projects = await self.uow.projects.get_all(
                 with_pagination=True,
@@ -203,3 +262,90 @@ class ProjectService(ProjectTagService):
                 pagination_data=await self.get_pagination_data_for_stmt(pagination_data)
             )
             return await self.data_by_fetched_projects(projects)
+
+    @handle_errors
+    async def update_project(
+            self,
+            instance_id,
+            data: ProjectUpdateSchema,
+            image_file=None
+    ):
+        if image_file is not None:
+            await save_media_file(image_file)
+            data.preview_image = await get_media_file_link(image_file.filename)
+
+        async with self.uow:
+            project = await self.uow.projects.get_one_by_id(instance_id)
+            if project is None:
+                return await self.project_does_not_exists()
+            await self.uow.projects.update_by_id(project.id, dict(data))
+            await self.uow.commit()
+            return await self.get_project_return_schema(project)
+
+    @handle_errors
+    async def add_project_tags(
+            self,
+            instance_id,
+            data: ProjectTagsUpdateSchema
+    ):
+        async with self.uow:
+            tags_lst = await self.get_tags_lst_by_ids(data.tags)
+            project: Project = await self.uow.projects.get_one_by_id(instance_id)
+            if project is None:
+                return await self.project_does_not_exists()
+
+            for tag in tags_lst:
+                if tag in project.tags:
+                    return ReturnData(
+                        error='This tag is already added to this project!'
+                    )
+                project.tags.append(tag)
+            await self.uow.commit()
+            return ReturnData(result=await self.get_project_return_schema(project))
+
+    @handle_errors
+    async def remove_project_tags(
+            self,
+            instance_id,
+            data: ProjectTagsUpdateSchema
+    ):
+        async with self.uow:
+            tags_lst = await self.get_tags_lst_by_ids(data.tags)
+            project: Project = await self.uow.projects.get_one_by_id(instance_id)
+            if project is None:
+                return await self.project_does_not_exists()
+
+            for tag in tags_lst:
+                if tag not in project.tags:
+                    return ReturnData(
+                        error=f'One of the tags doesn\'t exists in project tags list!'  # noqa
+                    )
+                project.tags.remove(tag)
+            await self.uow.commit()
+            return ReturnData(
+                result=True
+            )
+
+    @handle_errors
+    async def delete_project(
+            self,
+            instance_id
+    ):
+        async with self.uow:
+            await self.uow.projects.delete_by_id(instance_id)
+            await self.uow.commit()
+            return True
+
+    @handle_errors
+    async def get_project_by_id(
+            self,
+            instance_id
+    ):
+        async with self.uow:
+            project = await self.uow.projects.get_one_by_id(instance_id)
+            if project is None:
+                return await self.project_does_not_exists()
+
+            return ReturnData(
+                result=await self.get_project_return_schema(project)
+            )
