@@ -178,10 +178,14 @@ class SQLAlchemyRepository(AbstractRepository):
             data = data.copy()
             if data[key] is None:
                 del data[key]
+        if len(data.items()) < 1:
+            return None
         return data
 
     async def update_by_id(self, instance_id, data: dict):
         cleaned_data = await self.get_cleaned_data(data)
+        if cleaned_data is None:
+            return cleaned_data
         stmt = await self.get_operation_stmt_by_data(
             cleaned_data,
             STMTOperations.update,

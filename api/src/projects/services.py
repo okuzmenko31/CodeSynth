@@ -293,11 +293,18 @@ class ProjectService(ProjectTagService):
 
         async with self.uow:
             project = await self.uow.projects.get_one_by_id(instance_id)
+            if data.filter_type_id is not None:
+                filter_type_exists = await self.uow.project_types.check_exists_by_data(
+                    {'id': data.filter_type_id}
+                )
+                if not filter_type_exists:
+                    return ReturnData(error='Provided filter type does not exists!')
+
             if project is None:
                 return await return_data_err_object_does_not_exist('project')
             await self.uow.projects.update_by_id(project.id, dict(data))
             await self.uow.commit()
-            return await self.get_project_return_schema(project)
+            return ReturnData(result=await self.get_project_return_schema(project))
 
     @staticmethod
     async def project_tags__not_found_update_error():
