@@ -36,6 +36,8 @@ async def update_filter_type(
         instance_id,
         data
     )
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
     return return_data.result
 
 
@@ -91,6 +93,8 @@ async def update_tag(
         name,
         image_file
     )
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
     return return_data.result
 
 
@@ -106,6 +110,18 @@ async def delete_tag(
 @router.get('/tags/', response_model=list[ProjectTagReturnSchema])
 async def get_all_tags(uow: uowDEP):
     return await ProjectTagService(uow).get_all_tags()
+
+
+@router.get(
+    '/available_tags_for_project/{project_id}/',
+    response_model=list[ProjectTagReturnSchema]
+)
+async def get_available_tags_for_project(
+        uow: uowDEP,
+        project_id: int
+):
+    return_data = await ProjectTagService(uow).get_available_project_tags(project_id)
+    return return_data.result
 
 
 @router.get('/tags/{tag_id}/', response_model=ProjectTagReturnSchema)
@@ -213,6 +229,8 @@ async def get_project(
         project_id: int
 ):
     return_data = await ProjectService(uow).get_project_by_id(project_id)
+    if return_data.error:
+        return await json_response_with_400_error(return_data.error)
     return return_data.result
 
 
