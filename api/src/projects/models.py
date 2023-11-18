@@ -30,21 +30,12 @@ class ProjectTag(Base):
     name: Mapped[str] = mapped_column(String(45),
                                       nullable=False)
     img: Mapped[str] = mapped_column(nullable=False)
-    projects: Mapped[list['Project']] = relationship(
-        secondary='project_tags_association',
-        lazy='selectin'
-    )
 
     def __repr__(self):
         return f'Tag: {self.name}. Image: {self.img}'
 
     def __str__(self):
         return self.__repr__()
-
-    # def __eq__(self, other):
-    #     if isinstance(other, ProjectTag):
-    #         return self.id == other.id
-    #     return False
 
 
 class ProjectFilterType(Base):

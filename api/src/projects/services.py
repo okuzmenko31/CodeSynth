@@ -109,11 +109,11 @@ class ProjectTagService(BaseService):
             tag_name,
             image_file
     ):
-        await save_media_file(image_file)
+        hashed_filename = await save_media_file(image_file)
         async with self.uow:
             tag_id = await self.uow.project_tags.insert_by_data({
                 'name': tag_name,
-                'img': await get_media_file_link(image_file.filename)
+                'img': await get_media_file_link(hashed_filename)
             })
             tag = await self.uow.project_tags.get_one_by_id(tag_id)
             await self.uow.commit()
@@ -154,8 +154,8 @@ class ProjectTagService(BaseService):
             'name': tag_name
         }
         if image_file is not None:
-            await save_media_file(image_file)
-            update_data['img'] = await get_media_file_link(image_file.filename)
+            hashed_filename = await save_media_file(image_file)
+            update_data['img'] = await get_media_file_link(hashed_filename)
 
         async with self.uow:
             tag = await self.uow.project_tags.get_one_by_id(instance_id)
@@ -216,12 +216,12 @@ class ProjectService(ProjectTagService):
             data: ProjectSchema,
             image_file
     ):
-        await save_media_file(image_file)
+        hashed_filename = await save_media_file(image_file)
         async with self.uow:
             tags_lst = await self.get_tags_lst_by_ids(data.tags)
             project = await self.uow.projects.create_instance_by_data(dict(data))
             project.tags = tags_lst
-            project.preview_image = await get_media_file_link(image_file.filename)
+            project.preview_image = await get_media_file_link(hashed_filename)
             await self.uow.add(project)
             await self.uow.commit()
             await self.uow.refresh(project, attribute_names=['filter_type'])
@@ -288,8 +288,8 @@ class ProjectService(ProjectTagService):
             image_file=None
     ):
         if image_file is not None:
-            await save_media_file(image_file)
-            data.preview_image = await get_media_file_link(image_file.filename)
+            hashed_filename = await save_media_file(image_file)
+            data.preview_image = await get_media_file_link(hashed_filename)
 
         async with self.uow:
             project = await self.uow.projects.get_one_by_id(instance_id)
