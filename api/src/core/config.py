@@ -72,6 +72,10 @@ class PaginationSettings(BaseSettings):
     )
 
 
+class CachingSettings(BaseSettings):
+    use_redis: bool = Field('use_redis', json_schema_extra={'env': 'USE_REDIS'})
+
+
 class MainSettings(BaseSettings):
     debug: bool = dbg.debug
     secret_key: str = Field(
@@ -95,6 +99,9 @@ class MainSettings(BaseSettings):
 
     # PAGINATION
     pagination: PaginationSettings = Field(default_factory=PaginationSettings)
+
+    # CACHING
+    caching: CachingSettings = Field(default_factory=CachingSettings)
 
 
 settings = MainSettings()
