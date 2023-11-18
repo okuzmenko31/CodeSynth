@@ -4,6 +4,11 @@ from fastapi.staticfiles import StaticFiles
 
 from fastapi_pagination import add_pagination
 
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+
+from redis import asyncio as aioredis
+
 # from src.api_key import get_api_key
 from src.core.config import settings
 
@@ -36,3 +41,9 @@ app.add_middleware(
 
 # Adding pagination to the app
 add_pagination(app)
+
+
+@app.on_event('startup')
+async def startup():
+    redis = aioredis.from_url("redis://localhost")
+    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
