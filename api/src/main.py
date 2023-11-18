@@ -6,6 +6,7 @@ from fastapi_pagination import add_pagination
 
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+from fastapi_cache.backends.inmemory import InMemoryBackend
 
 from redis import asyncio as aioredis
 
@@ -43,7 +44,10 @@ app.add_middleware(
 add_pagination(app)
 
 
-# @app.on_event('startup')
-# async def startup():
-#     redis = aioredis.from_url("redis://localhost")
-#     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+@app.on_event('startup')
+async def startup():
+    caching_backend = InMemoryBackend()
+    if settings.caching.use_redis:
+        redis = aioredis.from_url("redis://localhost")
+        caching_backend = RedisBackend(redis)
+    FastAPICache.init(caching_backend, prefix="fastapi-cache")

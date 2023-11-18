@@ -53,11 +53,13 @@ async def delete_filter_type(
 
 
 @router.get('/filter_types/', response_model=list[ProjectFilterTypeReturnSchema])
+@cache(expire=60)
 async def get_filter_types(uow: uowDEP):
     return await ProjectFilterTypeService(uow).get_filter_types()
 
 
 @router.get('/filter_types/{filter_type_id}/', response_model=ProjectFilterTypeReturnSchema)
+@cache(expire=20)
 async def get_filter_type(
         uow: uowDEP,
         filter_type_id: int
@@ -110,6 +112,7 @@ async def delete_tag(
 
 
 @router.get('/tags/', response_model=list[ProjectTagReturnSchema])
+@cache(expire=30)
 async def get_all_tags(uow: uowDEP):
     return await ProjectTagService(uow).get_all_tags()
 
@@ -215,6 +218,7 @@ async def delete_project(
 
 
 @router.get('/all/', response_model=list[ProjectReturnSchema])
+@cache(expire=50)
 async def get_all_projects(
         uow: uowDEP,
         pag_params: pagination_params
@@ -226,6 +230,7 @@ async def get_all_projects(
 
 
 @router.get('/{project_id}/', response_model=ProjectReturnSchema)
+@cache(expire=120)
 async def get_project(
         uow: uowDEP,
         project_id: int
