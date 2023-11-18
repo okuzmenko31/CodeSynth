@@ -15,3 +15,7 @@ def handle_errors(func):
             raise ServiceMethodsException(func=func, error=e)
 
     return wrapper
+
+
+def handle_caching():
+    pass
