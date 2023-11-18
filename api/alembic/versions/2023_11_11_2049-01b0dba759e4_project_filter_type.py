@@ -28,7 +28,6 @@ def upgrade() -> None:
     )
     op.add_column('projects', sa.Column('filter_type_id', sa.Integer(), nullable=False))
     op.create_foreign_key(None, 'projects', 'project_filter_types', ['filter_type_id'], ['id'])
-    op.drop_column('projects', 'type_id')
     # ### end Alembic commands ###
 
 
