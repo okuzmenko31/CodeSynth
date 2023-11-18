@@ -196,3 +196,38 @@ class SQLAlchemyRepository(AbstractRepository):
             operation_type=STMTOperations.delete
         )
         await self.session.execute(stmt)
+
+    async def filter_by_field_not_in_subquery(
+            self,
+            subquery_select_entity,
+            subquery_where_clause: list | tuple | set,
+            not_in_model_field: str
+    ):
+        """
+        Returns filtered by subquery sequence with
+        instances of 'model'. Filters by 'not_in_model_field'.
+        'not_in_model_field' can be self.model.id or
+        else column field of model. Subquery can look
+        like this:
+
+        ProjectAssociation.project_tag_id - 'subquery_select_entity';
+        [ProjectAssociation.project_id == project_id] - 'subquery_where_clause'
+
+        subquery = select(ProjectAssociation.project_tag_id).where(
+            *[ProjectAssociation.project_id == project_id]
+        )
+
+        :param subquery_select_entity: Model or model column field
+        :param subquery_where_clause: list, tuple, or set with expression for where
+        method of subquery
+        :param not_in_model_field: string name of column field for filtering with 'notin_'
+        :return: sequence with instances of 'model'
+        """
+        subquery = select(subquery_select_entity).where(
+            *subquery_where_clause
+        )
+        stmt = select(self.model).where(
+            getattr(self.model, not_in_model_field).notin_(subquery)
+        )
+        res = await self.session.execute(stmt)
+        return res.fetchall()

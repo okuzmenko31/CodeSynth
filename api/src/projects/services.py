@@ -3,7 +3,7 @@ from src.core.utils.media_files import (get_media_file_link,
                                         save_media_file)
 
 from .schemas import *
-from .models import Project
+from .models import Project, ProjectAssociation
 
 from src.core.utils.decorators import handle_errors
 from src.core.utils.dataclasses import ReturnData
@@ -88,6 +88,20 @@ class ProjectFilterTypeService(BaseService):
 
 class ProjectTagService(BaseService):
 
+    @staticmethod
+    async def tags_schemas_lst_by_sequence(
+            tags_seq
+    ) -> list[ProjectTagReturnSchema]:
+        tags_lst = []
+        for tag in tags_seq:
+            tag = tag[0]
+            tags_lst.append(ProjectTagReturnSchema(
+                id=tag.id,
+                name=tag.name,
+                img=tag.img
+            ))
+        return tags_lst
+
     @handle_errors
     async def create_tag(
             self,
@@ -124,18 +138,9 @@ class ProjectTagService(BaseService):
         return tags_lst
 
     async def get_all_tags(self) -> list[ProjectTagReturnSchema]:
-        tags_lst = []
-
         async with self.uow:
             tags = await self.uow.project_tags.get_all()
-            for tag in tags:
-                tag = tag[0]
-                tags_lst.append(ProjectTagReturnSchema(
-                    id=tag.id,
-                    name=tag.name,
-                    img=tag.img
-                ))
-            return tags_lst
+            return await self.tags_schemas_lst_by_sequence(tags)
 
     @handle_errors
     async def update_tag(
@@ -169,6 +174,19 @@ class ProjectTagService(BaseService):
             await self.uow.project_tags.delete_by_id(instance_id)
             await self.uow.commit()
             return True
+
+    @handle_errors
+    async def get_available_project_tags(
+            self,
+            project_id
+    ):
+        async with self.uow:
+            tags = await self.uow.project_tags.filter_by_field_not_in_subquery(
+                subquery_select_entity=ProjectAssociation.project_tag_id,
+                subquery_where_clause=[ProjectAssociation.project_id == project_id],
+                not_in_model_field='id'
+            )
+            return await self.tags_schemas_lst_by_sequence(tags)
 
 
 class ProjectService(ProjectTagService):
@@ -291,6 +309,8 @@ class ProjectService(ProjectTagService):
         async with self.uow:
             tags_lst = await self.get_tags_lst_by_ids(data.tags)
             project: Project = await self.uow.projects.get_one_by_id(instance_id)
+
+            """update(Project).values({'tags': [Tag: Client-First]})"""
             if project is None:
                 return await self.project_does_not_exists()
 

@@ -1,15 +1,25 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Table, Column, ForeignKey, Text
+from sqlalchemy import String, Table, Column, ForeignKey, Text, UniqueConstraint
 
 from src.core.database import Base
 
+
 # Association table for M2M relationship between Projects and Project Tags
-project_tags_association_table = Table(
-    'project_tags_association_table',
-    Base.metadata,
-    Column('project_id', ForeignKey('projects.id', ondelete='CASCADE')),
-    Column('project_tag_id', ForeignKey('project_tags.id'))
-)
+class ProjectAssociation(Base):
+    __tablename__ = 'project_tags_association'  # noqa
+    __table_args__ = (
+        UniqueConstraint(
+            'project_id',
+            'project_tag_id',
+            name='idx_unique_project_tag'
+        ),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    project_id: Mapped[int] = mapped_column(
+        ForeignKey('projects.id', ondelete='CASCADE')
+    )
+    project_tag_id: Mapped[int] = mapped_column(ForeignKey('project_tags.id'))
 
 
 class ProjectTag(Base):
@@ -20,6 +30,10 @@ class ProjectTag(Base):
     name: Mapped[str] = mapped_column(String(45),
                                       nullable=False)
     img: Mapped[str] = mapped_column(nullable=False)
+    projects: Mapped[list['Project']] = relationship(
+        secondary='project_tags_association',
+        lazy='selectin'
+    )
 
     def __repr__(self):
         return f'Tag: {self.name}. Image: {self.img}'
@@ -27,10 +41,10 @@ class ProjectTag(Base):
     def __str__(self):
         return self.__repr__()
 
-    def __eq__(self, other):
-        if isinstance(other, ProjectTag):
-            return self.id == other.id
-        return False
+    # def __eq__(self, other):
+    #     if isinstance(other, ProjectTag):
+    #         return self.id == other.id
+    #     return False
 
 
 class ProjectFilterType(Base):
@@ -59,7 +73,7 @@ class Project(Base):
     preview_image: Mapped[str] = mapped_column(nullable=False)
     source_link: Mapped[str] = mapped_column(nullable=True)
     tags: Mapped[list[ProjectTag]] = relationship(
-        secondary=project_tags_association_table,
+        secondary='project_tags_association',
         lazy='selectin'
     )
     filter_type_id: Mapped[int] = mapped_column(ForeignKey('project_filter_types.id'))

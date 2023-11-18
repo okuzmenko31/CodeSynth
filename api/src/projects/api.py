@@ -108,6 +108,18 @@ async def get_all_tags(uow: uowDEP):
     return await ProjectTagService(uow).get_all_tags()
 
 
+@router.get(
+    '/available_tags_for_project/{project_id}/',
+    response_model=list[ProjectTagReturnSchema]
+)
+async def get_available_tags_for_project(
+        uow: uowDEP,
+        project_id: int
+):
+    return_data = await ProjectTagService(uow).get_available_project_tags(project_id)
+    return return_data.result
+
+
 @router.get('/tags/{tag_id}/', response_model=ProjectTagReturnSchema)
 async def get_tag(uow: uowDEP, tag_id: int):
     return_data = await ProjectTagService(uow).get_tag_by_id(tag_id)
