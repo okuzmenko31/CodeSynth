@@ -36,6 +36,8 @@ async def update_filter_type(
         instance_id,
         data
     )
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
     return return_data.result
 
 
@@ -91,6 +93,8 @@ async def update_tag(
         name,
         image_file
     )
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
     return return_data.result
 
 
@@ -225,6 +229,8 @@ async def get_project(
         project_id: int
 ):
     return_data = await ProjectService(uow).get_project_by_id(project_id)
+    if return_data.error:
+        return await json_response_with_400_error(return_data.error)
     return return_data.result
 
 

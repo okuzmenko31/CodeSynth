@@ -40,7 +40,7 @@ class ProjectTagsUpdateSchema(MainSchema):
 
 class ProjectReturnSchema(ProjectSchema):
     id: int
-    tags: list[ProjectTagSchema]
+    tags: list[ProjectTagReturnSchema]
     filter_type: Optional[str] = None
 
 

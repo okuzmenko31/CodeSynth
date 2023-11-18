@@ -7,6 +7,7 @@ from .models import Project, ProjectAssociation
 
 from src.core.utils.decorators import handle_errors
 from src.core.utils.dataclasses import ReturnData
+from src.core.utils.service_utils import return_data_err_object_does_not_exist
 
 
 class ProjectFilterTypeService(BaseService):
@@ -48,16 +49,18 @@ class ProjectFilterTypeService(BaseService):
             data: ProjectFilterTypeSchema
     ):
         async with self.uow:
-            filter_type_id = await self.uow.project_types.update_by_id(
+            filter_type = await self.uow.project_types.get_one_by_id(instance_id)
+            if filter_type is None:
+                return await return_data_err_object_does_not_exist('filter type')
+            await self.uow.project_types.update_by_id(
                 instance_id,
                 dict(data)
             )
             await self.uow.commit()
-            filter_type = await self.uow.project_types.get_one_by_id(filter_type_id)
-            return ProjectFilterTypeReturnSchema(
+            return ReturnData(result=ProjectFilterTypeReturnSchema(
                 id=filter_type.id,
                 name=filter_type.name
-            )
+            ))
 
     @handle_errors
     async def delete_filter_type(
@@ -77,9 +80,7 @@ class ProjectFilterTypeService(BaseService):
         async with self.uow:
             filter_type = await self.uow.project_types.get_one_by_id(instance_id)
             if filter_type is None:
-                return ReturnData(
-                    error='This filter type doesn\'t exists!'  # noqa
-                )
+                return await return_data_err_object_does_not_exist('filter type')
             return ReturnData(result=ProjectFilterTypeReturnSchema(
                 id=filter_type.id,
                 name=filter_type.name
@@ -124,7 +125,7 @@ class ProjectTagService(BaseService):
             tag = await self.uow.project_tags.get_one_by_id(instance_id)
 
             if tag is None:
-                return ReturnData(error='This tag doesn\'t exists!')  # noqa
+                return await return_data_err_object_does_not_exist('tag')
             return ReturnData(result=ProjectTagReturnSchema(
                 id=tag.id,
                 name=tag.name,
@@ -157,13 +158,17 @@ class ProjectTagService(BaseService):
             update_data['img'] = await get_media_file_link(image_file.filename)
 
         async with self.uow:
-            tag_id = await self.uow.project_tags.update_by_id(
+            tag = await self.uow.project_tags.get_one_by_id(instance_id)
+            if tag is None:
+                return await return_data_err_object_does_not_exist('tag')
+            await self.uow.project_tags.update_by_id(
                 instance_id,
                 update_data
             )
             await self.uow.commit()
-            tag = await self.uow.project_tags.get_one_by_id(tag_id)
-            return ProjectTagReturnSchema(id=tag.id, name=tag.name, img=tag.img)
+            return ReturnData(result=ProjectTagReturnSchema(
+                id=tag.id, name=tag.name, img=tag.img
+            ))
 
     @handle_errors
     async def delete_tag(
@@ -192,12 +197,6 @@ class ProjectTagService(BaseService):
 class ProjectService(ProjectTagService):
 
     @staticmethod
-    async def project_does_not_exists():
-        return ReturnData(
-            error='This project doesn\'t exists!'  # noqa
-        )
-
-    @staticmethod
     async def get_project_return_schema(project: Project):
         return ProjectReturnSchema(
             id=project.id,
@@ -207,7 +206,7 @@ class ProjectService(ProjectTagService):
             preview_image=project.preview_image,
             source_link=project.source_link,
             tags=[
-                ProjectTagSchema(name=tag.name, img=tag.img) for tag in project.tags
+                ProjectTagReturnSchema(name=tag.name, img=tag.img, id=tag.id) for tag in project.tags
             ],
             text=project.text
         )
@@ -295,10 +294,14 @@ class ProjectService(ProjectTagService):
         async with self.uow:
             project = await self.uow.projects.get_one_by_id(instance_id)
             if project is None:
-                return await self.project_does_not_exists()
+                return await return_data_err_object_does_not_exist('project')
             await self.uow.projects.update_by_id(project.id, dict(data))
             await self.uow.commit()
             return await self.get_project_return_schema(project)
+
+    @staticmethod
+    async def project_tags__not_found_update_error():
+        return ReturnData(error='No such tags was found to update project tags list!')
 
     @handle_errors
     async def add_project_tags(
@@ -308,11 +311,11 @@ class ProjectService(ProjectTagService):
     ):
         async with self.uow:
             tags_lst = await self.get_tags_lst_by_ids(data.tags)
+            if len(tags_lst) < 1:
+                return await self.project_tags__not_found_update_error()
             project: Project = await self.uow.projects.get_one_by_id(instance_id)
-
-            """update(Project).values({'tags': [Tag: Client-First]})"""
             if project is None:
-                return await self.project_does_not_exists()
+                return await return_data_err_object_does_not_exist('project')
 
             for tag in tags_lst:
                 if tag in project.tags:
@@ -331,9 +334,11 @@ class ProjectService(ProjectTagService):
     ):
         async with self.uow:
             tags_lst = await self.get_tags_lst_by_ids(data.tags)
+            if len(tags_lst) < 1:
+                return await self.project_tags__not_found_update_error()
             project: Project = await self.uow.projects.get_one_by_id(instance_id)
             if project is None:
-                return await self.project_does_not_exists()
+                return await return_data_err_object_does_not_exist('project')
 
             for tag in tags_lst:
                 if tag not in project.tags:
@@ -364,7 +369,7 @@ class ProjectService(ProjectTagService):
         async with self.uow:
             project = await self.uow.projects.get_one_by_id(instance_id)
             if project is None:
-                return await self.project_does_not_exists()
+                return await return_data_err_object_does_not_exist('project')
 
             return ReturnData(
                 result=await self.get_project_return_schema(project)
