@@ -43,7 +43,7 @@ app.add_middleware(
 add_pagination(app)
 
 
-@app.on_event('startup')
-async def startup():
-    redis = aioredis.from_url("redis://localhost")
-    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+# @app.on_event('startup')
+# async def startup():
+#     redis = aioredis.from_url("redis://localhost")
+#     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
