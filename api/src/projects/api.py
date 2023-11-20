@@ -12,6 +12,7 @@ from .dependencies import pagination_params, project_update_data
 
 from src.core.utils.dependencies import uowDEP
 from src.core.utils.service_utils import json_response_with_400_error
+from src.core.utils.enums import InstanceTypes
 
 router = APIRouter(
     prefix='/projects',
@@ -48,23 +49,23 @@ async def delete_filter_type(
         uow: uowDEP,
         instance_id: int
 ):
-    return_data = await ProjectFilterTypeService(uow).delete_filter_type(instance_id)
+    return_data = await ProjectFilterTypeService(uow).delete_by_id(instance_id)
     return return_data.result
 
 
 @router.get('/filter_types/', response_model=list[ProjectFilterTypeReturnSchema])
 @cache(expire=60)
 async def get_filter_types(uow: uowDEP):
-    return await ProjectFilterTypeService(uow).get_filter_types()
+    return_data = await ProjectFilterTypeService(uow).get_all_instances()
+    return return_data.result
 
 
 @router.get('/filter_types/{filter_type_id}/', response_model=ProjectFilterTypeReturnSchema)
-@cache(expire=20)
 async def get_filter_type(
         uow: uowDEP,
         filter_type_id: int
 ):
-    return_data = await ProjectFilterTypeService(uow).get_filter_type_by_id(filter_type_id)
+    return_data = await ProjectFilterTypeService(uow).get_by_id(filter_type_id, InstanceTypes.filter_type)
     if return_data.error is not None:
         return await json_response_with_400_error(return_data.error)
     return return_data.result
@@ -107,14 +108,15 @@ async def delete_tag(
         uow: uowDEP,
         tag_id: int
 ):
-    return_data = await ProjectTagService(uow).delete_tag(tag_id)
+    return_data = await ProjectTagService(uow).delete_by_id(tag_id)
     return return_data.result
 
 
 @router.get('/tags/', response_model=list[ProjectTagReturnSchema])
 @cache(expire=30)
 async def get_all_tags(uow: uowDEP):
-    return await ProjectTagService(uow).get_all_tags()
+    return_data = await ProjectTagService(uow).get_all_instances()
+    return return_data.result
 
 
 @router.get(
@@ -131,7 +133,7 @@ async def get_available_tags_for_project(
 
 @router.get('/tags/{tag_id}/', response_model=ProjectTagReturnSchema)
 async def get_tag(uow: uowDEP, tag_id: int):
-    return_data = await ProjectTagService(uow).get_tag_by_id(tag_id)
+    return_data = await ProjectTagService(uow).get_by_id(tag_id, InstanceTypes.project_tag)
     if return_data.error is not None:
         return await json_response_with_400_error(return_data.error)
     return return_data.result
@@ -194,7 +196,7 @@ async def update_project_tags(
     return return_data.result
 
 
-@router.patch('/remove_project_tag/{project_id}/', response_model=bool)
+@router.patch('/remove_project_tag/{project_id}/', response_model=ProjectReturnSchema)
 async def remove_project_tag(
         uow: uowDEP,
         project_id: int,
@@ -211,9 +213,7 @@ async def delete_project(
         uow: uowDEP,
         project_id: int
 ):
-    return_data = await ProjectService(uow).delete_project(project_id)
-    if return_data.error is not None:
-        return await json_response_with_400_error(return_data.error)
+    return_data = await ProjectService(uow).delete_by_id(project_id)
     return return_data.result
 
 
@@ -223,19 +223,19 @@ async def get_all_projects(
         uow: uowDEP,
         pag_params: pagination_params
 ):
-    return_data = await ProjectService(uow).get_projects(
+    return_data = await ProjectService(uow).get_all_instances(
+        with_pagination=True,
         pagination_data=pag_params.params_dict
     )
     return return_data.result
 
 
 @router.get('/{project_id}/', response_model=ProjectReturnSchema)
-@cache(expire=120)
 async def get_project(
         uow: uowDEP,
         project_id: int
 ):
-    return_data = await ProjectService(uow).get_project_by_id(project_id)
+    return_data = await ProjectService(uow).get_by_id(project_id, InstanceTypes.project)
     if return_data.error:
         return await json_response_with_400_error(return_data.error)
     return return_data.result

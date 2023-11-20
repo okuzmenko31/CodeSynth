@@ -1,16 +1,9 @@
 from abc import ABC, abstractmethod
-from enum import Enum
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, insert, exists, delete, update, Select
 
-
-class STMTOperations(str, Enum):
-    select = 'select'
-    exists = 'exists'
-    update = 'update'
-    delete = 'delete'
-    insert = 'insert'
+from .enums import STMTOperations
 
 
 class AbstractRepository(ABC):
@@ -26,6 +19,13 @@ class AbstractRepository(ABC):
 
     @abstractmethod
     async def get_one_by_data(self, *args):
+        raise NotImplementedError()
+
+
+class AbstractSchemaRepository(ABC):
+
+    @abstractmethod
+    async def get_return_schema(self, *args, **kwargs):
         raise NotImplementedError()
 
 
