@@ -1,16 +1,9 @@
 from abc import ABC, abstractmethod
-from enum import Enum
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, insert, exists, delete, update
+from sqlalchemy import select, insert, exists, delete, update, Select
 
-
-class STMTOperations(str, Enum):
-    select = 'select'
-    exists = 'exists'
-    update = 'update'
-    delete = 'delete'
-    insert = 'insert'
+from .enums import STMTOperations
 
 
 class AbstractRepository(ABC):
@@ -29,12 +22,26 @@ class AbstractRepository(ABC):
         raise NotImplementedError()
 
 
+class AbstractSchemaRepository(ABC):
+
+    @abstractmethod
+    async def get_return_schema(self, *args, **kwargs):
+        raise NotImplementedError()
+
+
 class SQLAlchemyRepository(AbstractRepository):
 
     def __init__(self, session: AsyncSession):
         self.session = session
 
     async def get_operation(self, operation: STMTOperations):
+        """
+        Returns expression with a model.
+        Like this: 'select(model)'.
+
+        :param operation: operation or expression
+        :return: operation or expression with a model
+        """
         operations = {
             STMTOperations.select: select,
             STMTOperations.exists: exists,
@@ -54,6 +61,21 @@ class SQLAlchemyRepository(AbstractRepository):
             operation_type: STMTOperations,
             **kwargs
     ):
+        """
+        Returns statement for insert or update expression
+        with provided data which will be substituted
+        into the '.values()' method. If operation
+        type is 'update', you have to provide
+        'update_instance_id', otherwise ValueError
+        will be raised.
+
+
+        :param operation: operation or expression
+        :param data: data dict with values for inserting or updating
+        :param operation_type: operation type from 'STMTOperations' class
+        :param kwargs: additional keyword arguments
+        :return: 'update' or 'insert' statement
+        """
         if operation_type == STMTOperations.insert:
             return operation.values(data).returning(self.model.id)
         if kwargs.get('update_instance_id') is None:
@@ -64,12 +86,28 @@ class SQLAlchemyRepository(AbstractRepository):
             self.model.id == kwargs.get('update_instance_id')  # noqa
         ).values(data).returning(self.model.id)
 
-    async def get_operation_stmt_by_data(
+    async def get_operation_stmt_by_type(
             self,
             data: dict,
             operation_type: STMTOperations,
             **kwargs
     ):
+        """
+        Returns statement for all available operation types. If
+        operation type is 'select', 'exists' or 'delete',
+        data will be used as 'where clause' in .where()
+        method. In another case, where operation type
+        is 'update' or 'insert', will be called
+        .get_insert_or_update_stmt() method and data
+        will be used in .values(). If operation type is
+        'update', you have to provide 'update_instance_id'
+        to avoid an exception.
+
+        :param data: data dict
+        :param operation_type: operation type or expression type
+        :param kwargs: additional keyword arguments
+        :return: 'select', 'exists', 'delete', 'insert' or 'update' statement
+        """
         operation = await self.get_operation(operation_type)
         insert_update_lst = [STMTOperations.insert, STMTOperations.update]
 
@@ -90,9 +128,21 @@ class SQLAlchemyRepository(AbstractRepository):
 
     @staticmethod
     async def paginate_statement(
-            stmt,
+            stmt: Select,
             pagination_data: dict
     ):
+        """
+        Returns paginated statement by 'offset' and 'limit'.
+        In 'pagination_data' dict you have to provide them.
+        Also provided statement must be 'select'.
+
+        :param stmt: 'select' statement
+        :param pagination_data: data dict with 'offset' and 'limit'
+        :return: paginated statement
+        """
+        if not isinstance(stmt, Select):
+            raise ValueError('Provided statement must be "select"!')
+
         offset = pagination_data.get('offset')
         limit = pagination_data.get('limit')
         if offset is not None and limit is not None:
@@ -100,7 +150,7 @@ class SQLAlchemyRepository(AbstractRepository):
         raise ValueError('Offset and limit must be provided!')
 
     async def select_by_data(self, data: dict):
-        stmt = await self.get_operation_stmt_by_data(
+        stmt = await self.get_operation_stmt_by_type(
             data,
             STMTOperations.select
         )
@@ -130,7 +180,7 @@ class SQLAlchemyRepository(AbstractRepository):
         return None
 
     async def insert_by_data(self, data: dict) -> int:
-        stmt = await self.get_operation_stmt_by_data(
+        stmt = await self.get_operation_stmt_by_type(
             data,
             STMTOperations.insert
         )
@@ -139,10 +189,17 @@ class SQLAlchemyRepository(AbstractRepository):
         return result
 
     async def create_instance_by_data(self, data: dict):
+        """
+        Returns model instance by data. For example:
+        Project(**data).
+
+        :param data: data dict with model fields and values for creating instance
+        :return: created model instance
+        """
         return self.model(**data)
 
     async def check_exists_by_data(self, data: dict) -> bool:
-        stmt = await self.get_operation_stmt_by_data(
+        stmt = await self.get_operation_stmt_by_type(
             data,
             STMTOperations.exists
         )
@@ -186,7 +243,7 @@ class SQLAlchemyRepository(AbstractRepository):
         cleaned_data = await self.get_cleaned_data(data)
         if cleaned_data is None:
             return cleaned_data
-        stmt = await self.get_operation_stmt_by_data(
+        stmt = await self.get_operation_stmt_by_type(
             cleaned_data,
             STMTOperations.update,
             update_instance_id=instance_id
@@ -195,7 +252,7 @@ class SQLAlchemyRepository(AbstractRepository):
         return res.scalar()
 
     async def delete_by_id(self, instance_id):
-        stmt = await self.get_operation_stmt_by_data(
+        stmt = await self.get_operation_stmt_by_type(
             data={'id': instance_id},
             operation_type=STMTOperations.delete
         )
