@@ -2,21 +2,21 @@ import datetime
 import json
 
 from datetime import timedelta
-from typing import NamedTuple, Optional
 
 from jose import jwt
 
 from src.core.config import settings
+from src.core.utils.decorators import handle_errors
 from src.core.utils.service import BaseService
 
+from src.core.utils.dataclasses import ReturnData
 
-class AdminAuthData(NamedTuple):
-    data: Optional[dict] = None
-    error: Optional[str] = None
+from .schemas import AccessAndRefreshTokensSchema, AccessTokenReturnSchema
 
 
 class JWTBlackListTokensService(BaseService):
 
+    @handle_errors
     async def add_token_to_blacklist(
             self,
             token: str
@@ -75,18 +75,19 @@ class AdminAuthService(JwtTokensMixin):
             return True
         return False
 
+    @handle_errors
     async def authenticate_admin(self, secret_key: str):
         if not await self.validate_secret_key(secret_key):
-            return AdminAuthData(error='The secret key is wrong! Please, write correct secret key.')
-        encoded_jwt_access = await self.generate_access_token()
-        encoded_jwt_refresh = await self.generate_refresh_token()
-        return AdminAuthData(data={
-            'access_token': encoded_jwt_access,
-            'refresh_token': encoded_jwt_refresh
-        })
+            return ReturnData(
+                error='The secret key is wrong! Please, write correct secret key.'
+            )
+        return ReturnData(result=AccessAndRefreshTokensSchema(
+            access_token=await self.generate_access_token(),
+            refresh_token=await self.generate_refresh_token()
+        ))
 
 
-class TokensVerifyService:
+class TokensVerifyService(JWTBlackListTokensService):
 
     @staticmethod
     async def get_decoded_token(token: str):
@@ -109,3 +110,33 @@ class TokensVerifyService:
         except (Exception,):
             return True
 
+    @property
+    def token_invalid_data(self):
+        return ReturnData(
+            error='This token is invalid or expired.'
+        )
+
+    async def jwt_token_valid(self, token: str) -> bool:
+        if not await self.token_in_blacklist(token) and not await self.check_token_expired(token):
+            return True
+        return False
+
+    @handle_errors
+    async def verify_token(self, token: str) -> ReturnData:
+        if not await self.jwt_token_valid(token):
+            return ReturnData(result=True)
+        return self.token_invalid_data
+
+
+class JWTTokensService(TokensVerifyService,
+                       JwtTokensMixin):
+
+    @handle_errors
+    async def get_access_from_refresh(self, refresh_token: str):
+        if not await self.jwt_token_valid(refresh_token):
+            return self.token_invalid_data
+        return ReturnData(
+            result=AccessTokenReturnSchema(
+                access_token=await self.generate_access_token()
+            )
+        )

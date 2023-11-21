@@ -1,10 +1,13 @@
 from fastapi import APIRouter, status
 from starlette.responses import JSONResponse
 
-from .schemas import AdminSecretKeySchema, AccessOrRefreshTokenSchema
+from .schemas import *
 from .services import (AdminAuthService,
                        JWTBlackListTokensService,
-                       TokensVerifyService, JwtTokensMixin)
+                       TokensVerifyService,
+                       JWTTokensService)
+
+from src.core.utils.service_utils import json_response_with_400_error
 
 from src.core.utils.dependencies import uowDEP
 
@@ -14,73 +17,44 @@ router = APIRouter(
 )
 
 
-@router.post('/admin/')
+@router.post('/admin/', response_model=AccessAndRefreshTokensSchema)
 async def admin_auth(data: AdminSecretKeySchema):
-    service = AdminAuthService()
-    tokens_data, error = await service.authenticate_admin(data.secret_key)
-    if error is not None:
-        return JSONResponse(content={
-            'error': error
-        }, status_code=status.HTTP_400_BAD_REQUEST)
-    return JSONResponse(content=tokens_data, status_code=status.HTTP_200_OK)
+    return_data = await AdminAuthService().authenticate_admin(data.secret_key)
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
 
 
-@router.post('/admin/access_token_verify/')
-async def verify_access_token(
+@router.post('/admin/token_verify/', response_model=bool)
+async def verify_token(
         data: AccessOrRefreshTokenSchema,
         uow: uowDEP
 ):
-    blacklist_service = JWTBlackListTokensService(uow)
-    verify_service = TokensVerifyService()
-
-    token = data.access_or_refresh_token
-    if await blacklist_service.token_in_blacklist(token):
-        return JSONResponse(content={
-            'error': 'This token is not valid. It was deleted after logging out.'
-        }, status_code=status.HTTP_400_BAD_REQUEST)
-
-    if await verify_service.check_token_expired(token):
-        return JSONResponse(content={
-            'error': 'This token is invalid or expired!'
-        }, status_code=status.HTTP_400_BAD_REQUEST)
-    return JSONResponse(content=True, status_code=status.HTTP_200_OK)
+    return_data = await TokensVerifyService(uow).verify_token(data.access_or_refresh_token)
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
 
 
-@router.post('/admin/access_token_from_refresh/')
+@router.post('/admin/access_token_from_refresh/', response_model=AccessTokenReturnSchema)
 async def get_access_token_from_refresh(
         data: AccessOrRefreshTokenSchema,
         uow: uowDEP
 ):
-    blacklist_service = JWTBlackListTokensService(uow)
-    verify_service = TokensVerifyService()
-    tokens_mixin = JwtTokensMixin()
-
-    token = data.access_or_refresh_token
-    if await blacklist_service.token_in_blacklist(token):
-        return JSONResponse(content={
-            'error': 'This token is already used!'
-        }, status_code=status.HTTP_400_BAD_REQUEST)
-
-    if await verify_service.check_token_expired(token):
-        return JSONResponse(content={
-            'error': 'This token is invalid or expired!'
-        }, status_code=status.HTTP_400_BAD_REQUEST)
-
-    data = {
-        'access_token': await tokens_mixin.generate_access_token()
-    }
-    await blacklist_service.add_token_to_blacklist(token)
-    return JSONResponse(content=data, status_code=status.HTTP_200_OK)
+    return_data = await JWTTokensService(uow).get_access_from_refresh(
+        data.access_or_refresh_token
+    )
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
 
 
-@router.post('/admin/logout/')
+@router.post('/admin/logout/', response_model=bool)
 async def admin_logout(
         data: AccessOrRefreshTokenSchema,
         uow: uowDEP
 ):
-    service = JWTBlackListTokensService(uow)
-    token_id = await service.add_token_to_blacklist(data.access_or_refresh_token)
-    return JSONResponse(content={
-        'success': 'You successfully logged out!',
-        'token_id': token_id
-    }, status_code=status.HTTP_200_OK)
+    await JWTBlackListTokensService(uow).add_token_to_blacklist(
+        data.access_or_refresh_token
+    )
+    return JSONResponse(content=True, status_code=status.HTTP_200_OK)
