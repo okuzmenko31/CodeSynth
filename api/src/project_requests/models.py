@@ -6,6 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 from sqlalchemy import String, SmallInteger, ForeignKey, UniqueConstraint, Text
 
 from src.core.database import Base
+from src.project_requests.utils import get_budget_value
 
 
 # Association table for M2M relationship between ProjectRequest and ProjectService
@@ -45,24 +46,21 @@ class ProjectBudget(Base):
     __tablename__ = 'project_budget'  # noqa
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    start_amount: Mapped[int] = mapped_column(SmallInteger, nullable=False)
-    secondary_amount: Mapped[int] = mapped_column(SmallInteger, nullable=True)
-    budget: Mapped[str] = mapped_column(String(20), nullable=True)
+    start_amount: Mapped[int] = mapped_column(nullable=False)
+    secondary_amount: Mapped[int] = mapped_column(nullable=True)
     project_requests: Mapped['ProjectRequest'] = relationship(
         back_populates='budget'
     )
-
-    @validates('start_amount, secondary_amount')
-    def validate_start_amount(self, key, amount):
-        if 0 < amount <= 100:
-            return amount
-        raise ValueError(f'Amount must be greater than 0 and less or equal to 100')
 
     def __repr__(self):
         return f'Budget: {self.budget}'
 
     def __str__(self):
         return self.__repr__()
+
+    @property
+    def budget(self):
+        return get_budget_value(self.start_amount, self.secondary_amount)
 
 
 class RefSource(Base):

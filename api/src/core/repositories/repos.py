@@ -75,7 +75,9 @@ class ProjectBudgetRepository(AbstractSchemaRepository,
     async def get_return_schema(cls, budget_instance):
         return ProjectBudgetReturnSchema(
             id=budget_instance.id,
-            budget=budget_instance.budget
+            budget=budget_instance.budget,
+            start_amount=budget_instance.start_amount,
+            secondary_amount=budget_instance.secondary_amount
         )
 
 
