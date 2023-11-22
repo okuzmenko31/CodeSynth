@@ -5,8 +5,8 @@ from src.core.utils.enums import InstanceTypes
 from src.core.utils.service_utils import json_response_with_400_error
 from src.core.schemas import InstancesIDSListSchema
 
-from .schemas import ProjectServiceReturnSchema, ProjectServiceSchema
-from .services import ProjectAppService
+from .schemas import *
+from .services import ProjectAppService, ProjectBudgetService
 
 router = APIRouter(
     prefix='/project_requests',
@@ -72,4 +72,10 @@ async def get_all_services(
         uow: uowDEP
 ):
     return_data = await ProjectAppService(uow).get_all_instances()
+    return return_data.result
+
+
+@router.post('/create_budget/', response_model=ProjectBudgetReturnSchema)
+async def create_budget(uow: uowDEP, data: ProjectBudgetSchema):
+    return_data = await ProjectBudgetService(uow).create_budget(data)
     return return_data.result

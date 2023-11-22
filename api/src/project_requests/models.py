@@ -46,8 +46,8 @@ class ProjectBudget(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     start_amount: Mapped[int] = mapped_column(SmallInteger, nullable=False)
-    secondary_amount: Mapped[int] = mapped_column(SmallInteger, nullable=False)
-    budget: Mapped[int] = mapped_column(nullable=True)
+    secondary_amount: Mapped[int] = mapped_column(SmallInteger, nullable=True)
+    budget: Mapped[str] = mapped_column(String(20), nullable=True)
     project_requests: Mapped['ProjectRequest'] = relationship(
         back_populates='budget'
     )

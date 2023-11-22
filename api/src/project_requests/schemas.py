@@ -7,3 +7,13 @@ class ProjectServiceSchema(MainSchema):
 
 class ProjectServiceReturnSchema(ProjectServiceSchema):
     id: int
+
+
+class ProjectBudgetSchema(MainSchema):
+    start_amount: int
+    secondary_amount: int
+
+
+class ProjectBudgetReturnSchema(MainSchema):
+    id: int
+    budget: str
