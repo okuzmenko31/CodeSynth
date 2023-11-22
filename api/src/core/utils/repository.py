@@ -239,7 +239,7 @@ class SQLAlchemyRepository(AbstractRepository):
             return None
         return data
 
-    async def update_by_id(self, instance_id, data: dict):
+    async def update_by_data(self, instance_id, data: dict):
         cleaned_data = await self.get_cleaned_data(data)
         if cleaned_data is None:
             return cleaned_data
@@ -292,3 +292,10 @@ class SQLAlchemyRepository(AbstractRepository):
         )
         res = await self.session.execute(stmt)
         return res.fetchall()
+
+    async def delete_by_ids(
+            self,
+            ids: list
+    ):
+        stmt = delete(self.model).where(self.model.id.in_(ids))
+        await self.session.execute(stmt)

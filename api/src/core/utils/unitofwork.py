@@ -2,10 +2,7 @@ from abc import ABC, abstractmethod
 
 from src.core.database import async_session_maker
 
-from src.core.repositories.repos import (JWTTokensBlackListRepository,
-                                         ProjectRepository,
-                                         ProjectTagRepository,
-                                         ProjectFilterTypeRepository)
+from src.core.repositories.repos import *
 
 
 class AbstractUnitOfWork(ABC):
@@ -13,6 +10,9 @@ class AbstractUnitOfWork(ABC):
     projects: ProjectRepository
     project_tags: ProjectTagRepository
     project_types: ProjectFilterTypeRepository
+    project_services: ProjectServiceRepository
+    project_budgets: ProjectBudgetRepository
+    project_requests: ProjectRequestRepository
 
     @abstractmethod
     async def __aenter__(self):
@@ -50,6 +50,9 @@ class UnitOfWork(AbstractUnitOfWork):
         self.projects = ProjectRepository(self.session)
         self.project_tags = ProjectTagRepository(self.session)
         self.project_types = ProjectFilterTypeRepository(self.session)
+        self.project_services = ProjectServiceRepository(self.session)
+        self.project_budgets = ProjectBudgetRepository(self.session)
+        self.project_requests = ProjectRequestRepository(self.session)
 
     async def __aexit__(self, *args):
         await self.rollback()

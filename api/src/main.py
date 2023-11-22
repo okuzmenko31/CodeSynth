@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -15,10 +15,17 @@ from src.core.config import settings
 
 from src.auth.api import router as auth_router
 from src.projects.api import router as projects_router
+from src.project_requests.api import router as project_requests_router
 
-origins = ['http://localhost:3000']
+origins = [
+    'http://localhost:3000'
+]
 
-routers = [auth_router, projects_router]
+routers = [
+    auth_router,
+    projects_router,
+    project_requests_router
+]
 
 app = FastAPI(
     title='Portfolio'
