@@ -10,6 +10,12 @@ from src.core.utils.service_utils import return_data_err_object_does_not_exist
 class ProjectAppService(BaseService):
     repository = ProjectServiceRepository
 
+    @handle_errors
+    async def get_filtered_services_for_user(self):
+        async with self.uow:
+            instances = await self.uow_repo.test_s()
+            print(instances)
+
 
 class ProjectBudgetService(BaseService):
     repository = ProjectBudgetRepository

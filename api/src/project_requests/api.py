@@ -75,6 +75,12 @@ async def get_all_services(
     return return_data.result
 
 
+@router.get('/test_services/', response_model=bool)
+async def test_services(uow: uowDEP):
+    await ProjectAppService(uow).get_filtered_services_for_user()
+    return True
+
+
 @router.post('/create_budget/', response_model=ProjectBudgetReturnSchema)
 async def create_budget(uow: uowDEP, data: ProjectBudgetSchema):
     return_data = await ProjectBudgetService(uow).create_by_data_dict(dict(data))

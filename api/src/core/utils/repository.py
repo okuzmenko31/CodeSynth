@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, insert, exists, delete, update, Select
+from sqlalchemy import select, insert, exists, delete, update, Select, case
 
 from .enums import STMTOperations
 
@@ -299,3 +299,13 @@ class SQLAlchemyRepository(AbstractRepository):
     ):
         stmt = delete(self.model).where(self.model.id.in_(ids))
         await self.session.execute(stmt)
+
+    async def test_s(self):
+        stmt = select(self.model).order_by(
+            case(
+                (self.model.name == 'others', 1),
+                else_=0
+            )
+        )
+        res = await self.session.execute(stmt)
+        return res.fetchall()
