@@ -13,6 +13,9 @@ class InstanceTypes(str, Enum):
     project = 'project'
     filter_type = 'filter type'
     project_tag = 'tag'
+    project_service = 'service'
+    project_budget = 'budget'
+    project_request = 'request'
 
 
 class ProjectTagsListOperations(str, Enum):

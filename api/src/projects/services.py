@@ -36,7 +36,7 @@ class ProjectFilterTypeService(BaseService):
             filter_type = await self.uow_repo.get_one_by_id(instance_id)
             if filter_type is None:
                 return await return_data_err_object_does_not_exist('filter type')
-            await self.uow.project_types.update_by_id(
+            await self.uow.project_types.update_by_data(
                 instance_id,
                 dict(data)
             )
@@ -89,7 +89,7 @@ class ProjectTagService(BaseService):
             tag = await self.uow_repo.get_one_by_id(instance_id)
             if tag is None:
                 return await return_data_err_object_does_not_exist('tag')
-            await self.uow.project_tags.update_by_id(
+            await self.uow.project_tags.update_by_data(
                 instance_id,
                 update_data
             )
@@ -173,7 +173,7 @@ class ProjectService(ProjectTagService):
 
             if project is None:
                 return await return_data_err_object_does_not_exist('project')
-            await self.uow_repo.update_by_id(project.id, dict(data))
+            await self.uow_repo.update_by_data(project.id, dict(data))
             await self.uow.commit()
             return ReturnData(result=await self.repository.get_return_schema(project))
 

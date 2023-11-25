@@ -1,6 +1,7 @@
 from typing import Union
 
 from src.core.repositories.repos import *
+
 from .dataclasses import ReturnData
 from .enums import InstanceTypes
 from .repository import SQLAlchemyRepository, AbstractSchemaRepository
@@ -20,7 +21,10 @@ class BaseService:
         return {
             ProjectRepository: self.uow.projects,
             ProjectTagRepository: self.uow.project_tags,
-            ProjectFilterTypeRepository: self.uow.project_types
+            ProjectFilterTypeRepository: self.uow.project_types,
+            ProjectServiceRepository: self.uow.project_services,
+            ProjectBudgetRepository: self.uow.project_budgets,
+            ProjectRequestRepository: self.uow.project_requests
         }
 
     @property
@@ -29,7 +33,10 @@ class BaseService:
     ) -> (
             ProjectRepository |
             ProjectTagRepository |
-            ProjectFilterTypeRepository
+            ProjectFilterTypeRepository |
+            ProjectServiceRepository |
+            ProjectBudgetRepository |
+            ProjectRequestRepository
     ):
         uow_repos_dict = self.repos_uow_dict()
         return uow_repos_dict.get(self.repository)
@@ -89,3 +96,39 @@ class BaseService:
         async with self.uow:
             instances = await self.uow_repo.get_all(with_pagination, pagination_data)
             return await self.get_schemas_lst_by_sequence(instances)
+
+    @handle_errors
+    async def create_by_data_dict(
+            self,
+            data: dict
+    ):
+        async with self.uow:
+            instance_id = await self.uow_repo.insert_by_data(data)
+            await self.uow.commit()
+            instance = await self.uow_repo.get_one_by_id(instance_id)
+            return await self.uow_repo.get_return_schema(instance)
+
+    @handle_errors
+    async def update_by_data_dict(
+            self,
+            instance_id,
+            instance_type: InstanceTypes,
+            data: dict
+    ):
+        async with self.uow:
+            instance = await self.uow_repo.get_one_by_id(instance_id)
+            if instance is None:
+                return await return_data_err_object_does_not_exist(instance_type.value)
+            await self.uow_repo.update_by_data(instance_id, dict(data))
+            await self.uow.commit()
+            return await self.uow_repo.get_return_schema(instance)
+
+    @handle_errors
+    async def delete_by_ids_list(
+            self,
+            ids_list: list
+    ):
+        async with self.uow:
+            await self.uow_repo.delete_by_ids(ids_list)
+            await self.uow.commit()
+            return True
