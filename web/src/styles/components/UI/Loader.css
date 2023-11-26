@@ -1,0 +1,45 @@
+.loader-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader-head {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes loading-anim {
+    0% {
+        transform: rotate(0turn);
+        border-top-color: #FF00D6;
+    }
+
+    50% {
+        border-top-color: #882EFD;
+    }
+
+    100% {
+        transform: rotate(1turn);
+        border-top-color: #FF00D6;
+    }
+}
+
+.loader-hexagon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.loader-hexagon::after {
+    content: "";
+    width: 75px;
+    height: 75px;
+    border: 15px solid #ffffff;
+    border-radius: 100%;
+    animation: loading-anim 2s infinite;
+}

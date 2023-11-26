@@ -1,0 +1,188 @@
+.project-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.project-container p {
+    margin: 0;
+}
+
+.inner-container {
+    position: relative;
+    padding-top: 65%;
+    width: 100%;
+    transition: .3s;
+}
+
+.not_scrolled {
+    filter: brightness(0.5) saturate(0%);
+    -webkit-filter: brightness(0.5) saturate(0%);
+}
+
+/* .project-block-wrapper.not_scrolled {
+    filter: brightness(0.5) saturate(0%);
+    -webkit-filter: brightness(0.5) saturate(0%);
+} */
+
+/* .project-block-wrapper {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 39px;
+    background: url("../../../assets/project_background_1.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    padding: 10px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    transition: .3s;
+} */
+
+.project-block {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    background: url("../../../assets/project_background_1.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 16px;
+    flex-shrink: 0;
+    flex: 1;
+    overflow: hidden;
+    transition: .3s;
+}
+
+.project-buttons {
+    position: absolute;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    bottom: 30px;
+    right: 10px;
+}
+
+.project__btn {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 4px 4px #4F4F4F;
+    background-color: rgba(77, 77, 77, 0.33);
+    border: 1px solid rgba(255, 255, 255, 0.50);
+    border-radius: 100%;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.project-link-button-icon {
+    width: 31px;
+    fill: #ffffff;
+    transition: .3s;
+}
+
+.project-link:hover {
+    background-color: #FFF;
+    border: 1px solid rgba(255, 255, 255, 0.50);
+}
+
+.project-link:hover .project-link-button-icon {
+    fill: #000000;
+}
+
+.project-checkout-button-icon{
+    width: 20px;
+    fill: #ffffff;
+    transition: .3s;
+}
+
+.project-checkout:hover {
+    background-color: #FFF;
+    border: 1px solid rgba(255, 255, 255, 0.50);
+}
+
+.project-checkout:hover .project-checkout-button-icon {
+    fill: #000000;
+}
+
+.project-image-preview {
+    position: absolute;
+    width: 95%;
+    top: 10%;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    transform: rotate(-15deg);
+    transition: .3s;
+}
+
+.inner-container:hover .project-image-preview {
+    transform: rotate(-5deg);
+}
+
+.project-tags-block {
+    display: flex;
+    gap: 20px;
+    width: 500px;
+    flex-wrap: wrap;
+}
+
+.project-tag {
+    display: flex;
+    color: #d9d9d9;
+    cursor: pointer;
+    background-color: rgba(255,255,255,.1);
+    border-top: 1px solid rgba(255,255,255,.75);
+    border-left: 1px solid rgba(255,255,255,.75);
+    border-radius: 8rem;
+    padding: 0.15rem 0.55rem 0.15rem 0.5rem;
+    font-size: 1rem;
+    font-family: 'Inconsolata';
+    font-weight: 700;
+    gap: 10px;
+    transition: all .2s;
+}
+
+.project-tag:hover {
+    background-color: rgba(255,255,255,.2);
+}
+
+.project-tag img {
+    max-width: 30px;
+    max-height: 95%;
+}
+
+@media (min-width: 992px) {
+    .project-container {
+        width: 40%;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 991px) {
+    .project-container {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-container {
+        width: 40%;
+    }
+}

@@ -1,6 +1,7 @@
 import React from 'react';
+
 import { useNavigate } from "react-router-dom"
-import "../styles/PageNotFound.css"
+import "../styles/pages/PageNotFound.css"
 
 const PageNotFound = () => {
     const navigate = useNavigate()
@@ -20,7 +21,7 @@ const PageNotFound = () => {
                         </defs>
                     </svg>
                 </div>
-                <button className="button" onClick={() => navigate(-1)}>Take me back!</button>
+                <a className="button" onClick={() => navigate(-1)}>Take me back!</a>
             </div>
         </div>
     );

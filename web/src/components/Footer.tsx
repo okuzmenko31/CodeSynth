@@ -1,14 +1,16 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import CodeSynth from "../assets/CodeSynth.png"
-import "../styles/Footer.css"
+import "../styles/components/Footer.css"
 
 
 const Footer = () => {
     return (
-        <footer className="footer">
+        <footer id="contacts" className="footer">
             <div className="logo">
                 <img alt="CodeSynth" src={CodeSynth}/>
-                <a href={process.env.REACT_APP_FRONTEND_DOMAIN} className="codesynth-text no-table mid-text" data-text="CODESYNTH">CodeSynth</a>
+                <Link to="/" className="codesynth-text no-table mid-text" data-text="CODESYNTH">CodeSynth</Link>
             </div>
 
             <div className="categories">

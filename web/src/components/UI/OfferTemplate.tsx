@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/Offer.css"
+import "../../styles/components/UI/Offer.css"
 
 
 const Service = ({name, description, image}: {name: string, description: string, image: any}) => {

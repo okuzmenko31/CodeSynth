@@ -50,3 +50,33 @@
     text-align: center;
     overflow-wrap: anywhere;
 }
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .offer-block {
+        width: 300px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .offer-block {
+        width: 300px;
+    }
+}
+
+@media (min-width: 651px) and (max-width: 767px) {
+    .offer-block {
+        width: 300px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 650px) {
+    .offer-block {
+        width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .offer-block {
+        width: 300px;
+    }
+}
