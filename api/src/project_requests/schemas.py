@@ -57,3 +57,7 @@ class ProjectRequestReturnSchema(ProjectRequestSchema):
     budget: str
     ref_source: Optional[str] = None
     project_services: list[ProjectServiceReturnSchema]
+
+
+class ProjectRequestServicesUpdateSchema(MainSchema):
+    services: list[int]

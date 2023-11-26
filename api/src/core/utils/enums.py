@@ -19,6 +19,6 @@ class InstanceTypes(str, Enum):
     project_ref_source = 'ref source'
 
 
-class ProjectTagsListOperations(str, Enum):
+class ModelRelatedListOperations(str, Enum):
     append = 'append'
     remove = 'remove'

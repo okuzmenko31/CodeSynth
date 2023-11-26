@@ -14,6 +14,9 @@ from src.core.utils.media_files import save_media_file, get_media_file_link
 
 from dataclasses import asdict
 
+from .schemas import ProjectRequestServicesUpdateSchema
+from ..core.utils.enums import ModelRelatedListOperations
+
 
 async def order_by_name_others_case_whens(
         model
@@ -113,7 +116,7 @@ class ProjectRequestService(BaseService):
         async with self.uow:
             request = await self.uow_repo.get_one_by_id(request_id)
             if request is None:
-                return await return_data_err_object_does_not_exist('project')
+                return await return_data_err_object_does_not_exist('project request')
 
             if data.budget_id is not None:
                 budget = await self.uow.project_budgets.get_one_by_id(data.budget_id)
@@ -127,3 +130,61 @@ class ProjectRequestService(BaseService):
             await self.uow_repo.update_by_data(request_id, asdict(data))
             await self.uow.commit()
             return ReturnData(result=await self.repository.get_return_schema(request))
+
+    async def edit_project_request_services(
+            self,
+            request_id: int,
+            data: ProjectRequestServicesUpdateSchema,
+            services_operation: ModelRelatedListOperations
+    ):
+        async with self.uow:
+            request = await self.uow_repo.get_one_by_id(request_id)
+            if request is None:
+                return await return_data_err_object_does_not_exist('project request')
+
+            services_lst = await ProjectServicesService(self.uow).get_instances_list_by_ids(
+                data.services
+            )
+            if len(services_lst) < 1:
+                return ReturnData(error='No such services was found by provided ids.')
+
+            for service in services_lst:
+                if services_operation.append:
+                    if service in request.project_services:
+                        return ReturnData(
+                            error='This service is already added to this project request'
+                        )
+                    request.project_services.append(service)
+                else:
+                    if service not in request.project_services:
+                        return ReturnData(
+                            error=('One of the service doesn\'t exists in'  # noqa
+                                   ' project request service list!')
+                        )
+                    request.project_services.remove(service)
+            await self.uow.commit()
+            return ReturnData(result=await self.repository.get_return_schema(request))
+
+    @handle_errors
+    async def add_project_request_services(
+            self,
+            request_id: int,
+            data: ProjectRequestServicesUpdateSchema
+    ):
+        return await self.edit_project_request_services(
+            request_id,
+            data,
+            ModelRelatedListOperations.append
+        )
+
+    @handle_errors
+    async def remove_project_request_services(
+            self,
+            request_id: int,
+            data: ProjectRequestServicesUpdateSchema
+    ):
+        return await self.edit_project_request_services(
+            request_id,
+            data,
+            ModelRelatedListOperations.remove
+        )

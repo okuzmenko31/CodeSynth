@@ -222,3 +222,59 @@ async def update_project_request(
     if return_data.error is not None:
         return await json_response_with_400_error(return_data.error)
     return return_data.result
+
+
+@router.patch(
+    '/add_project_request_services/{request_id}/',
+    response_model=ProjectRequestReturnSchema
+)
+async def add_project_request_services(
+        uow: uowDEP,
+        data: ProjectRequestServicesUpdateSchema,
+        request_id: int
+):
+    return_data = await ProjectRequestService(uow).add_project_request_services(request_id, data)
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
+
+
+@router.patch(
+    '/remove_project_request_services/{request_id}/',
+    response_model=ProjectRequestReturnSchema
+)
+async def remove_project_request_services(
+        uow: uowDEP,
+        data: ProjectRequestServicesUpdateSchema,
+        request_id: int
+):
+    return_data = await ProjectRequestService(uow).remove_project_request_services(request_id, data)
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
+
+
+@router.get('/', response_model=list[ProjectRequestReturnSchema])
+async def get_all_project_requests(uow: uowDEP):
+    return_data = await ProjectRequestService(uow).get_all_instances()
+    return return_data.result
+
+
+@router.get('/{request_id}/', response_model=ProjectRequestReturnSchema)
+async def get_project_request(uow: uowDEP, request_id: int):
+    return_data = await ProjectRequestService(uow).get_by_id(request_id, InstanceTypes.project_request)
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
+
+
+@router.delete('/delete_by_ids/', response_model=bool)
+async def delete_project_requests(uow: uowDEP, data: InstancesIDSListSchema):
+    return_data = await ProjectRequestService(uow).delete_by_ids_list(data.ids)
+    return return_data.result
+
+
+@router.delete('/{request_id}/', response_model=bool)
+async def delete_project_request(uow: uowDEP, request_id: int):
+    return_data = await ProjectRequestService(uow).delete_by_id(request_id)
+    return return_data.result

@@ -1,7 +1,7 @@
 from src.core.utils.service import BaseService
 from src.core.utils.media_files import (get_media_file_link,
                                         save_media_file)
-from src.core.utils.enums import ProjectTagsListOperations
+from src.core.utils.enums import ModelRelatedListOperations
 
 from .schemas import *
 from .models import ProjectAssociation
@@ -182,7 +182,7 @@ class ProjectService(ProjectTagService):
             self,
             instance_id,
             data: ProjectTagsUpdateSchema,
-            project_tags_operation: ProjectTagsListOperations
+            project_tags_operation: ModelRelatedListOperations
     ):
         async with self.uow:
             tags_lst = await self.get_tags_lst_by_ids(data.tags)
@@ -193,7 +193,7 @@ class ProjectService(ProjectTagService):
                 return await return_data_err_object_does_not_exist('project')
 
             for tag in tags_lst:
-                if project_tags_operation == ProjectTagsListOperations.append:
+                if project_tags_operation == ModelRelatedListOperations.append:
                     if tag in project.tags:
                         return ReturnData(
                             error='This tag is already added to this project!'
@@ -214,7 +214,7 @@ class ProjectService(ProjectTagService):
             instance_id,
             data: ProjectTagsUpdateSchema
     ):
-        return await self.edit_project_tags(instance_id, data, ProjectTagsListOperations.append)
+        return await self.edit_project_tags(instance_id, data, ModelRelatedListOperations.append)
 
     @handle_errors
     async def remove_project_tags(
@@ -222,4 +222,4 @@ class ProjectService(ProjectTagService):
             instance_id,
             data: ProjectTagsUpdateSchema
     ):
-        return await self.edit_project_tags(instance_id, data, ProjectTagsListOperations.remove)
+        return await self.edit_project_tags(instance_id, data, ModelRelatedListOperations.remove)
