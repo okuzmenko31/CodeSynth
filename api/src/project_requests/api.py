@@ -7,7 +7,7 @@ from src.core.utils.enums import InstanceTypes
 from src.core.utils.service_utils import json_response_with_400_error
 from src.core.schemas import InstancesIDSListSchema
 
-from .dependencies import project_req_create_data
+from .dependencies import project_req_create_data, project_req_update_data
 from .schemas import *
 from .services import (ProjectServicesService,
                        ProjectBudgetService,
@@ -201,12 +201,24 @@ async def get_all_ref_sources(uow: uowDEP):
     return return_data.result
 
 
-@router.post('/create/')
+@router.post('/create/', response_model=ProjectRequestReturnSchema)
 async def create_project_request(
         uow: uowDEP,
         create_data: project_req_create_data
 ):
     return_data = await ProjectRequestService(uow).create_project_request(create_data)
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
+
+
+@router.patch('/update/{request_id}/', response_model=ProjectRequestReturnSchema)
+async def update_project_request(
+        uow: uowDEP,
+        update_data: project_req_update_data,
+        request_id: int
+):
+    return_data = await ProjectRequestService(uow).update_project_request(request_id, update_data)
     if return_data.error is not None:
         return await json_response_with_400_error(return_data.error)
     return return_data.result

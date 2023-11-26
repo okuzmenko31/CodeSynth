@@ -6,12 +6,10 @@ from src.core.repositories.repos import (ProjectBudgetRepository,
                                          ProjectServiceRepository,
                                          ProjectRequestRepository,
                                          RefSourceRepository)
-from src.core.utils.dataclasses import ReturnData, ProjectRequestCreateData
+from src.core.utils.dataclasses import ReturnData, ProjectRequestCreateData, ProjectRequestUpdateData
 from src.core.utils.service_utils import return_data_err_object_does_not_exist
-from src.core.utils.enums import InstanceTypes
 from .models import ProjectRequest
 
-from .schemas import ProjectRequestSchema, ProjectRequestReturnSchema
 from src.core.utils.media_files import save_media_file, get_media_file_link
 
 from dataclasses import asdict
@@ -81,16 +79,12 @@ class ProjectRequestService(BaseService):
         async with self.uow:
             budget = await self.uow.project_budgets.get_one_by_id(data.budget_id)
             if budget is None:
-                return await return_data_err_object_does_not_exist(
-                    InstanceTypes.project_budget.value
-                )
+                return await return_data_err_object_does_not_exist('budget')
 
             if data.ref_source_id is not None:
                 ref_source = await self.uow.project_ref_sources.get_one_by_id(data.ref_source_id)
                 if ref_source is None:
-                    return await return_data_err_object_does_not_exist(
-                        InstanceTypes.project_ref_source.value
-                    )
+                    return await return_data_err_object_does_not_exist('project ref source')
 
             services_list = await ProjectServicesService(self.uow).get_instances_list_by_ids(
                 project_services_json
@@ -105,3 +99,31 @@ class ProjectRequestService(BaseService):
             await self.uow.add(project_request)
             await self.uow.commit()
             return ReturnData(result=await self.repository.get_return_schema(project_request))
+
+    @handle_errors
+    async def update_project_request(
+            self,
+            request_id: int,
+            data: ProjectRequestUpdateData
+    ):
+        if data.technical_task is not None:
+            hashed_filename = await save_media_file(data.technical_task)
+            data.technical_task = await get_media_file_link(hashed_filename)
+
+        async with self.uow:
+            request = await self.uow_repo.get_one_by_id(request_id)
+            if request is None:
+                return await return_data_err_object_does_not_exist('project')
+
+            if data.budget_id is not None:
+                budget = await self.uow.project_budgets.get_one_by_id(data.budget_id)
+                if budget is None:
+                    return await return_data_err_object_does_not_exist('budget')
+            if data.ref_source_id is not None:
+                source = await self.uow.project_ref_sources.get_one_by_id(data.ref_source_id)
+                if source is None:
+                    return await return_data_err_object_does_not_exist('ref source')
+
+            await self.uow_repo.update_by_data(request_id, asdict(data))
+            await self.uow.commit()
+            return ReturnData(result=await self.repository.get_return_schema(request))
