@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/Question.css"
+import "../../styles/components/UI/Question.css"
 
 
 const Question = ({question, answer}: {question: string, answer: string}) => {

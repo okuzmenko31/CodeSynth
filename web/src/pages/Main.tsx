@@ -1,18 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
+import axios from 'axios'
+
 import Project from "../components/UI/ProjectTemplate"
 import Service from "../components/UI/ServicesTemplate"
 import Langauge from "../components/UI/LanguageTemplate"
 import Offer from "../components/UI/OfferTemplate"
 import Question from '../components/UI/QuestionTemplate';
+
+import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import "../styles/Main.css"
+
+import "../styles/pages/Main.css"
 import { initParallaxEffect } from '../utils/parallax_effect';
 
 import img from "../assets/Source_Health.png"
 import python from "../assets/python.png"
 import javascript from "../assets/javascript.png"
+import { ObjectEncodingOptions } from 'fs';
 
 const Main = () => {
+    const [projects, setProjects] = useState([])
+    let page = 0
+
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/all/?page=${page}&size=10`)
+        .then(res => {
+            setProjects(res.data)
+        })
+    }, [])
+
+    type ProjectType = {
+        id: number;
+        name: string;
+        tags: string[];
+        preview_image: string;
+        source_link: string;
+    }
+
+
 
     const parallaxOptions = initParallaxEffect('.side-text', 0.5, 'rotate(-90deg)');
 
@@ -25,6 +51,8 @@ const Main = () => {
     const javascriptAdditionalTools = ['axios', 'redux']
 
     return (
+        <>
+        <Navbar />
         <div className="main-page">
             <div className="what-is">
                 <div className="what-is-text">
@@ -33,12 +61,12 @@ const Main = () => {
                 </div>
 
                 <div className="what-is-buttons">
-                    <button className="button-fill">MAKE ORDER</button>
-                    <button className="button">PORTFOLIO</button>
+                    <Link to="/make_order" className="button-fill">MAKE ORDER</Link>
+                    <Link to="#portfolio" className="button">PORTFOLIO</Link>
                 </div>
             </div>
 
-            <div className="projects-container-header">
+            <div id="portfolio" className="projects-container-header">
                 <div className='projects-text'>
                     <p className="big-text">EXPERIENCE IN ACTION</p>
                     <p className="small-text">With years of experience, we have had the opportunity to work on a wide range of projects for clients from all over the world, from building custom websites to developing complex web applications in Webflow. Explore our portfolio to see some of our most recent works and learn more about our experience and capabilities.</p>
@@ -46,16 +74,16 @@ const Main = () => {
 
                 <div className="projects-container">
                     <span className="side-text rotated-text">PORTFOLIO PROJECTS</span>
-                    <Project name="CodeSynth" image={img} tags={[{ name: 'lolo' }, { name: 'aahahahaa' }]} />
-                    <Project name="CodeAss" image={img} tags={[{ name: 'lolo' }, { name: 'aahahahaa' }]} />
-                    <Project name="CodeFuck" image={img} tags={[{ name: 'lolo' }, { name: 'aahahahaa' }]} />
-                    <Project name="CodeSynth" image={img} tags={[{ name: 'lolo' }, { name: 'aahahahaa' }]} />
-                    <Project name="CodeAss" image={img} tags={[{ name: 'lolo' }, { name: 'aahahahaa' }]} />
-                    <Project name="CodeFuck" image={img} tags={[{ name: 'lolo' }, { name: 'aahahahaa' }]} />
+                    {
+                        projects &&
+                        projects.map((el: ProjectType) => (
+                            <Project key={el.id} name={el.name} image={el.preview_image} tags={el.tags} checkout_link={el.source_link}/>
+                        ))
+                    }
                 </div>
             </div>
             
-            <div className="our-services">
+            <div id="services" className="our-services">
                 <div className="our-services-text">
                     <p className="big-text">OUR SERVICES</p>
                     <p className="small-text">Services that we can provide to our clients</p>
@@ -65,7 +93,7 @@ const Main = () => {
                     <div className="services-title-wrapper">
                         <p className="big-text">SOLUTIONS TO YOUR NEEDS</p>
                         <p className="small-text">We offer a wide range of services designed to help you achieve your goals, from design and user experience to custom development and third-party integrations.</p>
-                        <button className="button">GET STARTED</button>
+                        <Link to="/make_order" className="button">GET STARTED</Link>
                     </div>
 
                     <div className="services-items-wrapper">
@@ -93,14 +121,14 @@ const Main = () => {
                 </div>
             </div>
 
-            <div className="we-can-offer-block">
+            <div id="why-us" className="we-can-offer-block">
                 <div className="we-can-offer-header">
                     <div className="we-can-offer-title">
                         <p className="big-text">WE DELIVER QUALITY</p>
                         <p className="small-text">We prioritize quality of work and client experience. That's why you get a range of powerups when you work with us!</p>
                     </div>
 
-                    <button className="button">START PROJECT</button>
+                    <Link to="/make_order" className="button">START PROJECT</Link>
                 </div>
 
                 <div className="we-can-offer-content">
@@ -133,7 +161,7 @@ const Main = () => {
                 </div>
             </div>
 
-            <div className="questions-container">
+            <div id="faqs" className="questions-container">
                 <div className="questions-header">
                     <p className="big-text">FAQs</p>
                 </div>
@@ -153,11 +181,11 @@ const Main = () => {
                     <p className="small-text">We are ready to realize your dreamed project</p>
                 </div>
 
-                <button className="button">Get started</button>
+                <Link to="/make_order" className="button">Get started</Link>
             </div>
-
             <Footer />
         </div>
+        </>
     );
 }
 

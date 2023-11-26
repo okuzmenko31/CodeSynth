@@ -4,12 +4,11 @@ import { loadFull } from "tsparticles";
 
 const ParticlesBackground = ({ fpsLimit, speed }: { fpsLimit: number, speed: number }) => {
     const particlesInit = useCallback(async (engine: any) => {
-        console.log(engine);
         await loadFull(engine);
     }, []);
     
     const particlesLoaded = useCallback(async (container: any) => {
-        await console.log(container);
+
     }, []);
     
     return (

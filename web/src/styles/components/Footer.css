@@ -1,4 +1,5 @@
 .footer {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -9,6 +10,7 @@
     border-image: linear-gradient(90deg, #00000000 0%, #ffffff 50%, #00000000 100%) 1 0 0 0;
     background-color: #181818;
     gap: 100px;
+    bottom: 0;
     box-sizing: border-box;
 }
 
@@ -40,4 +42,24 @@
 
 .category p {
     margin: 0;
+}
+
+@media (min-width: 651px) and (max-width: 767px) {
+    .footer {
+        flex-direction: column;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 650px) {
+    .footer {
+        flex-direction: column;
+        padding: 2px;
+    } 
+}
+
+@media (max-width: 480px) {
+    .footer {
+        flex-direction: column;
+        padding: 2px;
+    }
 }

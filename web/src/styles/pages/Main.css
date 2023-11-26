@@ -1,0 +1,577 @@
+.main-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding-top: 150px;
+    gap: 150px;
+}
+
+.what-is {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+}
+
+.what-is-text p {
+    margin: 0;
+}
+
+.what-is-buttons {
+    display: flex;
+    width: 40%;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.projects-container-header {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.projects-text {
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.projects-text p {
+    max-width: 40%;
+}
+
+.projects-container {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 100px;
+}
+
+.side-text {
+    will-change: transform;
+    position: absolute;
+    left: -17%;
+    top: 10%;
+    white-space: nowrap;
+    font-size: 102px;
+    color: rgba(255,255,255,.05);
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: rgba(255,255,255,.5);
+    text-transform: uppercase;
+}
+
+.our-services {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.our-services-text p {
+    margin: 0;
+    text-align: center;
+}
+
+.our-services-content {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.services-title-wrapper {
+    position: sticky;
+    top: 0;
+    width: 500px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+    padding-top: 150px;
+}
+
+.services-title-wrapper p {
+    margin: 0;
+}
+
+.services-items-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 40%;
+    box-sizing: border-box;
+    padding-top: 150px;
+}
+
+.our-stack-block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.our-stack-title p {
+    margin: 0;
+    text-align: center;
+}
+
+.our-stack-content {
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 80%;
+}
+
+.we-can-offer-block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.we-can-offer-header {
+    display: flex;
+    width: 70%;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.we-can-offer-title p {
+    margin: 0;
+    max-width: 50%;
+}
+
+.we-can-offer-content {
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: 20px;
+    border: 2px solid rgba(255,255,255,.2);
+    overflow: hidden;
+}
+
+.our-statistic {
+    width: 100%;
+    padding: 100px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    border-width: 1px;
+    border-style: solid;
+    border-image: linear-gradient(90deg, #00000000 0%, #ffffff 50%, #00000000 100%) 1 0 1 0;
+}
+
+.our-statistic-block {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.our-statistic-block::before {
+    position: absolute;
+    top: -50%;
+    right: 0;
+    content: '+';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 200px;
+}
+
+.our-statistic-block.red::before {
+    background: url("../../assets/red_conic_gradient.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.our-statistic-block.green::before {
+    background: url("../../assets/green_conic_gradient.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.our-statistic-block.blue::before {
+    background: url("../../assets/purple_conic_gradient.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.our-statistic-block p {
+    margin: 0;
+    text-align: center;
+}
+
+.questions-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.questions-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.questions-header p {
+    margin: 0;
+}
+
+.questions-block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-offer-block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.user-offer-header {
+    width: 50%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-offer-header p {
+    margin: 0;
+    text-align: center;
+}
+
+@media (min-width: 1400px) and (max-width: 1599px) {
+    .what-is-buttons {
+        width: 50%;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .what-is-buttons {
+        width: 70%;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .what-is {
+        width: 70%;
+    }
+
+    .what-is-buttons {
+        width: 60%;
+    }
+
+    .we-can-offer-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .we-can-offer-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+    }
+
+    .we-can-offer-title p {
+        max-width: 100%;
+    }
+
+    .our-services-content {
+        flex-direction: column;
+    }
+
+    .services-items-wrapper {
+        width: 100%;
+    }
+
+    .services-title-wrapper {
+        position: relative;
+        width: 95%;
+        height: auto;
+        text-align: center;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .what-is {
+        width: 80%;
+    }
+    
+    .what-is-buttons {
+        width: 60%;
+    }
+
+    .projects-text {
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    .projects-text p {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .side-text {
+        display: none;
+        opacity: 0;
+        transform: none !important;
+    }
+    
+    .we-can-offer-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .we-can-offer-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+    }
+
+    .we-can-offer-title p {
+        max-width: 100%;
+    }
+
+    .our-services-content {
+        flex-direction: column;
+    }
+
+    .services-items-wrapper {
+        width: 100%;
+    }
+
+    .services-title-wrapper {
+        position: relative;
+        width: 95%;
+        height: auto;
+        text-align: center;
+    }
+}
+
+@media (min-width: 651px) and (max-width: 767px) {
+    .what-is {
+        width: 90%;
+    }
+    
+    .what-is-buttons {
+        width: 60%;
+    }
+
+    .projects-text {
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    .projects-text p {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .side-text {
+        display: none;
+        opacity: 0;
+        transform: none !important;
+    }
+
+    .we-can-offer-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .we-can-offer-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+    }
+
+    .we-can-offer-title p {
+        max-width: 100%;
+    }
+
+    .our-services-content {
+        flex-direction: column;
+    }
+
+    .services-items-wrapper {
+        width: 100%;
+    }
+
+    .services-title-wrapper {
+        position: relative;
+        width: 95%;
+        height: auto;
+        text-align: center;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 650px) {
+    .what-is {
+        width: 100%;
+    }
+    
+    .what-is-buttons {
+        width: 80%;
+        flex-direction: column;
+    }
+
+    .projects-text {
+        width: 50%;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    .projects-text p {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .side-text {
+        display: none;
+        opacity: 0;
+        transform: none !important;
+    }
+
+    .we-can-offer-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .we-can-offer-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+    }
+
+    .we-can-offer-title p {
+        max-width: 100%;
+    }
+
+    .our-services-content {
+        flex-direction: column;
+    }
+
+    .services-items-wrapper {
+        width: 100%;
+    }
+
+    .services-title-wrapper {
+        position: relative;
+        width: 95%;
+        height: auto;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .what-is {
+        width: 100%;
+    }
+    
+    .what-is-buttons {
+        width: 70%;
+        flex-direction: column;
+    }
+
+    .projects-text {
+        width: 40%;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    .projects-text p {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .side-text {
+        display: none;
+        opacity: 0;
+        transform: none !important;
+    }
+
+    .we-can-offer-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .we-can-offer-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+    }
+
+    .we-can-offer-title p {
+        max-width: 100%;
+    }
+
+    .we-can-offer-content {
+        width: 90%;
+    }
+
+    .our-services-content {
+        flex-direction: column;
+    }
+
+    .services-items-wrapper {
+        width: 100%;
+    }
+
+    .services-title-wrapper {
+        position: relative;
+        width: 95%;
+        height: auto;
+        text-align: center;
+    }
+    
+    .user-offer-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}

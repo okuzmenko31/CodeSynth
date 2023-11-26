@@ -1,5 +1,5 @@
 import React from "react"
-import "../../styles/Language.css"
+import "../../styles/components/UI/Language.css"
 
 const Language = ({name, frameworks, additional, image}: { name: string, frameworks: string[], additional?: string[], image: any }) => {
 

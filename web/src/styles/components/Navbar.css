@@ -1,0 +1,143 @@
+.navbar {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 200px;
+    border-width: 1px;
+    border-style: solid;
+    border-image: linear-gradient(90deg, #00000000 0%, #ffffff 50%, #00000000 100%) 0 0 1 0;
+    background-color: #1818187d;
+    gap: 100px;
+    box-sizing: border-box;
+    z-index: 20;
+    -webkit-backdrop-filter: blur(50px);
+    backdrop-filter: blur(50px);
+    transition: .3s;
+}
+
+.navbar-first-part {
+    display: flex;
+    gap: 100px;
+    align-items: center;
+}
+
+.navbar-buttons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+}
+
+.navbar-buttons-last {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+}
+
+.navbar-mobile-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    fill: #ffffff;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 4px 4px #4F4F4F;
+    background-color: rgba(77, 77, 77, 0.33);
+    border: 1px solid rgba(255, 255, 255, 0.50);
+    border-radius: 100%;
+    cursor: pointer;
+    z-index: 21;
+    transition: .3s;
+}
+
+.navbar-mobile-button:hover {
+    fill: #000000;
+    background-color: #FFF;
+    border: 1px solid rgba(255, 255, 255, 0.50);
+}
+
+.navbar-mobile-button.active {
+    fill: #000000;
+    background-color: #FFF;
+    border: 1px solid rgba(255, 255, 255, 0.50);
+}
+
+#navbar.active {
+    display: flex;
+    height: 100%;
+    top: 0 !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#navbar.active .navbar-first-part {
+    flex-direction: column;
+}
+
+#navbar.active .navbar-buttons {
+    flex-direction: column;
+}
+
+#navbar.active .navbar-buttons-last {
+    flex-direction: column;
+}
+
+@media (min-width: 1199px) {
+    .navbar-mobile-button {
+        display: none;
+        opacity: 0;
+    }
+}
+
+@media (max-width: 1198px) {
+    .navbar-mobile-button {
+        display: flex;
+        opacity: 1;
+    }
+
+    #navbar {
+        display: none;
+    }
+}
+
+@media (min-width: 1400px) and (max-width: 1599px) {
+    .navbar {
+        padding: 10px 40px;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .navbar {
+        padding: 10px 35px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .navbar {
+        padding: 10px 35px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    
+}
+
+@media (min-width: 651px) and (max-width: 767px) {
+    
+}
+
+@media (min-width: 481px) and (max-width: 650px) {
+    
+}
+
+@media (max-width: 480px) {
+    #navbar {
+        padding: 0;
+    }
+}

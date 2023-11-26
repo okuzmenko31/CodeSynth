@@ -2,6 +2,9 @@ export const initParallaxEffect = (target: string, speed: number, additional?: s
     return function () {
         let scrollPosition = window.scrollY;
         let parallaxContent = document.querySelector(target) as HTMLElement;
-        parallaxContent.style.transform = `translate(0, -${scrollPosition * speed}px) ${additional}`;
+        if (parallaxContent) {
+            parallaxContent.style.transform = `translate(0, -${scrollPosition * speed}px) ${additional}`;
+        }
     };
 };
+
