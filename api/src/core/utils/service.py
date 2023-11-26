@@ -24,7 +24,8 @@ class BaseService:
             ProjectFilterTypeRepository: self.uow.project_types,
             ProjectServiceRepository: self.uow.project_services,
             ProjectBudgetRepository: self.uow.project_budgets,
-            ProjectRequestRepository: self.uow.project_requests
+            ProjectRequestRepository: self.uow.project_requests,
+            RefSourceRepository: self.uow.project_ref_sources
         }
 
     @property
@@ -36,7 +37,8 @@ class BaseService:
             ProjectFilterTypeRepository |
             ProjectServiceRepository |
             ProjectBudgetRepository |
-            ProjectRequestRepository
+            ProjectRequestRepository |
+            RefSourceRepository
     ):
         uow_repos_dict = self.repos_uow_dict()
         return uow_repos_dict.get(self.repository)

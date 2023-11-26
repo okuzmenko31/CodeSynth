@@ -313,3 +313,8 @@ class SQLAlchemyRepository(AbstractRepository):
         )
         res = await self.session.execute(stmt)
         return res.fetchall()
+
+    async def order_by_field(self, field):
+        stmt = select(self.model).order_by(field)
+        res = await self.session.execute(stmt)
+        return res.fetchall()

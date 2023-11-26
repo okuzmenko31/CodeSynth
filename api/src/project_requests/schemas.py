@@ -24,3 +24,11 @@ class ProjectBudgetUpdateSchema(MainSchema):
 class ProjectBudgetReturnSchema(ProjectBudgetSchema):
     id: int
     budget: str
+
+
+class ProjectRefSourceSchema(MainSchema):
+    name: str
+
+
+class ProjectRefSourceReturnSchema(ProjectRefSourceSchema):
+    id: int

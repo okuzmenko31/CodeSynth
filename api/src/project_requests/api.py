@@ -6,7 +6,7 @@ from src.core.utils.service_utils import json_response_with_400_error
 from src.core.schemas import InstancesIDSListSchema
 
 from .schemas import *
-from .services import ProjectServicesService, ProjectBudgetService
+from .services import ProjectServicesService, ProjectBudgetService, ProjectRefSourceService
 
 router = APIRouter(
     prefix='/project_requests',
@@ -129,4 +129,67 @@ async def get_budget_by_id(uow: uowDEP, budget_id: int):
 @router.get('/all_budgets/', response_model=list[ProjectBudgetReturnSchema])
 async def get_all_budgets(uow: uowDEP):
     return_data = await ProjectBudgetService(uow).get_all_instances()
+    return return_data.result
+
+
+@router.get('/budgets_for_users/', response_model=list[ProjectBudgetReturnSchema])
+async def get_filtered_budgets(uow: uowDEP):
+    return_data = await ProjectBudgetService(uow).get_filtered_budgets()
+    return return_data.result
+
+
+@router.post('/create_ref_source/', response_model=ProjectRefSourceReturnSchema)
+async def create_ref_source(uow: uowDEP, data: ProjectRefSourceSchema):
+    return_data = await ProjectRefSourceService(uow).create_by_data_dict(dict(data))
+    return return_data.result
+
+
+@router.patch('/update_ref_source/{source_id}/', response_model=ProjectRefSourceReturnSchema)
+async def update_ref_source(
+        uow: uowDEP,
+        source_id: int,
+        data: ProjectRefSourceSchema
+):
+    return_data = await ProjectRefSourceService(uow).update_by_data_dict(
+        source_id,
+        InstanceTypes.project_ref_source,
+        dict(data)
+    )
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
+
+
+@router.delete('/delete_ref_source/{source_id}/', response_model=bool)
+async def delete_ref_source(uow: uowDEP, source_id: int):
+    return_data = await ProjectRefSourceService(uow).delete_by_id(source_id)
+    return return_data.result
+
+
+@router.delete('/delete_ref_sources/', response_model=bool)
+async def delete_budgets(uow: uowDEP, data: InstancesIDSListSchema):
+    return_data = await ProjectRefSourceService(uow).delete_by_ids_list(data.ids)
+    return return_data.result
+
+
+@router.get('/ref_source/{source_id}/', response_model=ProjectRefSourceReturnSchema)
+async def get_ref_source(uow: uowDEP, source_id: int):
+    return_data = await ProjectRefSourceService(uow).get_by_id(
+        source_id,
+        InstanceTypes.project_ref_source
+    )
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
+    return return_data.result
+
+
+@router.get('/ref_sources/', response_model=list[ProjectRefSourceReturnSchema])
+async def get_all_ref_sources(uow: uowDEP):
+    return_data = await ProjectRefSourceService(uow).get_all_instances()
+    return return_data.result
+
+
+@router.get('/ref_sources_for_users/', response_model=list[ProjectRefSourceReturnSchema])
+async def get_all_ref_sources(uow: uowDEP):
+    return_data = await ProjectRefSourceService(uow).get_filtered_ref_sources()
     return return_data.result

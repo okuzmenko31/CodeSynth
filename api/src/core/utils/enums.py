@@ -16,6 +16,7 @@ class InstanceTypes(str, Enum):
     project_service = 'service'
     project_budget = 'budget'
     project_request = 'request'
+    project_ref_source = 'ref source'
 
 
 class ProjectTagsListOperations(str, Enum):

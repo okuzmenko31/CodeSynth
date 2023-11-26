@@ -4,8 +4,10 @@ from src.core.utils.repository import SQLAlchemyRepository, AbstractSchemaReposi
 from src.projects.schemas import (ProjectReturnSchema,
                                   ProjectTagReturnSchema,
                                   ProjectFilterTypeReturnSchema)
-from src.project_requests.models import ProjectService, ProjectBudget, ProjectRequest
-from src.project_requests.schemas import ProjectServiceReturnSchema, ProjectBudgetReturnSchema
+from src.project_requests.models import ProjectService, ProjectBudget, ProjectRequest, RefSource
+from src.project_requests.schemas import (ProjectServiceReturnSchema,
+                                          ProjectBudgetReturnSchema,
+                                          ProjectRefSourceReturnSchema)
 
 
 class JWTTokensBlackListRepository(SQLAlchemyRepository):
@@ -83,3 +85,15 @@ class ProjectBudgetRepository(AbstractSchemaRepository,
 
 class ProjectRequestRepository(SQLAlchemyRepository):
     model = ProjectRequest
+
+
+class RefSourceRepository(AbstractSchemaRepository,
+                          SQLAlchemyRepository):
+    model = RefSource
+
+    @classmethod
+    async def get_return_schema(cls, source_instance):
+        return ProjectRefSourceReturnSchema(
+            id=source_instance.id,
+            name=source_instance.name
+        )
