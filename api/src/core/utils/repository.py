@@ -300,12 +300,21 @@ class SQLAlchemyRepository(AbstractRepository):
         stmt = delete(self.model).where(self.model.id.in_(ids))
         await self.session.execute(stmt)
 
-    async def test_s(self):
+    async def order_by_case(
+            self,
+            when_cases,
+            else_val=0
+    ):
         stmt = select(self.model).order_by(
             case(
-                (self.model.name == 'others', 1),
-                else_=0
+                *when_cases,
+                else_=else_val
             )
         )
+        res = await self.session.execute(stmt)
+        return res.fetchall()
+
+    async def order_by_field(self, field):
+        stmt = select(self.model).order_by(field)
         res = await self.session.execute(stmt)
         return res.fetchall()

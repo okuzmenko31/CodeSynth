@@ -1,4 +1,5 @@
-from typing import Annotated
+import json
+from typing import Annotated, Any
 
 from fastapi import APIRouter, UploadFile, File, Form
 
@@ -145,15 +146,19 @@ async def create_project(
         name: Annotated[str, Form(...)],
         filter_type_id: Annotated[int, Form(...)],
         source_link: Annotated[str, Form(...)],
-        tags: Annotated[list[int], Form(...)],
+        tags: Annotated[str, Form(...)],
         text: Annotated[str, Form(...)],
         preview_image: UploadFile = File(...)
 ):
+    json_tags = json.loads(tags)
+    if not isinstance(json_tags, list):
+        return await json_response_with_400_error('Tags must be a list')
+
     data = ProjectSchema(
         name=name,
         filter_type_id=filter_type_id,
         source_link=source_link,
-        tags=tags,
+        tags=json_tags,
         text=text
     )
     project_data = await ProjectService(uow).create_project(data, preview_image)

@@ -99,7 +99,7 @@ class ProjectRequest(Base):
     start_date: Mapped[Optional[datetime.date]]
     deadline_date: Mapped[Optional[datetime.date]]
     hard_deadline: Mapped[bool] = mapped_column(default=False, index=True)
-    ref_source_id: Mapped[int] = mapped_column(ForeignKey('ref_source.id'), nullable=False)
+    ref_source_id: Mapped[int] = mapped_column(ForeignKey('ref_source.id'), nullable=True)
     ref_source: Mapped[RefSource] = relationship(lazy='selectin')
     project_services: Mapped[list[ProjectService]] = relationship(
         secondary='project_request_service_association',

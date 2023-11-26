@@ -24,7 +24,8 @@ class BaseService:
             ProjectFilterTypeRepository: self.uow.project_types,
             ProjectServiceRepository: self.uow.project_services,
             ProjectBudgetRepository: self.uow.project_budgets,
-            ProjectRequestRepository: self.uow.project_requests
+            ProjectRequestRepository: self.uow.project_requests,
+            RefSourceRepository: self.uow.project_ref_sources
         }
 
     @property
@@ -36,7 +37,8 @@ class BaseService:
             ProjectFilterTypeRepository |
             ProjectServiceRepository |
             ProjectBudgetRepository |
-            ProjectRequestRepository
+            ProjectRequestRepository |
+            RefSourceRepository
     ):
         uow_repos_dict = self.repos_uow_dict()
         return uow_repos_dict.get(self.repository)
@@ -132,3 +134,8 @@ class BaseService:
             await self.uow_repo.delete_by_ids(ids_list)
             await self.uow.commit()
             return True
+
+    async def get_instances_list_by_ids(self, ids: list):
+        return [
+            instance[0] for instance in await self.uow_repo.filter_by_ids_list(ids)
+        ]
