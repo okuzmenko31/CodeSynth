@@ -6,7 +6,7 @@ from src.core.utils.service_utils import json_response_with_400_error
 from src.core.schemas import InstancesIDSListSchema
 
 from .schemas import *
-from .services import ProjectAppService, ProjectBudgetService
+from .services import ProjectServicesService, ProjectBudgetService
 
 router = APIRouter(
     prefix='/project_requests',
@@ -22,7 +22,7 @@ async def create_service(
         uow: uowDEP,
         data: ProjectServiceSchema
 ):
-    return_data = await ProjectAppService(uow).create_by_data_dict(dict(data))
+    return_data = await ProjectServicesService(uow).create_by_data_dict(dict(data))
     return return_data.result
 
 
@@ -32,7 +32,7 @@ async def update_service(
         service_id: int,
         data: ProjectServiceSchema
 ):
-    return_data = await ProjectAppService(uow).update_by_data_dict(
+    return_data = await ProjectServicesService(uow).update_by_data_dict(
         service_id,
         InstanceTypes.project_service,
         dict(data)
@@ -47,19 +47,19 @@ async def delete_services_by_ids(
         uow: uowDEP,
         data: InstancesIDSListSchema
 ):
-    return_data = await ProjectAppService(uow).delete_by_ids_list(data.ids)
+    return_data = await ProjectServicesService(uow).delete_by_ids_list(data.ids)
     return return_data.result
 
 
 @router.delete('/delete_service/{service_id}/', response_model=bool)
 async def delete_service(uow: uowDEP, service_id: int):
-    return_data = await ProjectAppService(uow).delete_by_id(service_id)
+    return_data = await ProjectServicesService(uow).delete_by_id(service_id)
     return return_data.result
 
 
 @router.get('/service/{service_id}/', response_model=ProjectServiceReturnSchema)
 async def get_service_by_id(uow: uowDEP, service_id: int):
-    return_data = await ProjectAppService(uow).get_by_id(
+    return_data = await ProjectServicesService(uow).get_by_id(
         service_id, InstanceTypes.project_service
     )
     if return_data.error is not None:
@@ -71,14 +71,14 @@ async def get_service_by_id(uow: uowDEP, service_id: int):
 async def get_all_services(
         uow: uowDEP
 ):
-    return_data = await ProjectAppService(uow).get_all_instances()
+    return_data = await ProjectServicesService(uow).get_all_instances()
     return return_data.result
 
 
-@router.get('/test_services/', response_model=bool)
-async def test_services(uow: uowDEP):
-    await ProjectAppService(uow).get_filtered_services_for_user()
-    return True
+@router.get('/services_for_user/', response_model=list[ProjectServiceReturnSchema])
+async def services_for_user(uow: uowDEP):
+    return_data = await ProjectServicesService(uow).get_filtered_services()
+    return return_data.result
 
 
 @router.post('/create_budget/', response_model=ProjectBudgetReturnSchema)
