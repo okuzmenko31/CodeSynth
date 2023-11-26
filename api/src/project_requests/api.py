@@ -1,3 +1,5 @@
+import json
+
 from fastapi import APIRouter
 
 from src.core.utils.dependencies import uowDEP
@@ -5,8 +7,12 @@ from src.core.utils.enums import InstanceTypes
 from src.core.utils.service_utils import json_response_with_400_error
 from src.core.schemas import InstancesIDSListSchema
 
+from .dependencies import project_req_create_data
 from .schemas import *
-from .services import ProjectServicesService, ProjectBudgetService, ProjectRefSourceService
+from .services import (ProjectServicesService,
+                       ProjectBudgetService,
+                       ProjectRefSourceService,
+                       ProjectRequestService)
 
 router = APIRouter(
     prefix='/project_requests',
@@ -192,4 +198,15 @@ async def get_all_ref_sources(uow: uowDEP):
 @router.get('/ref_sources_for_users/', response_model=list[ProjectRefSourceReturnSchema])
 async def get_all_ref_sources(uow: uowDEP):
     return_data = await ProjectRefSourceService(uow).get_filtered_ref_sources()
+    return return_data.result
+
+
+@router.post('/create/')
+async def create_project_request(
+        uow: uowDEP,
+        create_data: project_req_create_data
+):
+    return_data = await ProjectRequestService(uow).create_project_request(create_data)
+    if return_data.error is not None:
+        return await json_response_with_400_error(return_data.error)
     return return_data.result

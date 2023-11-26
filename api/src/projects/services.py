@@ -64,10 +64,7 @@ class ProjectTagService(BaseService):
             return await self.repository.get_return_schema(tag)
 
     async def get_tags_lst_by_ids(self, ids: list) -> list:
-        tags_lst = [
-            tag[0] for tag in await self.uow.project_tags.filter_by_ids_list(ids)
-        ]
-        return tags_lst
+        return await self.get_instances_list_by_ids(ids)
 
     @handle_errors
     async def update_tag(

@@ -134,3 +134,8 @@ class BaseService:
             await self.uow_repo.delete_by_ids(ids_list)
             await self.uow.commit()
             return True
+
+    async def get_instances_list_by_ids(self, ids: list):
+        return [
+            instance[0] for instance in await self.uow_repo.filter_by_ids_list(ids)
+        ]
