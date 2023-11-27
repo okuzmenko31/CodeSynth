@@ -21,31 +21,6 @@
     -webkit-filter: brightness(0.5) saturate(0%);
 }
 
-/* .project-block-wrapper.not_scrolled {
-    filter: brightness(0.5) saturate(0%);
-    -webkit-filter: brightness(0.5) saturate(0%);
-} */
-
-/* .project-block-wrapper {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-radius: 39px;
-    background: url("../../../assets/project_background_1.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 50% 50%;
-    padding: 10px;
-    box-sizing: border-box;
-    flex-shrink: 0;
-    transition: .3s;
-} */
-
 .project-block {
     position: absolute;
     top: 0;

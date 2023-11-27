@@ -21,7 +21,7 @@ import { ObjectEncodingOptions } from 'fs';
 
 const Main = () => {
     const [projects, setProjects] = useState([])
-    let page = 0
+    const [page, setPage] = useState(0)
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/all/?page=${page}&size=10`)
@@ -29,6 +29,23 @@ const Main = () => {
             setProjects(res.data)
         })
     }, [])
+
+    const loadMoreProjects = (e: any) => {
+        const newPage = page + 1
+        setPage(newPage)
+        axios.get(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/all/?page=${newPage}&size=10`)
+        .then(res => {
+            if (res.data.length > 0) {
+                const newArray: any = [...projects, ...res.data]
+                setProjects(newArray)
+                if (res.data.length < 10) {
+                    e.target.remove()
+                }
+            } else {
+                e.target.remove()
+            }
+        })
+    }
 
     type ProjectType = {
         id: number;
@@ -81,6 +98,7 @@ const Main = () => {
                         ))
                     }
                 </div>
+                <button onClick={loadMoreProjects} id="show_more" className="button-fill">SHOW MORE</button>
             </div>
             
             <div id="services" className="our-services">

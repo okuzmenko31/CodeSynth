@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import "../../styles/components/UI/Workspace.css"
 import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
+import Loader from "./Loader"
 
 const ProjectsWorkspace = () => {
     const navigate = useNavigate()
@@ -10,20 +11,47 @@ const ProjectsWorkspace = () => {
     const [projects, setProjects] = useState([])
     const [choosed, setChoosed] = useState([])
     const [deletedItems, setDeletedItems] = useState([])
+    const [avaibleTags, setAvaibleTags] = useState<any[]>([]);
+    const [tags, setTags] = useState<any[]>([]);
+    const [isLoadingProjects, setIsLoadingProjects] = useState(false)
+    let page = 0
 
-    const [name, setName] = useState("")
-    const [filterTypeId, setFilterTypeId] = useState("")
-    const [sourceLink, setSourceLink] = useState("")
-    const [tags, setTags] = useState([])
-    const [text, setText] = useState("")
     const formData = new FormData();
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/all/`)
+        axios.get(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/all/?page=${page}&size=10`)
         .then(res => {
             setProjects(res.data)
+            setIsLoadingProjects(true)
+        })
+
+        axios.get(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/tags/`)
+        .then(res => {
+            setAvaibleTags(res.data)
         })
     }, [])
+
+    const loadMoreProjects = () => {
+        page++;
+        setIsLoadingProjects(false);
+    
+        axios.get(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/all/?page=${page}&size=10`)
+            .then(res => {
+                const incomingProjects = res.data;
+                const uniqueProjects = incomingProjects.filter((newProject: any) =>
+                    !projects.some((existingProject: any) => existingProject.id === newProject.id)
+                );
+    
+                if (uniqueProjects.length > 0) {
+                    const newProjects: any = [...projects, ...uniqueProjects];
+                    setProjects(newProjects);
+                    setIsLoadingProjects(true);
+                }
+            })
+            .finally(() => {
+                setIsLoadingProjects(true);
+            });
+    };
 
     const handleCheckboxChange = (e: any) => {
         const parent = e.target.parentNode;
@@ -99,6 +127,7 @@ const ProjectsWorkspace = () => {
     
         if (e.target.type === "file") {
             const file = e.target.files?.[0];
+    
             if (file) {
                 formData.set(field, file);
             }
@@ -109,11 +138,42 @@ const ProjectsWorkspace = () => {
     };
 
     const sendRequestForCreation = () => {
-        formData.append('tags[]', JSON.stringify([1]))
+        const ids = tags.map(tag => tag.id);
+        formData.set('tags', JSON.stringify(ids))
+        
         axios.post(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/create/`, formData)
     }
+
+    const openTagMenu = () => {
+        const list = document.querySelector(".tag-menu-admin")
+        if (list) {
+            list.classList.toggle('opened')
+        }
+    }
     
+    const addToTags = (e: any) => {
+        const tagId = e.target.id;
     
+        const newTag = avaibleTags.find((tag: any) => tag.id == tagId);
+        const isDuplicate = tags.some((tag: any) => tag.id == tagId);
+    
+        if (!isDuplicate) {
+            setTags([...tags, newTag]);
+        }
+
+        setAvaibleTags(avaibleTags.filter((tag: any) => tag.id != tagId));
+    }
+    
+    const removeFromTags = (e: any) => {
+        const removedTagId = e.target.id;
+    
+        const updatedTags = tags.filter((tag: any) => tag.id != removedTagId);
+        const removedTag = tags.find((tag: any) => tag.id == removedTagId);
+    
+        setTags(updatedTags);
+        setAvaibleTags([...avaibleTags, removedTag]);
+    }
+
     return (
         <div className="workspace">
             {
@@ -135,7 +195,23 @@ const ProjectsWorkspace = () => {
                     </div>
 
                     <div className="input-category">
-                        
+                        {
+                            tags &&
+                            tags.map((tag: any) => (
+                                <p id={tag.id} key={tag.id} onClick={removeFromTags} className="small-text">{tag.name}</p>
+                            ))
+                        }
+                        <button onClick={openTagMenu} className="admin-button add">
+                            Add tag
+                            <div className="tag-menu-admin">
+                            {
+                                avaibleTags &&
+                                avaibleTags.map((tag: any) => (
+                                    <p id={tag.id} key={tag.id} onClick={addToTags} className="small-text">{tag.name}</p>
+                                ))
+                            }
+                            </div>
+                        </button>
                     </div>
 
                     <div className="input-category">
@@ -201,6 +277,16 @@ const ProjectsWorkspace = () => {
                             </tr>
                         ))
                     }
+                    <tr>
+                        <div onClick={loadMoreProjects} className="basic-td">
+                            {
+                                isLoadingProjects ?
+                                "Load more"
+                                :
+                                <Loader />
+                            }
+                        </div>
+                    </tr>
                 </div>
             </div>
         </div>
