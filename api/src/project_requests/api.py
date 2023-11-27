@@ -173,7 +173,7 @@ async def delete_ref_source(uow: uowDEP, source_id: int):
 
 
 @router.delete('/delete_ref_sources/', response_model=bool)
-async def delete_budgets(uow: uowDEP, data: InstancesIDSListSchema):
+async def delete_ref_sources(uow: uowDEP, data: InstancesIDSListSchema):
     return_data = await ProjectRefSourceService(uow).delete_by_ids_list(data.ids)
     return return_data.result
 
@@ -196,7 +196,7 @@ async def get_all_ref_sources(uow: uowDEP):
 
 
 @router.get('/ref_sources_for_users/', response_model=list[ProjectRefSourceReturnSchema])
-async def get_all_ref_sources(uow: uowDEP):
+async def ref_sources_for_users(uow: uowDEP):
     return_data = await ProjectRefSourceService(uow).get_filtered_ref_sources()
     return return_data.result
 
