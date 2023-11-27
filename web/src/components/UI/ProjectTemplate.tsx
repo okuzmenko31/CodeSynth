@@ -14,7 +14,6 @@ const Project = ({name, image, tags, project_link, checkout_link}: { name: strin
     return(
         <div className="project-container">
               <div className="inner-container">
-                {/* <div className="project-block-wrapper"> */}
                     <div className="project-block">
                         <img alt={name} src={image} className="project-image-preview"/>
                     </div>
@@ -38,7 +37,6 @@ const Project = ({name, image, tags, project_link, checkout_link}: { name: strin
                             </Link>
                         }
                     </div>
-                {/* </div> */}
             </div>
 
             <div className="project-tags-block">
