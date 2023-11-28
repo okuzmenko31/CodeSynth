@@ -96,7 +96,7 @@ const Main = () => {
             })
             .then(res => {
                 if (res.data.length > 0) {
-                    const newArray: any = [...projects, ...res.data]
+                    const newArray: any[any] = [...projects, ...res.data]
                     setProjects(newArray)
                     if (res.data.length < 10) {
                         showMore.style.display = "none"
@@ -109,7 +109,7 @@ const Main = () => {
             await axios.get(process.env.REACT_APP_BACKEND_DOMAIN + projectUrl + `?page=${newPage}&size=10`)
             .then(res => {
                 if (res.data.length > 0) {
-                    const newArray: any = [...projects, ...res.data]
+                    const newArray: any[any] = [...projects, ...res.data]
                     setProjects(newArray)
                     if (res.data.length < 10) {
                         showMore.style.display = "none"
@@ -152,12 +152,12 @@ const Main = () => {
         const index: number = choosedFilters.indexOf(parentId);
     
         if (index !== -1) {
-            const updatedFilters: any = choosedFilters.filter(item => item != parentId)
+            const updatedFilters: string[] | number[] = choosedFilters.filter(item => item != parentId)
             setChoosedFilters(updatedFilters);
             chechbox.checked = false
             console.log(updatedFilters);
         } else {
-            const updatedFilters: any = [...choosedFilters, parentId]
+            const updatedFilters: string[] | number[] = [...choosedFilters, parentId]
             setChoosedFilters(updatedFilters);
             chechbox.checked = true
             console.log(updatedFilters);
