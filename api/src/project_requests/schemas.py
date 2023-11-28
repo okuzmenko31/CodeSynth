@@ -43,8 +43,8 @@ class ProjectRequestSchema(MainSchema):
     project_info: Optional[str] = None
     company: Optional[str] = None
     company_website: Optional[str] = None
-    start_date: datetime.date
-    deadline_date: datetime.date
+    start_date: Optional[datetime.date]
+    deadline_date: Optional[datetime.date]
     hard_deadline: bool = False
     technical_task: Optional[str] = None
     budget_id: int

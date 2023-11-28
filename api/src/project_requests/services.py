@@ -149,7 +149,7 @@ class ProjectRequestService(BaseService):
                 return ReturnData(error='No such services was found by provided ids.')
 
             for service in services_lst:
-                if services_operation.append:
+                if services_operation == ModelRelatedListOperations.append:
                     if service in request.project_services:
                         return ReturnData(
                             error='This service is already added to this project request'
