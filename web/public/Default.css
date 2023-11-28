@@ -90,23 +90,10 @@ body,
     background-position: 97%;
 }
 
-.button-fill {
-    display: inline-flex;
-    height: 63px;
-    padding: 0 27px;
-    text-decoration: none;
-    margin: 0;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
+.button.fill {
     color: #181818;
     background: linear-gradient(98deg,#8F00FF 4.71%, #FF00D6 101.04%);
     border: 1px solid #8F00FF;
-    background-size: 255%;
-    font-size: 25px;
-    cursor: pointer;
-    transition: .3s;
 }
 
 .codesynth-text {
@@ -217,6 +204,13 @@ input[type="date"] {
     .mid-text {
         font-size: 48px;
     }
+
+    .codesynth-text::after {
+        position: absolute;
+        display: none;
+        opacity: 0;
+        content: "";
+    }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
@@ -231,6 +225,18 @@ input[type="date"] {
     .mid-text {
         font-size: 48px;
     }
+
+    .codesynth-text::after {
+        position: absolute;
+        display: none;
+        opacity: 0;
+        content: "";
+    }
+
+    .button {
+        height: 53px;
+        font-size: 20px;
+    } 
 }
 
 @media (min-width: 651px) and (max-width: 767px) {
@@ -245,32 +251,76 @@ input[type="date"] {
     .mid-text {
         font-size: 48px;
     }
+
+    .codesynth-text::after {
+        position: absolute;
+        display: none;
+        opacity: 0;
+        content: "";
+    }
+
+    .button {
+        height: 53px;
+        font-size: 20px;
+    } 
 }
 
 @media (min-width: 481px) and (max-width: 650px) {
     .biggest-text {
-        font-size: 102px;
+        font-size: 88px;
     }
     
     .big-text {
-        font-size: 87px;
+        font-size: 48px;
     }
     
     .mid-text {
-        font-size: 48px;
+        font-size: 32px;
     }
+
+    .small-text {
+        font-size: 15px;
+    }
+
+    .codesynth-text::after {
+        position: absolute;
+        display: none;
+        opacity: 0;
+        content: "";
+    }
+
+    .button {
+        height: 53px;
+        font-size: 20px;
+    } 
 }
 
 @media (max-width: 480px) {
     .biggest-text {
-        font-size: 102px;
+        font-size: 52px;
     }
     
     .big-text {
-        font-size: 87px;
+        font-size: 36px;
     }
     
     .mid-text {
-        font-size: 48px;
+        font-size: 25px;
     }
+
+    .small-text {
+        font-size: 15px;
+    }
+
+    .codesynth-text::after {
+        position: absolute;
+        display: none;
+        opacity: 0;
+        content: "";
+    }
+
+    .button {
+        height: 32px;
+        font-size: 15px;
+    } 
 }
