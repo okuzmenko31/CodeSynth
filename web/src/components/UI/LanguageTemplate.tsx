@@ -1,7 +1,7 @@
 import React from "react"
 import "../../styles/components/UI/Language.css"
 
-const Language = ({name, frameworks, additional, image}: { name: string, frameworks: string[], additional?: string[], image: any }) => {
+const Language = ({name, frameworks, additional, image}: { name: string, frameworks: string[], additional?: string[], image: string }) => {
 
     return(
         <div className="language-tech">

@@ -2,7 +2,7 @@ import React from "react";
 import "../../styles/components/UI/Offer.css"
 
 
-const Service = ({name, description, image}: {name: string, description: string, image: any}) => {
+const Service = ({name, description, image}: {name: string, description: string, image: string}) => {
     return (
         <div className="offer-block">
             <div className="offer-icon">
