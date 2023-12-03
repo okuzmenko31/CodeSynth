@@ -4,7 +4,13 @@ import "../../styles/components/UI/Project.css"
 
 import { addClassOnScroll } from "../../utils/add_class_on_scroll";
 
-const Project = ({name, image, tags, project_link, checkout_link}: { name: string, image: any, tags?: any[], project_link?: string, checkout_link?: string }) => {
+type tag = {
+    name: string,
+    img: string
+    id: number
+}
+
+const Project = ({name, image, tags, project_link, checkout_link}: { name: string, image: string, tags?: any[], project_link?: string, checkout_link?: string }) => {
 
     const handleScrollFunction = addClassOnScroll(['.inner-container', 'not_scrolled'], Math.floor(window.innerHeight / 4));
 
@@ -42,8 +48,8 @@ const Project = ({name, image, tags, project_link, checkout_link}: { name: strin
             <div className="project-tags-block">
                 {
                     tags &&
-                    tags.map((tag: any, index: number) => (
-                        <div key={index} className="project-tag">
+                    tags.map((tag: tag) => (
+                        <div key={tag.id} className="project-tag">
                             <img alt={tag.name} src={tag.img}/>
                             {tag.name}
                         </div>

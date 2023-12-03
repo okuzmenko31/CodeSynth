@@ -11,6 +11,7 @@ import { Routes, Route } from 'react-router-dom';
 const routerRoutes = [
     { path: "/", element: Main },
     { path: "/make_order", element: MakeOrder },
+    { path: "/project/:project?", element: MakeOrder },
     { path: "/admin/:category?/:action?/:id?", element: Admin },
     { path: "*", element: PageNotFound },
 ];

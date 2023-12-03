@@ -4,17 +4,23 @@ import "../../styles/components/UI/Workspace.css"
 import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
 
+type EditObject = {
+    name: string;
+    img: string;
+}
+
+type tag = {
+    name: string,
+    img: string
+    id: number
+}
+
 const TagsWorkspace = () => {
     const navigate = useNavigate()
     const params = useParams()
     const [tags, setTags] = useState([])
     const [choosed, setChoosed] = useState([])
     const [deletedItems, setDeletedItems] = useState([])
-
-    interface EditObject {
-        name: string;
-        img: string;
-    }
     
     const [editObject, setEditObject] = useState<EditObject>({ name: '', img: '' });
 
@@ -65,14 +71,14 @@ const TagsWorkspace = () => {
         const askModal = document.querySelector(".deletition-ask-modal");
 
         for (const item of deletedItems) {
-            const dItem: any = item;
+            const dItem: tag = item;
             axios.delete(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/delete_tag/${dItem.id}`)
             .then(() => {
-                const newArray = tags.filter((item: any) => item.id !== dItem.id)
+                const newArray = tags.filter((item: tag) => item.id !== dItem.id)
                 console.log(dItem.id);
                 console.log(choosed);
                 
-                const newChoosed = choosed.filter((item: any) => item != dItem.id)
+                const newChoosed = choosed.filter((item: number) => item != dItem.id)
                 console.log(newChoosed);
                 setTags(newArray)
                 setChoosed(newChoosed)
@@ -228,8 +234,8 @@ const TagsWorkspace = () => {
                     </th>
                     {
                         deletedItems &&
-                        deletedItems.map((item: any) => (
-                            <tr key={item.id} id={item.id}>
+                        deletedItems.map((item: tag) => (
+                            <tr key={item.id} id={`${item.id}`}>
                                 <td className="basic-td">{item.id}</td>
                                 <td className="basic-td">{item.name}</td>
                             </tr>
@@ -261,8 +267,8 @@ const TagsWorkspace = () => {
                     </th>
                     {
                         tags &&
-                        tags.map((item: any) => (
-                            <tr key={item.id} id={item.id}>
+                        tags.map((item: tag) => (
+                            <tr key={item.id} id={`${item.id}`}>
                                 <td className="input-td"><input onChange={handleCheckboxChange} type="checkbox" className="choose-item-admin" /></td>
                                 <td className="basic-td">{item.id}</td>
                                 <td className="basic-td">{item.name}</td>

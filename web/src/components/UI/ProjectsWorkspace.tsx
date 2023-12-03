@@ -5,6 +5,12 @@ import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
 import Loader from "./Loader"
 
+type tag = {
+    name: string,
+    img: string
+    id: number
+}
+
 const ProjectsWorkspace = () => {
     const navigate = useNavigate()
     const params = useParams()
@@ -43,7 +49,7 @@ const ProjectsWorkspace = () => {
                 );
     
                 if (uniqueProjects.length > 0) {
-                    const newProjects: any = [...projects, ...uniqueProjects];
+                    const newProjects: any[any] = [...projects, ...uniqueProjects];
                     setProjects(newProjects);
                     setIsLoadingProjects(true);
                 }
@@ -58,10 +64,10 @@ const ProjectsWorkspace = () => {
         const parentId = parent?.parentNode?.id;
     
         if (e.target.checked && parent && parentId) {
-            const newArray: any = [...choosed, parentId];
+            const newArray: any[any] = [...choosed, parentId];
             setChoosed(newArray);
         } else if (parentId) {
-            const newArray: any = choosed.filter((prj: string) => prj !== parentId);
+            const newArray: any[any] = choosed.filter((prj: string) => prj !== parentId);
             setChoosed(newArray);
         }
     };
@@ -154,21 +160,21 @@ const ProjectsWorkspace = () => {
     const addToTags = (e: any) => {
         const tagId = e.target.id;
     
-        const newTag = avaibleTags.find((tag: any) => tag.id == tagId);
-        const isDuplicate = tags.some((tag: any) => tag.id == tagId);
+        const newTag = avaibleTags.find((tag: tag) => tag.id == tagId);
+        const isDuplicate = tags.some((tag: tag) => tag.id == tagId);
     
         if (!isDuplicate) {
             setTags([...tags, newTag]);
         }
 
-        setAvaibleTags(avaibleTags.filter((tag: any) => tag.id != tagId));
+        setAvaibleTags(avaibleTags.filter((tag: tag) => tag.id != tagId));
     }
     
     const removeFromTags = (e: any) => {
         const removedTagId = e.target.id;
     
-        const updatedTags = tags.filter((tag: any) => tag.id != removedTagId);
-        const removedTag = tags.find((tag: any) => tag.id == removedTagId);
+        const updatedTags = tags.filter((tag: tag) => tag.id != removedTagId);
+        const removedTag = tags.find((tag: tag) => tag.id == removedTagId);
     
         setTags(updatedTags);
         setAvaibleTags([...avaibleTags, removedTag]);
@@ -197,8 +203,8 @@ const ProjectsWorkspace = () => {
                     <div className="input-category">
                         {
                             tags &&
-                            tags.map((tag: any) => (
-                                <p id={tag.id} key={tag.id} onClick={removeFromTags} className="small-text">{tag.name}</p>
+                            tags.map((tag: tag) => (
+                                <p id={`${tag.id}`} key={tag.id} onClick={removeFromTags} className="small-text">{tag.name}</p>
                             ))
                         }
                         <button onClick={openTagMenu} className="admin-button add">
@@ -206,8 +212,8 @@ const ProjectsWorkspace = () => {
                             <div className="tag-menu-admin">
                             {
                                 avaibleTags &&
-                                avaibleTags.map((tag: any) => (
-                                    <p id={tag.id} key={tag.id} onClick={addToTags} className="small-text">{tag.name}</p>
+                                avaibleTags.map((tag: tag) => (
+                                    <p id={`${tag.id}`} key={tag.id} onClick={addToTags} className="small-text">{tag.name}</p>
                                 ))
                             }
                             </div>
