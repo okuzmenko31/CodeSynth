@@ -3,12 +3,13 @@ from typing import Union
 from src.core.repositories.repos import *
 
 from .dataclasses import ReturnData
-from .enums import InstanceTypes
+from .enums import InstanceTypes, ModelRelatedListOperations
 from .repository import SQLAlchemyRepository, AbstractSchemaRepository
 
 from .decorators import handle_errors
 from .dependencies import uowDEP
 from .service_utils import return_data_err_object_does_not_exist
+from ..schemas import InstancesIDSListSchema
 
 
 class BaseService:
@@ -139,3 +140,79 @@ class BaseService:
         return [
             instance[0] for instance in await self.uow_repo.filter_by_ids_list(ids)
         ]
+
+    async def process_edit_related_objects(
+            self,
+            instance_id: int,
+            instance_type: InstanceTypes,
+            instance_related_attr_name: str,
+            related_instance_type: InstanceTypes,
+            operation: ModelRelatedListOperations,
+            objects_list
+    ):
+        """
+        This method make process of editing of related
+        objects of instance, which will be found by
+        'instance_id' and 'InstanceType'.
+
+        'instance_related_attr_name' - this is the
+        name of objects list related with our instance,
+        and list of which we want to update.
+        E.g. we have 'Project' instance and this instance
+        have related with M2M relationship 'tags' list.
+        We  can call them like that: 'project.tags'.
+        So you will need to provide str name of
+        this attribute - 'tags'.
+
+        'related_instance_type' - needed for
+        correct errors messages returning with
+        correct names of the objects.
+
+        'operation' - with related instances list
+        in SQLAlchemy we can do 'append' or 'remove',
+        so you need to provide one of the
+        'ModelRelatedListOperations' operation type.
+        E.g. 'ModelRelatedListOperations.append'.
+
+        'objects_list' - list with related objects.
+        E.g. for 'Project' instance you should provide
+        here list with 'ProjectTag' instances.
+
+        :param instance_id: instance id
+        :param instance_type: type of instance
+        :param instance_related_attr_name: related objects list attribute name
+        :param related_instance_type: type of instances on related objects list
+        :param operation: operation type - 'append' or 'remove'
+        :param objects_list: list of instances for adding to related objects list
+        :return:
+        """
+        rel_inst_type = related_instance_type.value
+        inst_type = instance_type.value
+
+        if len(objects_list) < 1:
+            return ReturnData(
+                error=f'No such {rel_inst_type}s was found to update {inst_type} {rel_inst_type}s list!'
+            )
+
+        instance = await self.uow_repo.get_one_by_id(instance_id)
+        if instance is None:
+            return await return_data_err_object_does_not_exist(inst_type)
+        instance_rel_objects_lst = getattr(instance, instance_related_attr_name)
+        for obj in objects_list:
+            if operation == ModelRelatedListOperations.append:
+                if obj in instance_rel_objects_lst:
+                    return ReturnData(
+                        error=f'This {rel_inst_type} is already'
+                              f' added to this {inst_type}'
+                    )
+                instance_rel_objects_lst.append(obj)
+                setattr(instance, instance_related_attr_name, instance_rel_objects_lst)
+            else:
+                if obj not in getattr(instance, instance_related_attr_name):
+                    return ReturnData(
+                        error=f'One of the {rel_inst_type}s '
+                              f'doesn\'t exists in {inst_type} {rel_inst_type}s list!'  # noqa
+                    )
+                getattr(instance, instance_related_attr_name).remove(obj)
+        await self.uow.commit()
+        return ReturnData(result=await self.repository.get_return_schema(instance))

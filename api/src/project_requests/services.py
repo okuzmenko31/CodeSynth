@@ -15,7 +15,7 @@ from src.core.utils.media_files import save_media_file, get_media_file_link
 from dataclasses import asdict
 
 from .schemas import ProjectRequestServicesUpdateSchema
-from ..core.utils.enums import ModelRelatedListOperations
+from ..core.utils.enums import ModelRelatedListOperations, InstanceTypes
 
 
 async def order_by_name_others_case_whens(
@@ -138,32 +138,17 @@ class ProjectRequestService(BaseService):
             services_operation: ModelRelatedListOperations
     ):
         async with self.uow:
-            request = await self.uow_repo.get_one_by_id(request_id)
-            if request is None:
-                return await return_data_err_object_does_not_exist('project request')
-
             services_lst = await ProjectServicesService(self.uow).get_instances_list_by_ids(
                 data.services
             )
-            if len(services_lst) < 1:
-                return ReturnData(error='No such services was found by provided ids.')
-
-            for service in services_lst:
-                if services_operation == ModelRelatedListOperations.append:
-                    if service in request.project_services:
-                        return ReturnData(
-                            error='This service is already added to this project request'
-                        )
-                    request.project_services.append(service)
-                else:
-                    if service not in request.project_services:
-                        return ReturnData(
-                            error=('One of the service doesn\'t exists in'  # noqa
-                                   ' project request service list!')
-                        )
-                    request.project_services.remove(service)
-            await self.uow.commit()
-            return ReturnData(result=await self.repository.get_return_schema(request))
+            return await self.process_edit_related_objects(
+                request_id,
+                InstanceTypes.project_request,
+                instance_related_attr_name='project_services',
+                related_instance_type=InstanceTypes.project_service,
+                operation=services_operation,
+                objects_list=services_lst
+            )
 
     @handle_errors
     async def add_project_request_services(

@@ -1,7 +1,7 @@
 from src.core.utils.service import BaseService
 from src.core.utils.media_files import (get_media_file_link,
                                         save_media_file)
-from src.core.utils.enums import ModelRelatedListOperations
+from src.core.utils.enums import ModelRelatedListOperations, InstanceTypes
 
 from .schemas import *
 from .models import ProjectAssociation
@@ -174,10 +174,6 @@ class ProjectService(ProjectTagService):
             await self.uow.commit()
             return ReturnData(result=await self.repository.get_return_schema(project))
 
-    @staticmethod
-    async def project_tags_not_found_update_error():
-        return ReturnData(error='No such tags was found to update project tags list!')
-
     async def edit_project_tags(
             self,
             instance_id,
@@ -185,28 +181,15 @@ class ProjectService(ProjectTagService):
             project_tags_operation: ModelRelatedListOperations
     ):
         async with self.uow:
-            tags_lst = await self.get_tags_lst_by_ids(data.tags)
-            if len(tags_lst) < 1:
-                return await self.project_tags_not_found_update_error()
-            project: Project = await self.uow_repo.get_one_by_id(instance_id)
-            if project is None:
-                return await return_data_err_object_does_not_exist('project')
-
-            for tag in tags_lst:
-                if project_tags_operation == ModelRelatedListOperations.append:
-                    if tag in project.tags:
-                        return ReturnData(
-                            error='This tag is already added to this project!'
-                        )
-                    project.tags.append(tag)
-                else:
-                    if tag not in project.tags:
-                        return ReturnData(
-                            error=f'One of the tags doesn\'t exists in project tags list!'  # noqa
-                        )
-                    project.tags.remove(tag)
-            await self.uow.commit()
-            return ReturnData(result=await self.repository.get_return_schema(project))
+            tags_lst = await ProjectTagService(self.uow).get_tags_lst_by_ids(data.tags)
+            return await self.process_edit_related_objects(
+                instance_id,
+                InstanceTypes.project,
+                instance_related_attr_name='tags',
+                related_instance_type=InstanceTypes.project_tag,
+                operation=project_tags_operation,
+                objects_list=tags_lst
+            )
 
     @handle_errors
     async def add_project_tags(
