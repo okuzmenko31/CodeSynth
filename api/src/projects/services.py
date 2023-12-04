@@ -118,17 +118,14 @@ class ProjectService(ProjectTagService):
     ):
         hashed_filename = await save_media_file(image_file)
         async with self.uow:
-            tags_lst = await self.get_tags_lst_by_ids(data.tags)
             filter_type = await self.uow.project_types.get_one_by_id(data.filter_type_id)
             if filter_type is None:
                 return ReturnData(error='Provided filter type does not exists!')
+            data.preview_image = await get_media_file_link(hashed_filename)
 
-            project = await self.uow_repo.create_instance_by_data(dict(data))
-            project.tags = tags_lst
-            project.preview_image = await get_media_file_link(hashed_filename)
-            await self.uow.add(project)
+            project_id = await self.uow_repo.insert_by_data(dict(data))
+            project = await self.uow_repo.get_one_by_id(project_id)
             await self.uow.commit()
-            await self.uow.refresh(project, attribute_names=['filter_type'])
             return ReturnData(
                 result=await self.repository.get_return_schema(project)
             )

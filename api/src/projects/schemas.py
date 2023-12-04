@@ -22,7 +22,6 @@ class ProjectSchema(MainSchema):
     filter_type_id: int
     preview_image: Optional[str] = None
     source_link: str
-    tags: list[int]
     text: str
 
 
