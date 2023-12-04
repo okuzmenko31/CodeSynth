@@ -150,7 +150,7 @@
     }
 }
 
-@media (min-width: 480px) and (max-width: 991px) {
+@media (min-width: 481px) and (max-width: 991px) {
     .project-container {
         width: 100%;
     }
@@ -158,6 +158,19 @@
 
 @media (max-width: 480px) {
     .project-container {
-        width: 40%;
+        width: 70%;
+    }
+
+    .project__btn {
+        width: 30px;
+        height: 30px;
+    }
+
+    .project-checkout-button-icon {
+        width: 15px;
+    }
+
+    .project-link-button-icon {
+        width: 21px;
     }
 }

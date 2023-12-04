@@ -8,6 +8,7 @@
     background-color: #ffffff;
     border-top: 2px solid #0e63e2;
     padding: 50px;
+    overflow-x: auto;
 }
 
 .admin-items-actions {
@@ -15,74 +16,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.admin-items-list {
-    width: 80%;
-    border-radius: 16px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.admin-items-list tr {
-    position: relative;
-    width: 100%;
-    display: flex;
-}
-
-.admin-items-list th {
-    display: flex;
-    background-color: #181818;
-}
-
-.admin-items-list th td {
-    color: #ffffff;
-}
-
-.admin-items-list tr:nth-child(odd) {
-    background-color: #c5c5c5;
-}
-
-.admin-items-list tr:nth-child(even) {
-    background-color: #e9e9e9;
-}
-
-
-.admin-items-list td {
-    color: #000;
-}
-
-.basic-td,
-.input-td {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.basic-td {
-    width: 100%;
-}
-
-.input-td {
-    width: 30%;
-}
-
-.choose-item-admin {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    margin: 2px;
-    background-color: transparent;
-    border-radius: 100%;
-    border: 1px solid #000;
-    cursor: pointer;
-    left: 5px;
-    transition: .3s;
-}
-
-.choose-item-admin:checked {
-    background-color: #0e63e2;
 }
 
 .admin-button  {
@@ -212,24 +145,6 @@
     padding: 0.5rem 1rem;
     font-size: 1rem;
     transition: .3s;
-}
-
-.edit-button {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    fill: #707070;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-    stroke: transparent;
-    cursor: pointer;
-    transition: .3s;
-}
-
-.edit-button:hover {
-    stroke: #000;
-    fill: #0066ff;
 }
 
 .admin-object-image {
