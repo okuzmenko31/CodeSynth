@@ -9,6 +9,7 @@ import axios from 'axios';
 import Loader from '../components/UI/Loader';
 import TagsWorkspace from '../components/UI/TagsWorkspace';
 import FilterTypeWorkspace from '../components/UI/FilterTypeWorkspace';
+import ServiceWorkspace from '../components/UI/ServiceWorkspace';
 
 const Admin = () => {
     const currentLocation = useLocation();
@@ -94,7 +95,7 @@ const Admin = () => {
     return (
         <div className="admin">
             {
-                authed ?
+                authed && loaded ?
                 <>
                     <div className='sidebar'>
                         <Link to="/" className='web-site'>
@@ -152,6 +153,18 @@ const Admin = () => {
                                 </Link>
                             </div>
                         </div>
+
+                        <div className='sidebar_category'>
+                            <p className='small-text'>Project requests</p>
+                            <div className='button_container'>
+                                <Link to="/admin/services" className='admin_button' >
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="6" fill='currentColor'></circle>
+                                    </svg>
+                                    Services
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                     <div className='working-directory'>
                         {
@@ -169,6 +182,10 @@ const Admin = () => {
                         {
                             params.category === "filter_types" && loaded &&
                             <FilterTypeWorkspace />
+                        }
+                        {
+                            params.category === "services" && loaded &&
+                            <ServiceWorkspace />
                         }
                     </div>
                 </>
