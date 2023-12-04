@@ -378,11 +378,19 @@
     .what-is-buttons {
         width: 50%;
     }
+
+    .side-text {
+        left: -22%;
+    }
 }
 
 @media (min-width: 1200px) and (max-width: 1399px) {
     .what-is-buttons {
         width: 70%;
+    }
+
+    .side-text {
+        left: -28%;
     }
 }
 
@@ -433,6 +441,10 @@
         width: 95%;
         height: auto;
         text-align: center;
+    }
+
+    .side-text {
+        left: -32%;
     }
 }
 
@@ -642,7 +654,7 @@
 
 @media (max-width: 480px) {
     .what-is {
-        width: 60%;
+        width: 90%;
     }
     
     .what-is-buttons {
@@ -661,11 +673,11 @@
     }
 
     .projects-container {
-        width: 60%;
+        width: 80%;
     }
 
     .projects-text {
-        width: 40%;
+        width: 60%;
         flex-direction: column;
         margin-bottom: 20px;
     }
@@ -682,7 +694,7 @@
     }
 
     .we-can-offer-block {
-        width: 60%;
+        width: 90%;
     }
 
     .we-can-offer-header {
@@ -712,7 +724,7 @@
     }
 
     .our-services {
-        width: 60%;
+        width: 90%;
     }
 
     .our-services-content {
@@ -742,6 +754,11 @@
     }
 
     .questions-container {
-        width: 60%;
+        width: 90%;
+    }
+    
+    .our-statistic {
+        width: 90%;
+        padding: 100px 20px;
     }
 }

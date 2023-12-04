@@ -187,7 +187,7 @@ const Main = () => {
 
                 <div className="what-is-buttons">
                     <Link to="/make_order" className="button fill">MAKE ORDER</Link>
-                    <Link to="#portfolio" className="button">PORTFOLIO</Link>
+                    <a href="#portfolio" className="button">PORTFOLIO</a>
                 </div>
             </div>
 

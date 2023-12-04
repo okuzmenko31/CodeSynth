@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from "react"
-
-import "../../styles/components/UI/Workspace.css"
 import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
+
+// Utils impopts
+import { openEditMenu } from "../../utils/workspace_utils"
+
+import "../../styles/components/UI/Workspace.css"
+import ItemsListWorkspace from "./ItemsListWorkspace"
+
+type EditObject = {
+    name: string;
+    img: string;
+}
 
 const FilterTypeWorkspace = () => {
     const navigate = useNavigate()
@@ -11,16 +20,17 @@ const FilterTypeWorkspace = () => {
     const [choosed, setChoosed] = useState([])
     const [deletedItems, setDeletedItems] = useState([])
     const [name, setName] = useState("")
-
-    interface EditObject {
-        name: string;
-        img: string;
-    }
-    
     const [editObject, setEditObject] = useState<EditObject>({ name: '', img: '' });
 
+    // API Endpoints
+    const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/filter_types/`;
+    const delUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/delete_filter_type/`;
+    const addUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/create_filter_type/`;
+    const patchUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/update_filter_type/${params.id}/`;
+    const getCurrentUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/filter_types/`;
+
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/filter_types/`)
+        axios.get(getUrl)
         .then(res => {
             setTags(res.data)
         })
@@ -52,11 +62,17 @@ const FilterTypeWorkspace = () => {
 
     const closeDeletitionModal = () => {
         const askModal = document.querySelector(".deletition-ask-modal")
+        const inputs = document.querySelectorAll('.choose-item-admin')
 
         if (askModal) {
             askModal.classList.remove('active')
             setDeletedItems([])
             setChoosed([])
+            inputs.forEach((input) => {
+                if (input) {
+                    (input as HTMLInputElement).checked = false
+                }
+            })
         }
     }
 
@@ -65,7 +81,7 @@ const FilterTypeWorkspace = () => {
 
         for (const item of deletedItems) {
             const dItem: any = item;
-            axios.delete(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/delete_filter_type/${dItem.id}`)
+            axios.delete(delUrl + `${dItem.id}`)
             .then(() => {
                 const newArray = tags.filter((item: any) => item.id !== dItem.id)
                 console.log(dItem.id);
@@ -96,7 +112,7 @@ const FilterTypeWorkspace = () => {
     }
 
     const sendRequestForCreation = () => {
-        axios.post(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/create_filter_type/`, {
+        axios.post(addUrl, {
             "name": name
         })
         .then(() => {
@@ -124,7 +140,7 @@ const FilterTypeWorkspace = () => {
     }
 
     const sendRequestForPatch = () => {
-        axios.patch(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/update_filter_type/${params.id}`, {
+        axios.patch(patchUrl, {
             "name": name
         })
         .then(() => {
@@ -148,21 +164,6 @@ const FilterTypeWorkspace = () => {
                     }
                 })
             }
-        })
-    }
-
-    const openEditMenu = (id: number) => {
-        navigate(`/admin/${params.category}/edit/${id}`)
-        axios.get(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/filter_types/${id}/`)
-        .then(res => { 
-            setEditObject(res.data)
-            const inputs = document.querySelectorAll('.admin-add-input')
-            inputs.forEach((input: any) => {
-                const id = input.id
-                if (input &&  res.data[id]) {
-                    setName(res.data[id])
-                }
-            })
         })
     }
 
@@ -221,7 +222,7 @@ const FilterTypeWorkspace = () => {
                     <button onClick={closeDeletitionModal} className="deletition-ask-button no">No</button>
                 </div>
             </div>
-            <p className="small-text">Projects</p>
+            <p className="small-text">Filter types</p>
             <div className="admin-context-menu">
                 <div className="admin-items-actions">
                     <button onClick={deleteItemsFromList} className="admin-button delete">
@@ -233,26 +234,25 @@ const FilterTypeWorkspace = () => {
                     </button>
                 </div>
 
-                <div className="admin-items-list">
-                    <th>
-                        <td className="input-td">Choose</td>
-                        <td className="basic-td">Id</td>
-                        <td className="basic-td">Name</td>
-                    </th>
-                    {
-                        tags &&
-                        tags.map((item: any) => (
-                            <tr key={item.id} id={item.id}>
-                                <td className="input-td"><input onChange={handleCheckboxChange} type="checkbox" className="choose-item-admin" /></td>
-                                <td className="basic-td">{item.id}</td>
-                                <td className="basic-td">{item.name}</td>
-                                <span onClick={() => openEditMenu(item.id)} className="edit-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7.127 22.562l-7.127 1.438 1.438-7.128 5.689 5.69zm1.414-1.414l11.228-11.225-5.69-5.692-11.227 11.227 5.689 5.69zm9.768-21.148l-2.816 2.817 5.691 5.691 2.816-2.819-5.691-5.689z"/></svg>
-                                </span>
-                            </tr>
-                        ))
-                    }
-                </div>
+                {
+                    tags.length > 0 &&
+                    <ItemsListWorkspace
+                        items={tags}
+                        currentUrl={getCurrentUrl}
+                        handler={handleCheckboxChange}
+                        actions={(res: any) => {
+                            setEditObject(res.data)
+                            const inputs = document.querySelectorAll('.admin-add-input')
+                            inputs.forEach((input: any) => {
+                                const id = input.id
+                                if (input &&  res.data[id]) {
+                                    setName(res.data[id])
+                                }
+                            })
+                        }}
+                    />
+                }
+
             </div>
         </div>
     )
