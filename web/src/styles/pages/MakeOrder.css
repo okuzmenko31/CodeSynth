@@ -170,4 +170,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+}
+
+.make-order-block-button.error {
+    color: #ff7676;
 }
