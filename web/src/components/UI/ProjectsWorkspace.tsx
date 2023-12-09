@@ -156,27 +156,25 @@ const ProjectsWorkspace = () => {
         const data = {
             "tags": ids
         }
-        axios.patch(`${updateTags}${id}/`, {data})
+        axios.patch(`${updateTags}${id}/`, data)
     }
 
     const sendRequestForCreation = () => {
-        const ids = tags.map(tag => tag.id);
         
         axios.post(addUrl, formData)
-        .then(res => {
+        .then((res) => {
             updateProjectsTags(res.data.id)
-        })
-        .then(() => {
             navigate(`/admin/${params.category}`)
+            setAvaibleTags(prevTags => [...tags, ...prevTags])
+            setTags([])
         })
     }
 
     const sendRequestForPatch = () => {
-        const ids = tags.map(tag => tag.id);
-        formData.set('tags', JSON.stringify(ids))
 
         axios.patch(patchUrl, formData)
-        .then(() => {
+        .then((res) => {
+            updateProjectsTags(res.data.id)
             formData = new FormData()
             navigate(`/admin/${params.category}`)
         })
@@ -213,25 +211,26 @@ const ProjectsWorkspace = () => {
     }
     
     const addToTags = (e: any) => {
-        const tagId = e.currentTarget.id;
-        const newTag = avaibleTags.find((tag: tag) => tag.id == tagId);
-        const isDuplicate = tags.some((tag: tag) => tag.id == tagId);
+        const tagId = e.target.id;
+    
+        const newTag = avaibleTags.find((tag: any) => tag.id == tagId);
+        const isDuplicate = tags.some((tag: any) => tag.id == tagId);
     
         if (!isDuplicate) {
-            setTags(prevTags => [...prevTags, newTag]);
+            setTags([...tags, newTag]);
         }
-    
-        setAvaibleTags(prevAvailableTags => prevAvailableTags.filter((tag: tag) => tag.id !== tagId));
+
+        setAvaibleTags(avaibleTags.filter((tag: any) => tag.id != tagId));
     }
     
     const removeFromTags = (e: any) => {
         const removedTagId = e.target.id;
     
-        const updatedTags = tags.filter((tag: tag) => tag.id != removedTagId);
-        const removedTag = tags.find((tag: tag) => tag.id == removedTagId);
+        const updatedTags = tags.filter((tag: any) => tag.id != removedTagId);
+        const removedTag = tags.find((tag: any) => tag.id == removedTagId);
     
         setTags(updatedTags);
-        setAvaibleTags(prevAvailableTags => [...prevAvailableTags, removedTag]);
+        setAvaibleTags([...avaibleTags, removedTag]);
     }
 
     return (
@@ -383,6 +382,8 @@ const ProjectsWorkspace = () => {
                         actions={(res: any) => {
                             setEditObject(res.data)
                             setTags(res.data.tags)
+                            const newAvailableTags = avaibleTags.filter(tag => !res.data.tags.includes(tag.id));
+                            setAvaibleTags(newAvailableTags)
                             const inputs = document.querySelectorAll('.admin-add-input')
                             inputs.forEach((input: any) => {
                                 const id = input.id

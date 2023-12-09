@@ -1,5 +1,5 @@
 import React from 'react';
-import Routes from "./routes"
+import Routes from "./router/routes"
 import ParticlesBackground from './components/ParticlesBackground';
 
 const App = () => { 

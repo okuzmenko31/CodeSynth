@@ -84,11 +84,9 @@ const FilterTypeWorkspace = () => {
             axios.delete(delUrl + `${dItem.id}`)
             .then(() => {
                 const newArray = tags.filter((item: any) => item.id !== dItem.id)
-                console.log(dItem.id);
-                console.log(choosed);
                 
                 const newChoosed = choosed.filter((item: any) => item != dItem.id)
-                console.log(newChoosed);
+                
                 setTags(newArray)
                 setChoosed(newChoosed)
             })

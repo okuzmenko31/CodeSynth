@@ -104,6 +104,31 @@ body,
     background-position: 97%;
 }
 
+.button:disabled {
+    display: inline-flex;
+    height: 63px;
+    padding: 0 27px;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    gap: 10px;
+    flex-shrink: 0;
+    background: linear-gradient(98deg, #00000000 50%, #4b4b4b 50.71%, #a8a8a8 110%);
+    border: 1px solid #a8a8a8;
+    background-size: 255%;
+    color: #4b4b4b;
+    font-size: 25px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.button:disabled:hover {
+    color: #181818;
+    border: 1px solid linear-gradient(98deg, #4b4b4b, a8a8a8);
+    background-position: 97%;
+}
+
 .button.fill {
     color: #181818;
     background: linear-gradient(98deg,#8F00FF 4.71%, #FF00D6 101.04%);
@@ -200,6 +225,43 @@ input[type="date"] {
     margin-bottom: 1.5rem;
     padding: 0.5rem 1rem;
     font-size: 1rem;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.file-type {
+    position: relative;
+}
+
+.file-type .upload {
+    width: 100%;
+    min-height: 3.5rem;
+    fill: #fff;
+    color: #fff;
+    background-color: rgba(255,255,255,.05);
+    border: 2px solid rgba(255,255,255,.15);
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.file-type .upload:hover {
+    fill: #882EFD;
+}
+
+.file-type .upload:hover p {
+    color: #882EFD;
+}
+
+.error {
+    color: #ff7676;
 }
 
 @media (min-width: 1200px) and (max-width: 1399px) {

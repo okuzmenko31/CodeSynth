@@ -1,22 +1,32 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import CodeSynth from "../assets/CodeSynth.png"
 import "../styles/components/Navbar.css"
 
 
 const Navbar = () => {
+    const location = useLocation()
+    const navigate = useNavigate()
 
-    const frontendDomain = process.env.REACT_APP_FRONTEND_DOMAIN as string;
-    const currentLocation = window.location.href;
-    
-    const getHashLink = (section: string) =>
-      currentLocation === frontendDomain || currentLocation === `${frontendDomain}/` ? `#${section}` : `${frontendDomain}/#${section}`;
-    
-    const portfolio = getHashLink('portfolio');
-    const services = getHashLink('services');
-    const whyUs = getHashLink('why-us');
-    const faqs = getHashLink('faqs');
+    useEffect(() => {
+        const elementId = location.hash.replace("#", "")
+        const element: any = document.getElementById(elementId)
+
+        if (element) {
+            element.scrollIntoView()
+        }
+    }, [location.pathname])
+
+    const scrollTo = (element_id: string) => {
+        const element: any = document.getElementById(element_id)
+
+        if (!element) {
+            navigate("/#" + element_id);
+        } else {
+            element.scrollIntoView()
+        }
+    }
 
     let prevScrollpos = window.scrollY || window.pageYOffset;
 
@@ -59,16 +69,16 @@ const Navbar = () => {
                 </div>
 
                 <div className="navbar-buttons small-text">
-                    <a href={portfolio} className="codesynth-text no-table" data-text="Portfolio">Portfolio</a>
-                    <a href={services} className="codesynth-text no-table" data-text="Services">Services</a>
-                    <a href={whyUs} className="codesynth-text no-table" data-text="Why us">Why us</a>
-                    <a href={faqs} className="codesynth-text no-table" data-text="FAQs">FAQs</a>
+                    <p onClick={() =>scrollTo("portfolio")} className="codesynth-text no-table" data-text="Portfolio">Portfolio</p>
+                    <p onClick={() =>scrollTo("services")} className="codesynth-text no-table" data-text="Services">Services</p>
+                    <p onClick={() =>scrollTo("why-us")} className="codesynth-text no-table" data-text="Why us">Why us</p>
+                    <p onClick={() =>scrollTo("faqs")} className="codesynth-text no-table" data-text="FAQs">FAQs</p>
                 </div>
             </div>
 
             <div className="navbar-buttons-last small-text">
                 <Link to="/make_order" className="codesynth-text no-table" data-text="Submit your application">Submit your application</Link>
-                <a href="#contacts" className="codesynth-text no-table" data-text="Our contacts">Our contacts</a>
+                <p onClick={() =>scrollTo("contacts")} className="codesynth-text no-table" data-text="Our contacts">Our contacts</p>
             </div>
         </nav>
         </>
