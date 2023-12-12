@@ -24,7 +24,8 @@
 
 .what-is-buttons {
     display: flex;
-    width: 40%;
+    width: 60%;
+    align-items: center;
     justify-content: space-between;
     gap: 50px;
 }
@@ -116,8 +117,7 @@
     color: #000;
     padding: 0 35px;
     box-sizing: border-box;
-    text-align: center;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
     cursor: pointer;
     transition: .3s;
 }
@@ -147,7 +147,6 @@
 
 .projects-container {
     position: relative;
-    align-items: center;
     justify-content: center;
     width: 90%;
     display: flex;
@@ -158,7 +157,7 @@
 .side-text {
     will-change: transform;
     position: absolute;
-    left: -17%;
+    left: -575px;
     top: 10%;
     white-space: nowrap;
     font-size: 102px;
@@ -190,7 +189,8 @@
     position: sticky;
     top: 0;
     width: 500px;
-    height: 500px;
+    height: auto;
+    max-height: 30%;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -291,6 +291,7 @@
     justify-content: center;
     align-items: center;
     font-size: 200px;
+    font-weight: 500;
 }
 
 .our-statistic-block.red::before {
@@ -339,6 +340,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 40px;
 }
 
 .questions-header p {
@@ -374,37 +376,37 @@
     text-align: center;
 }
 
-@media (min-width: 1400px) and (max-width: 1599px) {
-    .what-is-buttons {
-        width: 50%;
+@media (max-width: 1199px) {
+    .main-page {
+        overflow-x: hidden;
     }
 
     .side-text {
-        left: -22%;
+        display: none;
+        opacity: 0;
+        transform: none !important;
+    }
+}
+
+@media (min-width: 1400px) and (max-width: 1599px) {
+    .what-is-buttons {
+        width: 70%;
     }
 }
 
 @media (min-width: 1200px) and (max-width: 1399px) {
     .what-is-buttons {
-        width: 70%;
-    }
-
-    .side-text {
-        left: -28%;
+        width: 80%;
     }
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
     .what-is {
-        width: 70%;
+        width: 80%;
     }
 
     .what-is-buttons {
         width: 60%;
-    }
-    
-    .project-filters-block {
-        justify-content: center;
     }
 
     .drop-down-list {
@@ -413,14 +415,14 @@
 
     .we-can-offer-header {
         flex-direction: column;
+        align-items: flex-start;
         gap: 20px;
     }
 
     .we-can-offer-title {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
-        text-align: center;
         flex-direction: column;
     }
 
@@ -440,236 +442,22 @@
         position: relative;
         width: 95%;
         height: auto;
-        text-align: center;
-    }
-
-    .side-text {
-        left: -32%;
     }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
     .what-is {
-        width: 80%;
-    }
-    
-    .what-is-buttons {
-        width: 60%;
-    }
-
-    .project-filters-block {
-        justify-content: center;
-    }
-
-    .drop-down-list {
-        right: auto;
-    }
-
-    .projects-text {
-        flex-direction: column;
-        margin-bottom: 20px;
-    }
-
-    .projects-text p {
-        max-width: 100%;
-        text-align: center;
-    }
-
-    .side-text {
-        display: none;
-        opacity: 0;
-        transform: none !important;
-    }
-    
-    .we-can-offer-header {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .we-can-offer-title {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        flex-direction: column;
-    }
-
-    .we-can-offer-title p {
-        max-width: 100%;
-    }
-
-    .our-services-content {
-        flex-direction: column;
-    }
-
-    .services-items-wrapper {
-        width: 100%;
-    }
-
-    .services-title-wrapper {
-        position: relative;
-        width: 95%;
-        height: auto;
-        text-align: center;
-    }
-}
-
-@media (min-width: 651px) and (max-width: 767px) {
-    .what-is {
-        width: 90%;
-    }
-    
-    .what-is-buttons {
-        width: 60%;
-    }
-
-    .project-filters-block {
-        justify-content: center;
-    }
-
-    .drop-down-list {
-        right: auto;
-    }
-
-    .projects-text {
-        flex-direction: column;
-        margin-bottom: 20px;
-    }
-
-    .projects-text p {
-        max-width: 100%;
-        text-align: center;
-    }
-
-    .side-text {
-        display: none;
-        opacity: 0;
-        transform: none !important;
-    }
-
-    .we-can-offer-header {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .we-can-offer-title {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        flex-direction: column;
-    }
-
-    .we-can-offer-title p {
-        max-width: 100%;
-    }
-
-    .our-services-content {
-        flex-direction: column;
-    }
-
-    .services-items-wrapper {
-        width: 100%;
-    }
-
-    .services-title-wrapper {
-        position: relative;
-        width: 95%;
-        height: auto;
-        text-align: center;
-    }
-}
-
-@media (min-width: 481px) and (max-width: 650px) {
-    .what-is {
-        width: 100%;
-    }
-    
-    .what-is-buttons {
-        width: 80%;
-        flex-direction: column;
-    }
-
-    .project-filters-block {
-        justify-content: center;
-    }
-
-    .drop-down-list {
-        right: auto;
-    }
-
-    .projects-text {
-        width: 50%;
-        flex-direction: column;
-        margin-bottom: 20px;
-    }
-
-    .projects-text p {
-        max-width: 100%;
-        text-align: center;
-    }
-
-    .side-text {
-        display: none;
-        opacity: 0;
-        transform: none !important;
-    }
-
-    .we-can-offer-header {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .we-can-offer-title {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        flex-direction: column;
-    }
-
-    .we-can-offer-title p {
-        max-width: 100%;
-    }
-
-    .our-services-content {
-        flex-direction: column;
-    }
-
-    .services-items-wrapper {
-        width: 100%;
-    }
-
-    .services-title-wrapper {
-        position: relative;
-        width: 95%;
-        height: auto;
-        text-align: center;
-    }
-
-    .our-statistic-block::before {
-        font-size: 102px;
-    }
-}
-
-@media (max-width: 480px) {
-    .what-is {
         width: 90%;
     }
     
     .what-is-buttons {
         width: 70%;
         flex-direction: column;
-    }
-
-    .project-filters-block {
-        width: 100%;
-        justify-content: center;
+        gap: 20px;
     }
 
     .drop-down-list {
-        width: 30%;
-        right: auto;
+        right: 10px;
     }
 
     .projects-container {
@@ -677,20 +465,13 @@
     }
 
     .projects-text {
-        width: 60%;
+        width: 80%;
         flex-direction: column;
         margin-bottom: 20px;
     }
 
     .projects-text p {
         max-width: 100%;
-        text-align: center;
-    }
-
-    .side-text {
-        display: none;
-        opacity: 0;
-        transform: none !important;
     }
 
     .we-can-offer-block {
@@ -698,15 +479,16 @@
     }
 
     .we-can-offer-header {
+        width: 85%;
         flex-direction: column;
+        align-items: flex-start;
         gap: 20px;
     }
 
     .we-can-offer-title {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
-        text-align: center;
         flex-direction: column;
     }
 
@@ -719,8 +501,8 @@
     }
 
     .offer-icon {
-        width: 25px;
-        height: 25px;
+        width: 50px;
+        height: 50px;
     }
 
     .our-services {
@@ -728,28 +510,352 @@
     }
 
     .our-services-content {
+        width: 100%;
+        align-items: center;
         flex-direction: column;
     }
 
     .services-items-wrapper {
         width: 100%;
+        padding-top: 100px;
     }
 
     .services-title-wrapper {
         position: relative;
-        width: 95%;
+        width: 100%;
         height: auto;
-        text-align: center;
+        padding-top: 50px;
     }
     
     .user-offer-header {
+        width: 85%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        text-align: center;
     }
 
     .our-statistic-block::before {
+        right: 80px;
+        font-size: 120px;
+    }
+
+    .questions-container {
+        width: 90%;
+    }
+    
+    .our-statistic {
+        width: 90%;
+        padding: 100px 20px;
+    }
+}
+
+@media (min-width: 651px) and (max-width: 767px) {
+    .what-is {
+        width: 90%;
+    }
+    
+    .what-is-buttons {
+        width: 70%;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .drop-down-list {
+        right: 10px;
+    }
+
+    .projects-container {
+        width: 80%;
+    }
+
+    .projects-text {
+        width: 80%;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    .projects-text p {
+        max-width: 100%;
+    }
+
+    .we-can-offer-block {
+        width: 90%;
+    }
+
+    .we-can-offer-header {
+        width: 85%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .we-can-offer-title {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .we-can-offer-title p {
+        max-width: 100%;
+    }
+
+    .we-can-offer-content {
+        width: 90%;
+    }
+
+    .offer-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .our-services {
+        width: 90%;
+    }
+
+    .our-services-content {
+        width: 100%;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .services-items-wrapper {
+        width: 100%;
+        padding-top: 100px;
+    }
+
+    .services-title-wrapper {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding-top: 50px;
+    }
+    
+    .user-offer-header {
+        width: 85%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .our-statistic-block::before {
+        right: 90px;
+        font-size: 100px;
+    }
+
+    .questions-container {
+        width: 90%;
+    }
+    
+    .our-statistic {
+        width: 90%;
+        padding: 100px 20px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 650px) {
+    .what-is {
+        width: 90%;
+    }
+    
+    .what-is-buttons {
+        width: 70%;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .project-filters-block {
+        width: 75%;
+    }
+
+    .drop-down-list {
+        right: 10px;
+    }
+
+    .projects-container {
+        width: 80%;
+    }
+
+    .projects-text {
+        width: 70%;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    .projects-text p {
+        max-width: 100%;
+    }
+
+    .we-can-offer-block {
+        width: 90%;
+    }
+
+    .we-can-offer-header {
+        width: 85%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .we-can-offer-title {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .we-can-offer-title p {
+        max-width: 100%;
+    }
+
+    .we-can-offer-content {
+        width: 90%;
+    }
+
+    .offer-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .our-services {
+        width: 90%;
+    }
+
+    .our-services-content {
+        width: 100%;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .services-items-wrapper {
+        width: 100%;
+        padding-top: 75px;
+    }
+
+    .services-title-wrapper {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding-top: 50px;
+    }
+    
+    .user-offer-header {
+        width: 85%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .our-statistic-block::before {
+        right: 25%;
+        font-size: 102px;
+    }
+
+    .questions-container {
+        width: 90%;
+    }
+    
+    .our-statistic {
+        width: 90%;
+        padding: 100px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .what-is {
+        width: 90%;
+    }
+    
+    .what-is-buttons {
+        width: 70%;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .project-filters-block {
+        width: 75%;
+    }
+
+    .drop-down-list {
+        right: 10px;
+    }
+
+    .projects-container {
+        width: 80%;
+    }
+
+    .projects-text {
+        width: 70%;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    .projects-text p {
+        max-width: 100%;
+    }
+
+    .we-can-offer-block {
+        width: 90%;
+    }
+
+    .we-can-offer-header {
+        width: 85%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .we-can-offer-title {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .we-can-offer-title p {
+        max-width: 100%;
+    }
+
+    .we-can-offer-content {
+        width: 90%;
+    }
+
+    .offer-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .our-services {
+        width: 90%;
+    }
+
+    .our-services-content {
+        width: 100%;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .services-items-wrapper {
+        width: 100%;
+        padding-top: 75px;
+    }
+
+    .services-title-wrapper {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding-top: 50px;
+    }
+    
+    .user-offer-header {
+        width: 85%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .our-statistic-block::before {
+        right: 80px;
         font-size: 102px;
     }
 

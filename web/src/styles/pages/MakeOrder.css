@@ -81,6 +81,7 @@
 }
 
 .form_checkbox {
+    max-width: max-content;
     opacity: .3;
     position: relative;
     background-color: rgba(26,26,26,.15);
@@ -105,12 +106,14 @@
 }
 
 .list-item-dates {
+    max-width: 90%;
     display: flex;
+    flex-wrap: wrap;
     gap: 50px;
 }
 
 .category-list-date {
-    width: max-content;
+    width: 90%;
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
@@ -149,6 +152,11 @@
     font-size: 1rem;
 }
 
+.make-order-category p {
+    max-width: 90%;
+    overflow-wrap: anywhere;
+}
+
 .make-order-category-input {
     gap: 10px;
     display: flex;
@@ -176,3 +184,21 @@
 .make-order-block-button.error {
     color: #ff7676;
 }
+
+@media (max-width: 1199px) {
+    .make-order {
+        overflow-x: hidden;
+    }
+
+    .make-order-text,
+    .make-order-content {
+        width: 85%;
+    }
+}
+
+@media (max-width: 480px) {
+    .list-item-dates {
+        gap: 20px;
+    }
+}
+

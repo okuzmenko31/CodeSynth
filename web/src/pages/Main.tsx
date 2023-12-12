@@ -14,10 +14,8 @@ import Footer from '../components/Footer';
 import "../styles/pages/Main.css"
 import { initParallaxEffect } from '../utils/parallax_effect';
 
-import img from "../assets/Source_Health.png"
 import python from "../assets/python.png"
 import javascript from "../assets/javascript.png"
-import { ObjectEncodingOptions } from 'fs';
 
 const Main = () => {
     const [projects, setProjects] = useState([])
@@ -25,18 +23,6 @@ const Main = () => {
     const [choosedFilters, setChoosedFilters] = useState<number[]>([]);
     const [page, setPage] = useState(0)
     const [projectUrl, setProjectUrl] = useState("/api/v1/projects/all/")
-
-    useEffect(() => {
-        axios.get(process.env.REACT_APP_BACKEND_DOMAIN + projectUrl + `?page=${page}&size=10`)
-        .then(res => {
-            setProjects(res.data)
-        })
-
-        axios.get(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/filter_types`)
-        .then(res => {
-            setFilters(res.data)
-        })
-    }, [])
 
     useEffect(() => {
         if (choosedFilters.length > 0) {
@@ -167,13 +153,25 @@ const Main = () => {
 
     const parallaxOptions = initParallaxEffect('.side-text', 0.5, 'rotate(-90deg)');
 
-    document.addEventListener('scroll', parallaxOptions);
-
     const pythonFrameWorks = ['drf', 'django', 'fast api']
     const pythonAdditionalTools = ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'RabbitMQ', 'AWS', 'Websockets', 'Docker', 'NGINX', 'Git']
 
     const javascriptFrameWorks = ['react.js', 'vue.js', 'typescript']
     const javascriptAdditionalTools = ['axios', 'redux']
+
+    useEffect(() => {
+        axios.get(process.env.REACT_APP_BACKEND_DOMAIN + projectUrl + `?page=${page}&size=10`)
+        .then(res => {
+            setProjects(res.data)
+        })
+
+        axios.get(`${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/filter_types`)
+        .then(res => {
+            setFilters(res.data)
+        })
+
+        window.addEventListener('scroll', parallaxOptions);
+    }, [])
 
     return (
         <>

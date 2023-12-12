@@ -7,6 +7,7 @@
 
 .project-container p {
     margin: 0;
+    overflow-wrap: anywhere;
 }
 
 .inner-container {
@@ -115,7 +116,7 @@
 .project-tags-block {
     display: flex;
     gap: 20px;
-    width: 500px;
+    width: 100%;
     flex-wrap: wrap;
 }
 

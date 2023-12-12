@@ -1,5 +1,5 @@
 * {
-    font-family: "Bebas Neue", Arial;
+    font-family: "Montserrat", Arial;
     color: #ffffff;
     scroll-behavior: smooth;
 }
@@ -53,20 +53,23 @@ body,
 .biggest-text {
     position: relative;
     font-size: 200px;
+    font-weight: 700;
     text-transform: uppercase;
     text-decoration: none;
 }
 
 .big-text {
     position: relative;
-    font-size: 102px;
+    font-size: 85px;
+    font-weight: 700;
     text-transform: uppercase;
     text-decoration: none;
 }
 
 .mid-text {
     position: relative;
-    font-size: 52px;
+    font-size: 48px;
+    font-weight: 700;
     text-transform: uppercase;
     text-decoration: none;
 }
@@ -82,7 +85,10 @@ body,
 .button {
     display: inline-flex;
     height: 63px;
+    width: 250px;
+    max-width: 300px;
     padding: 0 27px;
+    font-weight: 700;
     margin: 0;
     justify-content: center;
     align-items: center;
@@ -264,21 +270,25 @@ input[type="file"] {
     color: #ff7676;
 }
 
+#show_more {
+    margin-top: 50px;
+}
+
 @media (min-width: 1200px) and (max-width: 1399px) {
 
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
     .biggest-text {
-        font-size: 150px;
+        font-size: 85px;
     }
     
     .big-text {
-        font-size: 92px;
+        font-size: 45px;
     }
     
     .mid-text {
-        font-size: 48px;
+        font-size: 32px;
     }
 
     .codesynth-text::after {
@@ -291,15 +301,15 @@ input[type="file"] {
 
 @media (min-width: 768px) and (max-width: 991px) {
     .biggest-text {
-        font-size: 102px;
+        font-size: 85px;
     }
     
     .big-text {
-        font-size: 87px;
+        font-size: 45px;
     }
     
     .mid-text {
-        font-size: 48px;
+        font-size: 32px;
     }
 
     .codesynth-text::after {
@@ -317,15 +327,15 @@ input[type="file"] {
 
 @media (min-width: 651px) and (max-width: 767px) {
     .biggest-text {
-        font-size: 102px;
+        font-size: 65px;
     }
     
     .big-text {
-        font-size: 87px;
+        font-size: 47px;
     }
     
     .mid-text {
-        font-size: 48px;
+        font-size: 32px;
     }
 
     .codesynth-text::after {
@@ -343,11 +353,11 @@ input[type="file"] {
 
 @media (min-width: 481px) and (max-width: 650px) {
     .biggest-text {
-        font-size: 88px;
+        font-size: 65px;
     }
     
     .big-text {
-        font-size: 48px;
+        font-size: 47px;
     }
     
     .mid-text {
@@ -355,7 +365,7 @@ input[type="file"] {
     }
 
     .small-text {
-        font-size: 15px;
+        font-size: 20px;
     }
 
     .codesynth-text::after {
@@ -377,15 +387,15 @@ input[type="file"] {
     }
     
     .big-text {
-        font-size: 36px;
+        font-size: 40px;
     }
     
     .mid-text {
-        font-size: 25px;
+        font-size: 32px;
     }
 
     .small-text {
-        font-size: 15px;
+        font-size: 20px;
     }
 
     .codesynth-text::after {
@@ -396,7 +406,8 @@ input[type="file"] {
     }
 
     .button {
+        width: 120px;
         height: 32px;
-        font-size: 15px;
+        font-size: 12px;
     } 
 }
