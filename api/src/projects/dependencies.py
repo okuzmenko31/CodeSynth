@@ -2,8 +2,8 @@ from typing import Annotated, Optional
 
 from fastapi import Depends, Query, Form, UploadFile, File
 
-from src.core.config import settings
-from src.core.utils.dataclasses import ProjectUpdateData
+from ..core.config import settings
+from ..core.utils.dataclasses import ProjectUpdateData
 
 
 class PaginationParams:

@@ -1,4 +1,3 @@
-import json
 from typing import Annotated
 
 from fastapi import APIRouter, UploadFile, File, Form
@@ -11,9 +10,9 @@ from .services import (ProjectService,
                        ProjectFilterTypeService)
 from .dependencies import pagination_params, project_update_data
 
-from src.core.utils.dependencies import uowDEP
-from src.core.utils.service_utils import json_response_with_400_error
-from src.core.utils.enums import InstanceTypes
+from ..core.utils.dependencies import uowDEP
+from ..core.utils.service_utils import json_response_with_400_error
+from ..core.utils.enums import InstanceTypes
 
 router = APIRouter(
     prefix='/projects',

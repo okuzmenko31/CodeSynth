@@ -1,6 +1,6 @@
 from typing import Union
 
-from src.core.repositories.repos import *
+from ...core.repositories.repos import *
 
 from .dataclasses import ReturnData
 from .enums import InstanceTypes, ModelRelatedListOperations
@@ -9,7 +9,6 @@ from .repository import SQLAlchemyRepository, AbstractSchemaRepository
 from .decorators import handle_errors
 from .dependencies import uowDEP
 from .service_utils import return_data_err_object_does_not_exist
-from ..schemas import InstancesIDSListSchema
 
 
 class BaseService:

@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    volumes:
+      - psql_data:/var/lib/posgresql/data
+    environment:
+      POSTGRES_DB: "${DB_NAME}"
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_HOST: "${DB_HOST}"
+      POSTGRES_PORT: "${DB_PORT}"
+    env_file: .env.local
+
+  api:
+    build:
+      context: .
+    volumes:
+      - .:/apps/api
+      - media_volume:/apps/api/media
+    depends_on:
+      - db
+    env_file:
+      - .env.local
+    ports:
+      - "8000:8000"
+
+  redis:
+    image: redis:alpine
+    restart: always
+    hostname: redis
+    ports:
+      - '6379:6379'
+
+  pg_admin:
+    image: dpage/pgadmin4
+    container_name: pg_admin4_container
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "${PG_ADMIN_EMAIL}"
+      PGADMIN_DEFAULT_PASSWORD: "${PG_ADMIN_PASSWORD}"
+    volumes:
+      - pg_admin_data:/var/lib/pgadmin
+
+
+
+
+volumes:
+  psql_data:
+  media_volume:
+  pg_admin_data:

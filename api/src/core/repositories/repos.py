@@ -1,22 +1,30 @@
-from src.auth.models import JWTTokensBlackList
-from src.projects.models import Project, ProjectTag, ProjectFilterType
-from src.core.utils.repository import SQLAlchemyRepository, AbstractSchemaRepository
-from src.projects.schemas import (ProjectReturnSchema,
-                                  ProjectTagReturnSchema,
-                                  ProjectFilterTypeReturnSchema)
-from src.project_requests.models import ProjectService, ProjectBudget, ProjectRequest, RefSource
-from src.project_requests.schemas import (ProjectServiceReturnSchema,
-                                          ProjectBudgetReturnSchema,
-                                          ProjectRefSourceReturnSchema,
-                                          ProjectRequestReturnSchema)
+from ...auth.models import JWTTokensBlackList
+from ...projects.models import Project, ProjectTag, ProjectFilterType
+from ...core.utils.repository import SQLAlchemyRepository, AbstractSchemaRepository
+from ...projects.schemas import (
+    ProjectReturnSchema,
+    ProjectTagReturnSchema,
+    ProjectFilterTypeReturnSchema,
+)
+from ...project_requests.models import (
+    ProjectService,
+    ProjectBudget,
+    ProjectRequest,
+    RefSource,
+)
+from ...project_requests.schemas import (
+    ProjectServiceReturnSchema,
+    ProjectBudgetReturnSchema,
+    ProjectRefSourceReturnSchema,
+    ProjectRequestReturnSchema,
+)
 
 
 class JWTTokensBlackListRepository(SQLAlchemyRepository):
     model = JWTTokensBlackList
 
 
-class ProjectRepository(AbstractSchemaRepository,
-                        SQLAlchemyRepository):
+class ProjectRepository(AbstractSchemaRepository, SQLAlchemyRepository):
     model = Project
 
     @classmethod
@@ -29,49 +37,38 @@ class ProjectRepository(AbstractSchemaRepository,
             preview_image=project.preview_image,
             source_link=project.source_link,
             tags=[
-                ProjectTagReturnSchema(name=tag.name, img=tag.img, id=tag.id) for tag in project.tags
+                ProjectTagReturnSchema(name=tag.name, img=tag.img, id=tag.id)
+                for tag in project.tags
             ],
-            text=project.text
+            text=project.text,
         )
 
 
-class ProjectTagRepository(AbstractSchemaRepository,
-                           SQLAlchemyRepository):
+class ProjectTagRepository(AbstractSchemaRepository, SQLAlchemyRepository):
     model = ProjectTag
 
     @classmethod
     async def get_return_schema(cls, tag):
-        return ProjectTagReturnSchema(
-            id=tag.id, name=tag.name, img=tag.img
-        )
+        return ProjectTagReturnSchema(id=tag.id, name=tag.name, img=tag.img)
 
 
-class ProjectFilterTypeRepository(AbstractSchemaRepository,
-                                  SQLAlchemyRepository):
+class ProjectFilterTypeRepository(AbstractSchemaRepository, SQLAlchemyRepository):
     model = ProjectFilterType
 
     @classmethod
     async def get_return_schema(cls, filter_type):
-        return ProjectFilterTypeReturnSchema(
-            id=filter_type.id,
-            name=filter_type.name
-        )
+        return ProjectFilterTypeReturnSchema(id=filter_type.id, name=filter_type.name)
 
 
-class ProjectServiceRepository(AbstractSchemaRepository,
-                               SQLAlchemyRepository):
+class ProjectServiceRepository(AbstractSchemaRepository, SQLAlchemyRepository):
     model = ProjectService
 
     @classmethod
     async def get_return_schema(cls, service):
-        return ProjectServiceReturnSchema(
-            id=service.id,
-            name=service.name
-        )
+        return ProjectServiceReturnSchema(id=service.id, name=service.name)
 
 
-class ProjectBudgetRepository(AbstractSchemaRepository,
-                              SQLAlchemyRepository):
+class ProjectBudgetRepository(AbstractSchemaRepository, SQLAlchemyRepository):
     model = ProjectBudget
 
     @classmethod
@@ -80,12 +77,11 @@ class ProjectBudgetRepository(AbstractSchemaRepository,
             id=budget_instance.id,
             budget=budget_instance.budget,
             start_amount=budget_instance.start_amount,
-            secondary_amount=budget_instance.secondary_amount
+            secondary_amount=budget_instance.secondary_amount,
         )
 
 
-class ProjectRequestRepository(AbstractSchemaRepository,
-                               SQLAlchemyRepository):
+class ProjectRequestRepository(AbstractSchemaRepository, SQLAlchemyRepository):
     model = ProjectRequest
 
     @classmethod
@@ -104,22 +100,21 @@ class ProjectRequestRepository(AbstractSchemaRepository,
             budget_id=project_request.budget_id,
             ref_source_id=project_request.ref_source_id,
             budget=project_request.budget.budget,
-            ref_source=project_request.ref_source.name if project_request.ref_source is not None else None,
+            ref_source=project_request.ref_source.name
+            if project_request.ref_source is not None
+            else None,
             project_services=[
-                ProjectServiceReturnSchema(
-                    id=service.id, name=service.name
-                ) for service in project_request.project_services
-            ]
+                ProjectServiceReturnSchema(id=service.id, name=service.name)
+                for service in project_request.project_services
+            ],
         )
 
 
-class RefSourceRepository(AbstractSchemaRepository,
-                          SQLAlchemyRepository):
+class RefSourceRepository(AbstractSchemaRepository, SQLAlchemyRepository):
     model = RefSource
 
     @classmethod
     async def get_return_schema(cls, source_instance):
         return ProjectRefSourceReturnSchema(
-            id=source_instance.id,
-            name=source_instance.name
+            id=source_instance.id, name=source_instance.name
         )

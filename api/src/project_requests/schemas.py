@@ -1,6 +1,6 @@
 import datetime
 
-from src.core.schemas import MainSchema
+from ..core.schemas import MainSchema
 from pydantic import EmailStr
 
 from typing import Optional

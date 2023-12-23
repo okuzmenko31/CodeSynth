@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
-from src.core.database import async_session_maker
+from ...core.database import async_session_maker
 
-from src.core.repositories.repos import *
+from ...core.repositories.repos import *
 
 
 class AbstractUnitOfWork(ABC):
