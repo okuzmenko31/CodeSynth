@@ -1,0 +1,1 @@
+# CodeSynth API Details
