@@ -1,4 +1,4 @@
-from ...auth.models import JWTTokensBlackList
+from ...auth.models import JWTTokensBlackList, User
 from ...projects.models import Project, ProjectTag, ProjectFilterType
 from ...core.utils.repository import SQLAlchemyRepository, AbstractSchemaRepository
 from ...projects.schemas import (
@@ -22,6 +22,10 @@ from ...project_requests.schemas import (
 
 class JWTTokensBlackListRepository(SQLAlchemyRepository):
     model = JWTTokensBlackList
+
+
+class UserRepository(SQLAlchemyRepository):
+    model = User
 
 
 class ProjectRepository(AbstractSchemaRepository, SQLAlchemyRepository):
