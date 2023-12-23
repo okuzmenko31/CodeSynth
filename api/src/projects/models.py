@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, ForeignKey, Text, UniqueConstraint
 
-from src.core.database import Base
+from ..core.database import Base
 
 
 # Association table for M2M relationship between Projects and Project Tags

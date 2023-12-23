@@ -1,6 +1,6 @@
 from typing import Optional
 
-from src.core.schemas import MainSchema
+from ..core.schemas import MainSchema
 
 
 class ProjectTagSchema(MainSchema):

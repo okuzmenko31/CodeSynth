@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from src.core.schemas import MainSchema
+from ..core.schemas import MainSchema
 
 
 class AdminSecretKeySchema(BaseModel):

@@ -5,11 +5,11 @@ from datetime import timedelta
 
 from jose import jwt
 
-from src.core.config import settings
-from src.core.utils.decorators import handle_errors
-from src.core.utils.service import BaseService
+from ..core.config import settings
+from ..core.utils.decorators import handle_errors
+from ..core.utils.service import BaseService
 
-from src.core.utils.dataclasses import ReturnData
+from ..core.utils.dataclasses import ReturnData
 
 from .schemas import AccessAndRefreshTokensSchema, AccessTokenReturnSchema
 

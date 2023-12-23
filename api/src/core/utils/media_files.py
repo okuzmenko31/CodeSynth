@@ -1,7 +1,7 @@
 import shutil
 import hashlib
 
-from src.core.config import settings
+from ...core.config import settings
 
 
 async def get_media_file_link(filename: str):
