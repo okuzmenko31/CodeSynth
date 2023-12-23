@@ -3,7 +3,7 @@ from starlette.responses import JSONResponse
 
 from .schemas import *
 from .services import (
-    AdminAuthService,
+    UserService,
     JWTBlackListTokensService,
     TokensVerifyService,
     JWTTokensService,
@@ -17,8 +17,11 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @router.post("/admin/", response_model=AccessAndRefreshTokensSchema)
-async def admin_auth(data: AdminSecretKeySchema):
-    return_data = await AdminAuthService().authenticate_admin(data.secret_key)
+async def admin_auth(
+    data: LoginAdminSchema,
+    uow: uowDEP,
+):
+    return_data = await UserService(uow).authenticate_admin(data)
     if return_data.error is not None:
         return await json_response_with_400_error(return_data.error)
     return return_data.result

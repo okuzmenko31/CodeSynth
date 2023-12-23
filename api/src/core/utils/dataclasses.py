@@ -48,3 +48,9 @@ class ProjectRequestUpdateData:
     company: Optional[str] = None
     company_website: Optional[str] = None
     ref_source_id: Optional[int] = None
+
+
+@dataclass
+class PasswordValidationData:
+    error: Optional[str] = None
+    success: Optional[bool] = None

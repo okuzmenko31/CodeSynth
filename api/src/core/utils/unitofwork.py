@@ -14,6 +14,7 @@ class AbstractUnitOfWork(ABC):
     project_budgets: ProjectBudgetRepository
     project_requests: ProjectRequestRepository
     project_ref_sources: RefSourceRepository
+    users: UserRepository
 
     @abstractmethod
     async def __aenter__(self):
@@ -55,6 +56,7 @@ class UnitOfWork(AbstractUnitOfWork):
         self.project_budgets = ProjectBudgetRepository(self.session)
         self.project_requests = ProjectRequestRepository(self.session)
         self.project_ref_sources = RefSourceRepository(self.session)
+        self.users = UserRepository(self.session)
 
     async def __aexit__(self, *args):
         await self.rollback()

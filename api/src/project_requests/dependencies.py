@@ -1,5 +1,5 @@
 import datetime
-from typing import Annotated, Any, Optional
+from typing import Annotated, Optional
 
 from fastapi import Depends, Form, UploadFile, File
 

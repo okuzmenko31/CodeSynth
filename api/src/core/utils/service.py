@@ -25,7 +25,8 @@ class BaseService:
             ProjectServiceRepository: self.uow.project_services,
             ProjectBudgetRepository: self.uow.project_budgets,
             ProjectRequestRepository: self.uow.project_requests,
-            RefSourceRepository: self.uow.project_ref_sources
+            RefSourceRepository: self.uow.project_ref_sources,
+            UserRepository: self.uow.users
         }
 
     @property
