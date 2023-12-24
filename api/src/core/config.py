@@ -129,6 +129,9 @@ class MainSettings(BaseSettings):
         "secure_protocol",
         json_schema_extra={"env": "SECURE_PROTOCOL"},
     )
+    api_key: str = Field(
+        "api_key"
+    )
 
     # DATABASE
     db: DBSettings = Field(default_factory=DBSettings)
