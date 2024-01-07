@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator, ValidationError, EmailStr
+from pydantic import BaseModel, field_validator, EmailStr
 
 from .validators import validate_password
 from ..core.schemas import MainSchema
