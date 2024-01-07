@@ -1,7 +1,11 @@
 from fastapi import APIRouter, status
 from starlette.responses import JSONResponse
 
-from .schemas import *
+from .schemas import AccessOrRefreshTokenSchema
+from .schemas import AccessTokenReturnSchema
+from .schemas import AccessAndRefreshTokensSchema
+from .schemas import LoginAdminSchema
+
 from .services import (
     UserService,
     JWTBlackListTokensService,
