@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -12,9 +12,7 @@ from fastapi_cache.backends.inmemory import InMemoryBackend
 
 from redis import asyncio as aioredis
 
-from .core.utils.api_key import get_api_key
 from .core.config import settings
-
 from .auth.api import router as auth_router
 from .projects.api import router as projects_router
 from .project_requests.api import router as project_requests_router
@@ -37,7 +35,6 @@ async def lifespan(app: FastAPI):  # noqa
 app = FastAPI(
     title="CodeSynth",
     lifespan=lifespan,
-    dependencies=[Depends(get_api_key)],
 )
 app.mount(
     f"/{settings.media.media_file_path_start}",
