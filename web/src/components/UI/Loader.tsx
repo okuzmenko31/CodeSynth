@@ -1,14 +1,11 @@
-import React from 'react'
-import "../../styles/components/UI/Loader.css"
+import "../../styles/components/UI/Loader.scss";
 
-const  Loader = () => {
-
-
+const Loader = () => {
     return (
-        <div className='loader-container'>
-            <span className='loader-hexagon'></span>
+        <div className="loader-container">
+            <span className="loader-hexagon"></span>
         </div>
-    )
-}
+    );
+};
 
 export default Loader;

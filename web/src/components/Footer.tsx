@@ -1,16 +1,20 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
-import CodeSynth from "../assets/CodeSynth.png"
-import "../styles/components/Footer.css"
-
+import CodeSynth from "../assets/CodeSynth.png";
+import "../styles/components/Footer.scss";
 
 const Footer = () => {
     return (
         <footer id="contacts" className="footer">
             <div className="logo">
-                <img alt="CodeSynth" src={CodeSynth}/>
-                <Link to="/" className="codesynth-text no-table mid-text" data-text="CODESYNTH">CodeSynth</Link>
+                <img alt="CodeSynth" src={CodeSynth} />
+                <Link
+                    to="/"
+                    className="codesynth-text no-table mid-text"
+                    data-text="CODESYNTH"
+                >
+                    CodeSynth
+                </Link>
             </div>
 
             <div className="categories">
@@ -60,7 +64,7 @@ const Footer = () => {
                 </ul>
             </div>
         </footer>
-    )
-}
+    );
+};
 
 export default Footer;

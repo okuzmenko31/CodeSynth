@@ -5,6 +5,8 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .page-not-found-content {
@@ -24,8 +26,8 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-}
 
-.page-not-found-text p {
-    margin: 0;
+    & p {
+        margin: 0;
+    }
 }

@@ -15,16 +15,16 @@
 @keyframes loading-anim {
     0% {
         transform: rotate(0turn);
-        border-top-color: #FF00D6;
+        border-top-color: var(--secondary-color);
     }
 
     50% {
-        border-top-color: #882EFD;
+        border-top-color: var(--primary-color);
     }
 
     100% {
         transform: rotate(1turn);
-        border-top-color: #FF00D6;
+        border-top-color: var(--secondary-color);
     }
 }
 
@@ -32,14 +32,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
 
-
-.loader-hexagon::after {
-    content: "";
-    width: 75px;
-    height: 75px;
-    border: 15px solid #ffffff;
-    border-radius: 100%;
-    animation: loading-anim 2s infinite;
+    &::after {
+        content: "";
+        width: 75px;
+        height: 75px;
+        border: 15px solid var(--white);
+        border-radius: 100%;
+        animation: loading-anim 2s infinite;
+    }
 }

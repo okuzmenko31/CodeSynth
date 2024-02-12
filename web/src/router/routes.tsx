@@ -1,21 +1,16 @@
-import React from 'react';
+import Main from "../pages/Main";
+import MakeOrder from "../pages/MakeOrder";
+import PageNotFound from "../pages/PageNotFound";
 
-import Main from '../pages/Main';
-import PageNotFound from '../pages/PageNotFound';
-import MakeOrder from '../pages/MakeOrder';
-import Admin from '../pages/Admin';
+import RouterWrapper from "./routerWrapper";
 
-import RouterWrapper from './routerWrapper';
-
-
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes } from "react-router-dom";
 
 const routerRoutes = [
     { path: "/", element: Main },
     { path: "/make_order", element: MakeOrder },
     { path: "/project/:project?", element: MakeOrder },
-    { path: "/admin/:category?/:action?/:id?", element: Admin },
-    { path: "*", element: PageNotFound }
+    { path: "*", element: PageNotFound },
 ];
 
 const InitRoutes = () => (
@@ -23,9 +18,12 @@ const InitRoutes = () => (
         <Routes>
             {routerRoutes &&
                 routerRoutes.map((el: any, index: number) => (
-                    <Route key={index} path={el.path} element={<el.element />} />
-                ))
-            }
+                    <Route
+                        key={index}
+                        path={el.path}
+                        element={<el.element />}
+                    />
+                ))}
         </Routes>
     </RouterWrapper>
 );

@@ -1,0 +1,27 @@
+.service-block {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-wrap: normal;
+    border-width: 1px;
+    border-style: solid;
+    border-image: linear-gradient(
+            90deg,
+            var(--transparent-color) 0%,
+            var(--white) 50%,
+            var(--transparent-color) 100%
+        )
+        0 0 1 0;
+    padding: 50px 0;
+
+    & p {
+        text-align: start !important;
+        margin: 0;
+    }
+}
+
+@media (max-width: 1199px) {
+    .service-block p {
+        text-align: center !important;
+    }
+}
