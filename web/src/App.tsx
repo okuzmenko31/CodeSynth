@@ -1,11 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import Routes from "./router/routes";
+import { addSoundsToButtons } from "./utils/add_sound_to_button";
 import themeController from "./utils/themeController";
 
 const App = () => {
     const theme = useSelector((state: any) => state.themeReducer.theme);
     const dispatch = useDispatch();
+    const location = useLocation();
+    const [windowWidth, setWindowWidth] = useState<any>(null);
 
     window.addEventListener("mousemove", (e) => {
         setTimeout(() => {
@@ -30,9 +34,14 @@ const App = () => {
         themeController.setLocalStorageTheme(theme);
     }, [theme]);
 
+    useEffect(() => {
+        addSoundsToButtons();
+        setWindowWidth(window.innerWidth);
+    }, [location.pathname]);
+
     return (
         <>
-            <div id="cursor-seeker"></div>
+            {(windowWidth as number) > 1199 && <div id="cursor-seeker"></div>}
             <div className="App">
                 <Routes />
             </div>

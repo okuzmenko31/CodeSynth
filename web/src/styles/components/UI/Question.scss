@@ -12,8 +12,9 @@
 
 .question {
     position: relative;
-    padding: 20px;
+    padding: 20px 60px 20px 20px;
     cursor: pointer;
+    overflow-wrap: break-word;
     transition: 0.3s;
 
     & .question-caret {
