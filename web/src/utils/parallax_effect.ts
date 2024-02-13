@@ -3,8 +3,6 @@ export const initParallaxEffect = (
     speed: number,
     additional?: string
 ): EventListener => {
-    console.log("FUCK!", target);
-
     return function () {
         let scrollPosition = document.querySelector(".main-page")?.scrollTop;
         let parallaxContent = document.querySelectorAll(target) as any;

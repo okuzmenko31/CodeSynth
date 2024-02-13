@@ -28,6 +28,7 @@
     --additional-color-1: rgba(255, 255, 255, 0.05);
     --additional-color-2: rgba(255, 255, 255, 0.15);
     --additional-color-3: rgba(255, 255, 255, 0.5);
+    --additional-color-4: rgba(255, 255, 255, 0.2);
 }
 
 .light {
@@ -50,6 +51,7 @@
     --additional-color-1: rgba(0, 0, 0, 0.05);
     --additional-color-2: rgba(0, 0, 0, 0.15);
     --additional-color-3: rgba(0, 0, 0, 0.5);
+    --additional-color-4: rgba(0, 0, 0, 0.2);
 }
 
 ::-webkit-scrollbar {
@@ -127,79 +129,6 @@ body,
     color: var(--small-text);
     font-size: 25px;
     text-decoration: none;
-}
-
-.button {
-    display: inline-flex;
-    height: 63px;
-    width: 250px;
-    max-width: 300px;
-    padding: 0 27px;
-    font-weight: 700;
-    margin: 0;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    gap: 10px;
-    flex-shrink: 0;
-    background: linear-gradient(
-        98deg,
-        var(--transparent-color) 50%,
-        var(--additional-primary-color) 50.71%,
-        var(--secondary-color) 110%
-    );
-    border: 1px solid var(--additional-primary-color);
-    background-size: 255%;
-    color: var(--secondary-color);
-    font-size: 25px;
-    cursor: pointer;
-    transition: 0.3s;
-
-    &:hover {
-        color: var(--background-color);
-        border: 1px solid var(--additional-primary-color);
-        background-position: 97%;
-    }
-
-    &:disabled {
-        display: inline-flex;
-        height: 63px;
-        padding: 0 27px;
-        margin: 0;
-        justify-content: center;
-        align-items: center;
-        text-decoration: none;
-        gap: 10px;
-        flex-shrink: 0;
-        background: linear-gradient(
-            98deg,
-            var(--transparent-color) 50%,
-            #4b4b4b 50.71%,
-            #a8a8a8 110%
-        );
-        border: 1px solid #a8a8a8;
-        background-size: 255%;
-        color: #4b4b4b;
-        font-size: 25px;
-        cursor: pointer;
-        transition: 0.3s;
-
-        &:hover {
-            color: var(--background-color);
-            border: 1px solid linear-gradient(98deg, #4b4b4b, a8a8a8);
-            background-position: 97%;
-        }
-    }
-
-    &.fill {
-        color: var(--background-color);
-        background: linear-gradient(
-            98deg,
-            var(--additional-primary-color) 4.71%,
-            var(--secondary-color) 101.04%
-        );
-        border: 1px solid var(--additional-primary-color);
-    }
 }
 
 .codesynth-text {
@@ -290,7 +219,7 @@ body,
 }
 
 input[type="date"] {
-    min-height: 3.5rem;
+    min-height: 35px;
     color: var(--white);
     background-color: var(--additional-color-1);
     border: 2px solid var(--additional-color-2);
@@ -309,7 +238,7 @@ input[type="file"] {
 
     & .upload {
         width: 100%;
-        min-height: 3.5rem;
+        min-height: 35px;
         fill: var(--white);
         color: var(--white);
         background-color: var(--additional-color-1);
