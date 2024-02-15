@@ -6,6 +6,7 @@ import "../styles/pages/MakeOrder.scss";
 import axios from "axios";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import Button from "../components/UI/Button";
 
 type Service = {
     id: number;
@@ -448,12 +449,13 @@ const MakeOrder = () => {
                         </div>
                     </div>
                     <div className="make-order-block-button">
-                        <button
-                            onClick={handleSubmit(sendApplication)}
-                            className="button"
-                        >
-                            SUBMIT APPLICATION
-                        </button>
+                        <Button
+                            text="SUBMIT APPLICATION"
+                            callback={() => {
+                                handleSubmit(sendApplication);
+                            }}
+                            style={{ width: "100%", maxWidth: "100%" }}
+                        />
                     </div>
                 </div>
                 <Footer />
