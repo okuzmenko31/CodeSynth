@@ -133,6 +133,7 @@ body,
 
 .codesynth-text {
     position: relative;
+    width: max-content;
     background-image: linear-gradient(90deg, var(--white), var(--white));
     background-clip: text;
     -webkit-background-clip: text;
@@ -177,10 +178,16 @@ body,
         padding: 10px;
         font-weight: 300;
         transition: 0.3s;
+        pointer-events: none;
     }
 
     &.no-table::after {
         display: none;
+        width: 0;
+        height: 0;
+        opacity: 0;
+        content: "";
+        user-select: none;
     }
 
     &:hover {
@@ -352,13 +359,6 @@ input[type="file"] {
     }
 }
 
-@media (min-width: 481px) and (max-width: 991px) {
-    .button {
-        height: 53px;
-        font-size: 20px;
-    }
-}
-
 @media (max-width: 480px) {
     .biggest-text {
         font-size: 52px;
@@ -374,11 +374,5 @@ input[type="file"] {
 
     .small-text {
         font-size: 20px;
-    }
-
-    .button {
-        width: 120px;
-        height: 32px;
-        font-size: 12px;
     }
 }
