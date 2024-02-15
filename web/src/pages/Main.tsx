@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Langauge from "../components/UI/LanguageTemplate";
 import Offer from "../components/UI/OfferTemplate";
@@ -16,6 +16,7 @@ import { initParallaxEffect } from "../utils/parallax_effect";
 
 import javascript from "../assets/javascript.png";
 import python from "../assets/python.png";
+import Button from "../components/UI/Button";
 
 const Main = () => {
     const [projects, setProjects] = useState([]);
@@ -23,6 +24,7 @@ const Main = () => {
     const [choosedFilters, setChoosedFilters] = useState<number[]>([]);
     const [page, setPage] = useState(0);
     const [projectUrl, setProjectUrl] = useState("/api/v1/projects/all/");
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (choosedFilters.length > 0) {
@@ -161,7 +163,6 @@ const Main = () => {
             );
             setChoosedFilters(updatedFilters);
             chechbox.checked = false;
-            console.log(updatedFilters);
         } else {
             const updatedFilters: string[] | number[] = [
                 ...choosedFilters,
@@ -169,7 +170,6 @@ const Main = () => {
             ];
             setChoosedFilters(updatedFilters);
             chechbox.checked = true;
-            console.log(updatedFilters);
         }
     };
 
@@ -241,12 +241,17 @@ const Main = () => {
                     </div>
 
                     <div className="what-is-buttons">
-                        <Link to="/make_order" className="button fill">
-                            MAKE ORDER
-                        </Link>
-                        <a href="#portfolio" className="button">
-                            PORTFOLIO
-                        </a>
+                        <Button
+                            text="MAKE ORDER"
+                            callback={() => navigate("/make_order")}
+                        />
+                        <Button
+                            text="PORTFOLIO"
+                            callback={() => {
+                                window.location.hash = "";
+                                window.location.hash = "#portfolio";
+                            }}
+                        />
                     </div>
                 </div>
 
@@ -316,13 +321,13 @@ const Main = () => {
                                 />
                             ))}
                     </div>
-                    <button
-                        onClick={loadMoreProjects}
+                    <Button
+                        text="SHOW MORE"
                         id="show_more"
-                        className="button fill"
-                    >
-                        SHOW MORE
-                    </button>
+                        callback={(e: any) => {
+                            loadMoreProjects(e);
+                        }}
+                    />
                 </div>
 
                 <div id="services" className="our-services">
@@ -342,9 +347,13 @@ const Main = () => {
                                 user experience to custom development and
                                 third-party integrations.
                             </p>
-                            <Link to="/make_order" className="button">
-                                GET STARTED
-                            </Link>
+
+                            <Button
+                                text="GET STARTED"
+                                callback={() => {
+                                    navigate("/make_order");
+                                }}
+                            />
                         </div>
 
                         <div className="services-items-wrapper">
@@ -407,9 +416,12 @@ const Main = () => {
                             </p>
                         </div>
 
-                        <Link to="/make_order" className="button">
-                            START PROJECT
-                        </Link>
+                        <Button
+                            text="START PROJECT"
+                            callback={() => {
+                                navigate("/make_order");
+                            }}
+                        />
                     </div>
 
                     <div className="we-can-offer-content">
@@ -502,9 +514,12 @@ const Main = () => {
                         </p>
                     </div>
 
-                    <Link to="/make_order" className="button">
-                        Get started
-                    </Link>
+                    <Button
+                        text="GET STARTED"
+                        callback={() => {
+                            navigate("/make_order");
+                        }}
+                    />
                 </div>
                 <Footer />
             </div>

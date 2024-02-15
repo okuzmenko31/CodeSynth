@@ -247,6 +247,12 @@
     margin-bottom: 30px;
 }
 
+.we-can-offer-title {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .we-can-offer-title p {
     margin: 0;
     max-width: 50%;
@@ -258,7 +264,7 @@
     flex-wrap: wrap;
     justify-content: center;
     border-radius: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid var(--additional-color-4);
     overflow: hidden;
 }
 
@@ -397,6 +403,11 @@
         & p {
             text-align: center;
         }
+    }
+
+    .our-statistic-block .biggest-text::before {
+        right: -50px;
+        font-size: 85px;
     }
 }
 
@@ -540,13 +551,6 @@
     .our-statistic {
         width: 90%;
         padding: 100px 20px;
-    }
-}
-
-@media (max-width: 767px) {
-    .our-statistic-block .biggest-text::before {
-        right: -50px;
-        font-size: 100px;
     }
 }
 

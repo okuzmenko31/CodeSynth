@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import Button from "../components/UI/Button";
 import "../styles/pages/PageNotFound.scss";
 
 const PageNotFound = () => {
@@ -43,9 +44,13 @@ const PageNotFound = () => {
                         </defs>
                     </svg>
                 </div>
-                <a className="button" onClick={() => navigate(-1)}>
-                    Take me back!
-                </a>
+
+                <Button
+                    text="TAKE ME BACK!"
+                    callback={() => {
+                        navigate(-1);
+                    }}
+                />
             </div>
         </div>
     );

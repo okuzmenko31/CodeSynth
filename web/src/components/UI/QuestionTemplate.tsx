@@ -12,7 +12,7 @@ const Question = ({
     };
     return (
         <div className="question-block">
-            <div onClick={toggleActive} className="question mid-text">
+            <div onClick={toggleActive} className="question">
                 {question}
                 <div className="question-caret">
                     <svg
