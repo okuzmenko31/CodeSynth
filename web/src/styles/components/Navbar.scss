@@ -192,12 +192,14 @@
 @media (min-width: 1400px) and (max-width: 1599px) {
     #navbar {
         padding: 10px 40px;
+        gap: 15px;
     }
 }
 
 @media (min-width: 1200px) and (max-width: 1399px) {
     #navbar {
         padding: 10px 35px;
+        gap: 10px;
     }
 
     .logo a {
@@ -206,6 +208,11 @@
 
     #navbar .small-text {
         font-size: 20px;
+    }
+
+    .change-theme-button {
+        width: 35px;
+        height: 35px;
     }
 }
 
@@ -227,5 +234,16 @@
 @media (max-width: 480px) {
     #navbar {
         padding: 0;
+    }
+}
+
+@media (max-width: 300px) {
+    .navbar-mobile-button {
+        width: 25px;
+        height: 25px;
+    }
+
+    .navbar-mobile-button svg {
+        width: 80%;
     }
 }

@@ -248,7 +248,7 @@ const Main = () => {
                         <Button
                             text="PORTFOLIO"
                             callback={() => {
-                                window.location.pathname = "/";
+                                window.location.hash = "";
                                 window.location.hash = "#portfolio";
                             }}
                         />

@@ -404,6 +404,11 @@
             text-align: center;
         }
     }
+
+    .our-statistic-block .biggest-text::before {
+        right: -50px;
+        font-size: 85px;
+    }
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
@@ -546,13 +551,6 @@
     .our-statistic {
         width: 90%;
         padding: 100px 20px;
-    }
-}
-
-@media (max-width: 767px) {
-    .our-statistic-block .biggest-text::before {
-        right: -50px;
-        font-size: 100px;
     }
 }
 
