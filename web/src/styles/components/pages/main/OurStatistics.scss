@@ -1,0 +1,108 @@
+.our-statistic {
+    width: 100%;
+    padding: 100px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+    border-width: 1px;
+    border-style: solid;
+    border-image: linear-gradient(
+            90deg,
+            var(--transparent-color) 0%,
+            var(--white) 50%,
+            var(--transparent-color) 100%
+        )
+        1 0 1 0;
+}
+
+.our-statistic-block {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    & .biggest-text::before {
+        position: absolute;
+        top: -50%;
+        right: -100px;
+        content: "+";
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 200px;
+        font-weight: 500;
+    }
+
+    &.red .biggest-text::before {
+        background: url("../../../../assets/red_conic_gradient.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    &.green .biggest-text::before {
+        background: url("../../../../assets/green_conic_gradient.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    &.blue .biggest-text::before {
+        background: url("../../../../assets/purple_conic_gradient.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    & p {
+        margin: 0;
+        text-align: center;
+    }
+}
+
+@media (max-width: 1199px) {
+    .our-statistic-block .biggest-text::before {
+        right: -50px;
+        font-size: 85px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .our-statistic {
+        width: 90%;
+        padding: 100px 20px;
+    }
+}
+
+@media (min-width: 651px) and (max-width: 767px) {
+    .our-statistic {
+        width: 90%;
+        padding: 100px 20px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 650px) {
+    .our-statistic {
+        width: 90%;
+        padding: 100px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .our-statistic {
+        width: 90%;
+        padding: 100px 20px;
+    }
+}

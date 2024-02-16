@@ -1,32 +1,66 @@
-.language-tech {
+.technology-tech {
+    width: 45%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
     margin: 0;
+    gap: 20px;
 }
 
-.language-name {
+.technology-name {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    font-size: 35px;
+    font-weight: 600;
+    text-transform: uppercase;
 
     & p {
         margin: 0;
-    }
-
-    & img {
-        width: 99px;
-        height: 99px;
-        border-radius: 20px;
     }
 }
 
-.language-frame-works {
+.technologies {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 20px;
     margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
 
     & p {
         margin: 0;
+    }
+}
+
+.technology-tech-small {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    filter: brightness(0.5) saturate(0%);
+    -webkit-filter: brightness(0.5) saturate(0%);
+    opacity: 0.55;
+    font-weight: 500;
+    transition: 0.3s;
+
+    & img {
+        max-width: 50px;
+        max-height: 50px;
+    }
+
+    &:hover {
+        filter: none;
+        -webkit-filter: none;
+        opacity: 1;
+    }
+}
+
+@media (max-width: 991px) {
+    .technology-tech {
+        width: 100%;
     }
 }

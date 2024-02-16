@@ -1,0 +1,47 @@
+.user-offer-block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.user-offer-header {
+    width: 50%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+
+    & p {
+        margin: 0;
+        text-align: center;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .user-offer-header {
+        width: 85%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (min-width: 651px) and (max-width: 767px) {
+    .user-offer-header {
+        width: 85%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 650px) {
+    .user-offer-header {
+        width: 85%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
