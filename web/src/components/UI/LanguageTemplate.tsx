@@ -1,40 +1,34 @@
 import "../../styles/components/UI/Language.scss";
 
+type TechnologyType = {
+    name: string;
+    image: string;
+};
+
 const Language = ({
     name,
-    frameworks,
-    additional,
-    image,
+    technologies,
 }: {
     name: string;
-    frameworks: string[];
-    additional?: string[];
-    image: string;
+    technologies: TechnologyType[];
 }) => {
     return (
-        <div className="language-tech">
-            <div className="language-name">
-                <p className="big-text">{name}</p>
-                <img alt={name} src={image} />
+        <div className="technology-tech">
+            <div className="technology-name">
+                <p>{name}</p>
             </div>
 
-            <ul className="language-frame-works mid-text">
-                {frameworks &&
-                    frameworks.map((framework: string, index: number) => (
-                        <li key={index}>{framework}</li>
-                    ))}
-            </ul>
-
-            {additional && (
-                <ul className="language-additional-tools mid-text">
-                    <p>ADDITIONAL TOOLS:</p>
-                    {additional &&
-                        additional.map((tool: string, index: number) => (
-                            <li key={index}>{tool}</li>
-                        ))}
-                    <p>AND OTHERS</p>
-                </ul>
-            )}
+            <div className="technologies">
+                {technologies &&
+                    technologies.map(
+                        (technology: TechnologyType, index: number) => (
+                            <div className="technology-tech-small" key={index}>
+                                <img src={technology.image} />
+                                {technology.name}
+                            </div>
+                        )
+                    )}
+            </div>
         </div>
     );
 };

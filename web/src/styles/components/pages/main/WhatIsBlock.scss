@@ -1,0 +1,69 @@
+.what-is {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+
+    & p {
+        margin: 0;
+    }
+}
+
+.what-is-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .what-is {
+        width: 80%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .what-is {
+        width: 90%;
+    }
+
+    .what-is-buttons {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+@media (min-width: 651px) and (max-width: 767px) {
+    .what-is {
+        width: 90%;
+    }
+
+    .what-is-buttons {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 650px) {
+    .what-is {
+        width: 90%;
+    }
+
+    .what-is-buttons {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .what-is {
+        width: 90%;
+    }
+
+    .what-is-buttons {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
