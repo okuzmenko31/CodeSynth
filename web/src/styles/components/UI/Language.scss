@@ -59,6 +59,14 @@
     }
 }
 
+@media (max-width: 1199px) {
+    .technology-tech-small {
+        filter: none;
+        -webkit-filter: none;
+        opacity: 1;
+    }
+}
+
 @media (max-width: 991px) {
     .technology-tech {
         width: 100%;
