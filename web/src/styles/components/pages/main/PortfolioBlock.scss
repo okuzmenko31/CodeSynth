@@ -135,6 +135,20 @@
     text-transform: uppercase;
 }
 
+@media (max-width: 991px) {
+    .projects-text {
+        gap: 5px;
+
+        & .big-text {
+            margin-bottom: 0;
+        }
+
+        & .small-text {
+            margin-top: 0;
+        }
+    }
+}
+
 @media (min-width: 768px) and (max-width: 991px) {
     .drop-down-list {
         right: 10px;

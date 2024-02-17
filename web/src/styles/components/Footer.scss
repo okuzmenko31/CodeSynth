@@ -19,14 +19,20 @@
     bottom: 0;
     box-sizing: border-box;
 
-    & .logo {
+    & .logo-container {
         display: flex;
-        gap: 10px;
-        align-items: center;
+        flex-direction: column;
+        gap: 20px;
 
-        & img {
-            max-width: 82px;
-            max-height: 82px;
+        & .logo {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+
+            & img {
+                max-width: 82px;
+                max-height: 82px;
+            }
         }
     }
 }
@@ -56,7 +62,7 @@
         justify-content: center;
         flex-direction: column;
 
-        & .logo {
+        & .logo-container .logo {
             width: 100%;
             justify-content: center;
         }
@@ -82,9 +88,13 @@
     .footer {
         padding: 2px;
 
-        & .logo img {
-            max-width: 48px;
-            max-height: 48px;
+        & .logo-container {
+            text-align: center;
+
+            & .logo img {
+                max-width: 48px;
+                max-height: 48px;
+            }
         }
     }
 }
