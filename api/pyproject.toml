@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "codesynth-api"
+version = "0.1.0"
+description = "API for CodeSynth website"
+authors = ["Oleg Kuzmenko <olegkuzmenko2005@ggmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+sqlalchemy = "^2.0.27"
+greenlet = "^3.0.3"
+psycopg = {version = "^3.1.18", extras = ["binary", "pool"]}
+python-dotenv = "^1.0.1"
+alembic = "^1.13.1"
+
+[tool.poetry.group.dev.dependencies]
+fastapi = "^0.109.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
