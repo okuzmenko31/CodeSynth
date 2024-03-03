@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Service from "../../../components/UI/ServicesTemplate";
+import { paths } from "../../../router/routes";
 import "../../../styles/components/pages/main/OurServicesContent.scss";
 import Button from "../../UI/Button";
 
@@ -26,7 +27,7 @@ const OurServicesContent = () => {
                     <Button
                         text="GET STARTED"
                         callback={() => {
-                            navigate("/make_order");
+                            navigate(paths.makeOrder);
                         }}
                     />
                 </div>

@@ -6,10 +6,16 @@ import RouterWrapper from "./routerWrapper";
 
 import { Route, Routes } from "react-router-dom";
 
+export const paths = {
+    main: "/",
+    makeOrder: "/make-order",
+    project: "/project/:project?",
+};
+
 const routerRoutes = [
-    { path: "/", element: Main },
-    { path: "/make_order", element: MakeOrder },
-    { path: "/project/:project?", element: MakeOrder },
+    { path: paths.main, element: Main },
+    { path: paths.makeOrder, element: MakeOrder },
+    { path: paths.project, element: MakeOrder },
     { path: "*", element: PageNotFound },
 ];
 

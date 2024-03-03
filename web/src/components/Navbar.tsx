@@ -4,9 +4,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CodeSynth from "../assets/CodeSynth.png";
 import { setTheme } from "../redux/actions";
+import { paths } from "../router/routes";
 import switchOff from "../sounds/switch-off.mp3";
 import switchOn from "../sounds/switch-on.mp3";
 import "../styles/components/Navbar.scss";
+import NavbarButton from "./UI/NavbarButton";
 
 const Navbar = () => {
     const location = useLocation();
@@ -22,16 +24,6 @@ const Navbar = () => {
             element.scrollIntoView();
         }
     }, [location.pathname]);
-
-    const scrollTo = (element_id: string) => {
-        const element: any = document.getElementById(element_id);
-
-        if (!element) {
-            navigate("/#" + element_id);
-        } else {
-            element.scrollIntoView();
-        }
-    };
 
     let prevScrollpos = window.scrollY || window.pageYOffset;
 
@@ -108,52 +100,22 @@ const Navbar = () => {
                         </div>
                     )}
                     <div className="navbar-buttons small-text">
-                        <p
-                            onClick={() => scrollTo("portfolio")}
-                            className="codesynth-text no-table"
-                            data-text="Portfolio"
-                        >
-                            Portfolio
-                        </p>
-                        <p
-                            onClick={() => scrollTo("services")}
-                            className="codesynth-text no-table"
-                            data-text="Services"
-                        >
-                            Services
-                        </p>
-                        <p
-                            onClick={() => scrollTo("why-us")}
-                            className="codesynth-text no-table"
-                            data-text="Why us"
-                        >
-                            Why us
-                        </p>
-                        <p
-                            onClick={() => scrollTo("faqs")}
-                            className="codesynth-text no-table"
-                            data-text="FAQs"
-                        >
-                            FAQs
-                        </p>
+                        <NavbarButton text="Portfolio" hash="portfolio" />
+                        <NavbarButton text="Services" hash="services" />
+                        <NavbarButton text="Why us" hash="why-us" />
+                        <NavbarButton text="FAQs" hash="faqs" />
                     </div>
                 </div>
 
                 <div className="navbar-buttons-last small-text">
-                    <Link
-                        to="/make_order"
-                        className="codesynth-text no-table"
-                        data-text="Submit your application"
-                    >
-                        Submit your application
-                    </Link>
-                    <p
-                        onClick={() => scrollTo("contacts")}
-                        className="codesynth-text no-table"
-                        data-text="Our contacts"
-                    >
-                        Our contacts
-                    </p>
+                    <NavbarButton
+                        text="Submit your application"
+                        customAction={() => {
+                            navigate(paths.makeOrder);
+                            window.scrollTo(0, 0);
+                        }}
+                    />
+                    <NavbarButton text="Our contacts" hash="contacts" />
                 </div>
 
                 <div className="navbar-buttons-additional">

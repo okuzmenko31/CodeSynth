@@ -13,6 +13,7 @@
     --primary-color: #882efd;
     --secondary-color: #ff00d6;
     --additional-primary-color: #8f00ff;
+    --required-input: #ff8766;
     --gradient: linear-gradient(
         180deg,
         var(--additional-primary-color) 0%,
@@ -69,7 +70,10 @@
 }
 
 html {
-    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 html,
@@ -77,6 +81,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: var(--background-color);
+    overflow-x: hidden;
 }
 
 html,
@@ -84,8 +89,7 @@ body,
 #root,
 .App {
     width: 100%;
-    height: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 #root {
@@ -239,6 +243,13 @@ input[type="date"] {
 
 input[type="file"] {
     display: none;
+}
+
+input,
+textarea {
+    &:focus {
+        outline-color: var(--primary-color);
+    }
 }
 
 .file-type {

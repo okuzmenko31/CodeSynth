@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { paths } from "../../../router/routes";
 import "../../../styles/components/pages/main/UserOfferBlock.scss";
 import Button from "../../UI/Button";
 
@@ -16,7 +17,7 @@ const UserOfferBlock = () => {
             <Button
                 text="GET STARTED"
                 callback={() => {
-                    navigate("/make_order");
+                    navigate(paths.makeOrder);
                 }}
             />
         </div>
