@@ -5,6 +5,7 @@ import Button from "../../UI/Button";
 
 import javascript from "../../../assets/javascript.png";
 import python from "../../../assets/python.png";
+import { paths } from "../../../router/routes";
 
 const WCOC = () => {
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ const WCOC = () => {
                 <Button
                     text="START PROJECT"
                     callback={() => {
-                        navigate("/make_order");
+                        navigate(paths.makeOrder);
                     }}
                 />
             </div>

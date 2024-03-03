@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { paths } from "../../../router/routes";
 import "../../../styles/components/pages/main/WhatIsBlock.scss";
 import Button from "../../UI/Button";
 
@@ -19,7 +20,7 @@ const WhatIsBlock = () => {
             <div className="what-is-buttons">
                 <Button
                     text="MAKE ORDER"
-                    callback={() => navigate("/make_order")}
+                    callback={() => navigate(paths.makeOrder)}
                 />
                 <Button
                     text="PORTFOLIO"
