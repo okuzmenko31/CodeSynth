@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  postgresql_db:
+    image: "postgres:15"
+    restart: always
+    container_name: "postgresql"
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_HOST: ${DB_HOST}
+      POSTGRES_PORT: ${DB_PORT}
+    env_file:
+      - .env.dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+    container_name: "api"
+    depends_on:
+      - postgresql_db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_HOST: ${DB_HOST}
+      POSTGRES_PORT: ${DB_PORT}
+    env_file:
+      - .env.dev
+    ports:
+      - "8000:${API_APP_PORT}"
+    volumes:
+      - .:/app/api
+
+volumes:
+  postgres_data:
