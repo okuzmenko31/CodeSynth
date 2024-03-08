@@ -1,7 +1,10 @@
 from functools import lru_cache
 
-from pydantic import Field, field_validator
-from pydantic import PostgresDsn
+from pydantic import (
+    Field,
+    field_validator,
+    PostgresDsn,
+)
 from pydantic_settings import BaseSettings
 from pydantic_core.core_schema import ValidationInfo
 
@@ -12,6 +15,7 @@ class CorsSettings(BaseSettings):
     origins: str = Field(alias="cors_origins")
 
     @field_validator("origins")
+    @classmethod
     def assemble_cors_origins(cls, v: str) -> list[str]:
         return DotenvListHelper.get_list_from_value(v)
 
@@ -23,30 +27,25 @@ class DBSettings(BaseSettings):
     host: str = Field(alias="db_host")
     port: int = Field(alias="db_port")
     scheme: str = Field(alias="db_scheme")
-    async_connect: bool = Field(alias="db_async_connect", default=True)
     url: str | None = Field(alias="db_url", default=None)
 
-    @field_validator("url", mode="plain")
+    @field_validator("url", mode="after")
     @classmethod
     def assemble_db_url(
-        cls, v: PostgresDsn | None, validation_info: ValidationInfo
+        cls, v: str | None, validation_info: ValidationInfo
     ) -> str:
         if v is not None:
             return v
-
         values = validation_info.data
-        path = f"/{values['name']}"
-        if values["async_connect"]:
-            path += "?async_fallback=true"
-
-        return PostgresDsn.build(
+        url = PostgresDsn.build(
             scheme=values["scheme"],
             username=values["user"],
             password=values["password"],
             host=values["host"],
             port=values["port"],
-            path=path,
+            path=values["name"],
         )
+        return str(url)
 
 
 class Settings(BaseSettings):
