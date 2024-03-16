@@ -17,4 +17,10 @@ RUN /bin/true\
     && rm -rf /root/.cache/pypoetry
 RUN chmod +x /app/run.sh
 
+RUN groupadd -r app && useradd -r -g app appuser \
+    && chown -R appuser:app /app \
+    && chmod +x /app/run.sh
+
+USER appuser
+
 CMD ["/app/run.sh"]
