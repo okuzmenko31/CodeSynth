@@ -29,7 +29,7 @@ class DBSettings(BaseSettings):
     scheme: str = Field(alias="db_scheme")
     url: str | None = Field(alias="db_url", default=None)
 
-    @field_validator("url", mode="after")
+    @field_validator("url")
     @classmethod
     def assemble_db_url(
         cls, v: str | None, validation_info: ValidationInfo

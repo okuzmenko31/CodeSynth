@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  postgresql_db:
+  postgresql:
     image: "postgres:15"
     restart: always
     container_name: "postgresql"
@@ -16,12 +16,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  api:
+  app:
     build:
       context: .
-    container_name: "api"
+    container_name: "app"
     depends_on:
-      - postgresql_db
+      - postgresql
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
