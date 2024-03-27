@@ -17,6 +17,10 @@ export const stackData: Stack[] = [
                 image: "https://smarthome.buanet.de/wp-content/uploads/sites/3/2020/12/redis.png",
             },
             {
+                name: "RabbitMQ",
+                image: "https://i0.wp.com/acemq.com/wp-content/uploads/2019/11/rabbitmq2.png?resize=1080%2C1082&ssl=1",
+            },
+            {
                 name: "Pyramid",
                 image: "https://trypyramid.com/img/pyramid_logo_red_on_transparent_background.svg",
             },
@@ -27,10 +31,6 @@ export const stackData: Stack[] = [
             {
                 name: "Node.JS",
                 image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/1200px-Node.js_logo.svg.png",
-            },
-            {
-                name: "DRF",
-                image: "https://www.fullstackpython.com/img/logos/django-rest-framework.png",
             },
             {
                 name: "Django",

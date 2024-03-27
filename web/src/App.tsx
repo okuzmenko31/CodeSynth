@@ -9,18 +9,19 @@ const App = () => {
     const location = useLocation();
     const [windowWidth, setWindowWidth] = useState<unknown>(null);
 
-    window.addEventListener("mousemove", (e) => {
+    const moveCursor = (e: any) => {
         setTimeout(() => {
-            const x = e.pageX;
-            const y = e.pageY;
+            const x = e.clientX;
+            const y = e.clientY;
             const seeker = document.getElementById("cursor-seeker");
 
             if (seeker) {
-                seeker.style.top = `${y - seeker.clientWidth * 0.5}px`;
+                seeker.style.top = `${y - seeker.clientHeight * 0.5}px`;
                 seeker.style.left = `${x - seeker.clientHeight * 0.5}px`;
             }
-        }, 70);
-    });
+        }, 30);
+    };
+    window.addEventListener("mousemove", moveCursor);
 
     useEffect(() => {
         if (theme === "light") {
