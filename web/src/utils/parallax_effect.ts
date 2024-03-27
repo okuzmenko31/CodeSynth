@@ -4,7 +4,7 @@ export const initParallaxEffect = (
     additional?: string
 ): EventListener => {
     return function () {
-        let scrollPosition = document.querySelector(".main-page")?.scrollTop;
+        let scrollPosition = document.documentElement.scrollTop;
         let parallaxContent = document.querySelectorAll(target) as any;
         parallaxContent.forEach((content: HTMLElement) => {
             if (content && scrollPosition) {

@@ -18,7 +18,7 @@ const Navbar = () => {
 
     useEffect(() => {
         const elementId = location.hash.replace("#", "");
-        const element: any = document.getElementById(elementId);
+        const element: HTMLElement | null = document.getElementById(elementId);
 
         if (element) {
             element.scrollIntoView();

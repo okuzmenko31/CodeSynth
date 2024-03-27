@@ -5,7 +5,7 @@ import "../../styles/components/UI/Button.scss";
 
 type ButtonProps = {
     text: string;
-    callback: any;
+    callback: () => any;
     id?: string;
     style?: CSSProperties | undefined;
 };

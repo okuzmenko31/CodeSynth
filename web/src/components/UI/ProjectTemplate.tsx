@@ -3,7 +3,7 @@ import "../../styles/components/UI/Project.scss";
 
 import { addClassOnScroll } from "../../utils/add_class_on_scroll";
 
-type tag = {
+export type Tag = {
     name: string;
     img: string;
     id: number;
@@ -18,7 +18,7 @@ const Project = ({
 }: {
     name: string;
     image: string;
-    tags?: any[];
+    tags?: Tag[];
     project_link?: string;
     checkout_link?: string;
 }) => {
@@ -78,7 +78,7 @@ const Project = ({
 
             <div className="project-tags-block">
                 {tags &&
-                    tags.map((tag: tag) => (
+                    tags.map((tag: Tag) => (
                         <div key={tag.id} className="project-tag">
                             <img alt={tag.name} src={tag.img} />
                             {tag.name}

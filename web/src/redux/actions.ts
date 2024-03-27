@@ -1,11 +1,16 @@
-import { SET_PAGE, SET_THEME } from "./types";
+import { SET_PAGE, SET_STATIC_DATA, SET_THEME } from "./types";
 
-export const setTheme = (value: unknown) => ({
+export const setTheme = (value: string) => ({
     type: SET_THEME,
     payload: value,
 });
 
-export const setPage = (value: unknown) => ({
+export const setPage = (value: number) => ({
     type: SET_PAGE,
+    payload: value,
+});
+
+export const setStaticData = (value: boolean) => ({
+    type: SET_STATIC_DATA,
     payload: value,
 });

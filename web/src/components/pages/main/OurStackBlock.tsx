@@ -1,7 +1,37 @@
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { stackData } from "../../../data/stack";
 import "../../../styles/components/pages/main/OurStackBlock.scss";
 import Language from "../../UI/LanguageTemplate";
 
+export type StackTechnologies = {
+    name: string;
+    image: string;
+};
+
+export type Stack = {
+    name: string;
+    technologies: StackTechnologies[];
+};
+
 const OurStackBlock = () => {
+    const [stack, setStack] = useState<Stack[]>([]);
+
+    const staticData = useSelector(
+        (state: any) => state.staticReducer.staticData
+    );
+
+    const getStack = async () => {
+        if (!staticData) {
+        } else {
+            setStack(stackData);
+        }
+    };
+
+    useEffect(() => {
+        getStack();
+    }, []);
+
     return (
         <div className="our-stack-block">
             <div className="our-stack-title">
@@ -10,80 +40,14 @@ const OurStackBlock = () => {
             </div>
 
             <div className="our-stack-content">
-                <Language
-                    name="backend"
-                    technologies={[
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                    ]}
-                />
-                <Language
-                    name="backend"
-                    technologies={[
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                        {
-                            name: "React",
-                            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
-                        },
-                    ]}
-                />
+                {stack &&
+                    stack.map((tech, index) => (
+                        <Language
+                            key={index}
+                            name={tech.name}
+                            technologies={tech.technologies}
+                        />
+                    ))}
             </div>
         </div>
     );

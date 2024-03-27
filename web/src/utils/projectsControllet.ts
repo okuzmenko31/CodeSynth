@@ -1,0 +1,210 @@
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Tag } from "../components/UI/ProjectTemplate";
+import { ProjectType } from "../components/pages/main/PortfolioBlock";
+import { projectsData } from "../data/projects";
+import { setPage } from "../redux/actions";
+import { paths } from "../router/routes";
+
+class ProjectsController {
+    private dispatch = useDispatch();
+
+    private staticData = useSelector(
+        (state: any) => state.staticReducer.staticData
+    );
+
+    private navigate = useNavigate();
+
+    constructor(
+        private projects: ProjectType[],
+        private projectUrl: string,
+        private setProjects: any,
+        private setProjectUrl: any,
+        private page: number,
+        private projectsNumber: number,
+        private choosedFilters: number[]
+    ) {}
+
+    private hideLoadButton = (
+        length: number,
+        threshold: number,
+        elementIdToScrollTo: string = "portfolio"
+    ) => {
+        const showMore = document.getElementById("show_more");
+
+        if (showMore) {
+            if (length > 0 && length < threshold) {
+                showMore.style.display = "none";
+                if (elementIdToScrollTo) {
+                    const elementToScroll =
+                        document.getElementById(elementIdToScrollTo);
+                    if (elementToScroll) {
+                        elementToScroll.scrollIntoView({ behavior: "smooth" });
+                    }
+                }
+            } else if (length === 0) {
+                showMore.style.display = "none";
+            } else {
+                showMore.style.display = "flex";
+            }
+        }
+    };
+
+    public getProjectsInitial = async () => {
+        if (!this.staticData) {
+            const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}${this.projectUrl}?page=${this.page}&size=${this.projectsNumber}`;
+
+            await axios.get(getUrl).then((res) => {
+                this.setProjects(res.data);
+            });
+        } else {
+            const sliceFrom = this.page * this.projectsNumber;
+            const sliceTo =
+                this.page * this.projectsNumber + this.projectsNumber;
+            const newProjects = projectsData.slice(sliceFrom, sliceTo);
+
+            this.setProjects(newProjects);
+        }
+    };
+
+    public getProjectsByChoosedFilters = async () => {
+        if (!this.staticData) {
+            if (this.choosedFilters.length > 0) {
+                this.dispatch(setPage(0));
+                this.setProjectUrl("/api/v1/projects/filter_by_filter_types/");
+
+                const postUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/filter_by_filter_types/?page=0&size=${this.projectsNumber}`;
+
+                await axios
+                    .post(postUrl, {
+                        filter_types: this.choosedFilters,
+                    })
+                    .then((res) => {
+                        this.setProjects(res.data);
+
+                        this.hideLoadButton(res.data.length, 1);
+                    });
+            } else {
+                this.dispatch(setPage(0));
+                this.setProjectUrl("/api/v1/projects/all/");
+
+                await axios
+                    .get(
+                        process.env.REACT_APP_BACKEND_DOMAIN +
+                            "/api/v1/projects/all/?page=0&size=${projectsNumber}"
+                    )
+                    .then((res) => {
+                        this.setProjects(res.data);
+
+                        this.hideLoadButton(res.data.length, 1);
+                    });
+            }
+        } else {
+            this.dispatch(setPage(0));
+
+            if (this.choosedFilters.length > 0) {
+                const filteredProjects = projectsData.filter(
+                    (item: ProjectType) =>
+                        item.tags.some((tag: Tag) =>
+                            this.choosedFilters.includes(tag.id)
+                        )
+                );
+                const newProjects = filteredProjects.slice(
+                    0,
+                    this.projectsNumber
+                );
+
+                this.setProjects(newProjects);
+
+                this.hideLoadButton(
+                    filteredProjects.length,
+                    this.projectsNumber
+                );
+            } else {
+                const newProjects = projectsData.slice(0, this.projectsNumber);
+
+                this.setProjects(newProjects);
+
+                this.hideLoadButton(projectsData.length, this.projectsNumber);
+            }
+        }
+    };
+
+    public loadMoreProjects = async () => {
+        const newPage = this.page + 1;
+        this.dispatch(setPage(newPage));
+
+        const showMore = document.getElementById("show_more");
+
+        if (!this.staticData) {
+            if (this.choosedFilters.length > 0) {
+                const postUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}${this.projectUrl}?page=${newPage}&size=${this.projectsNumber}`;
+
+                await axios
+                    .post(postUrl, {
+                        filter_types: this.choosedFilters,
+                    })
+                    .then((res) => {
+                        if (showMore) {
+                            if (res.data.length > 0) {
+                                const newArray: any[any] = [
+                                    ...this.projects,
+                                    ...res.data,
+                                ];
+                                this.setProjects(newArray);
+                                this.hideLoadButton(
+                                    res.data.length,
+                                    this.projectsNumber
+                                );
+                            } else {
+                                showMore.style.display = "none";
+                            }
+                        }
+                    });
+            } else {
+                const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}${this.projectUrl}?page=${newPage}&size=${this.projectsNumber}`;
+
+                await axios.get(getUrl).then((res) => {
+                    if (showMore) {
+                        if (res.data.length > 0) {
+                            const newArray: any[any] = [
+                                ...this.projects,
+                                ...res.data,
+                            ];
+                            this.setProjects(newArray);
+                            this.hideLoadButton(
+                                res.data.length,
+                                this.projectsNumber
+                            );
+                        } else {
+                            showMore.style.display = "none";
+                        }
+                    }
+                });
+            }
+        } else {
+            const sliceFrom = newPage * this.projectsNumber;
+            const sliceTo = newPage * this.projectsNumber + this.projectsNumber;
+            if (this.choosedFilters.length > 0) {
+                const filteredProjects = projectsData.filter(
+                    (item: ProjectType) =>
+                        item.tags.some((tag: Tag) =>
+                            this.choosedFilters.includes(tag.id)
+                        )
+                );
+                const newProjects = filteredProjects.slice(sliceFrom, sliceTo);
+
+                this.setProjects(newProjects);
+                this.hideLoadButton(newProjects.length, this.projectsNumber);
+            } else {
+                const newProjects = projectsData.slice(sliceFrom, sliceTo);
+
+                this.setProjects(newProjects);
+                this.hideLoadButton(newProjects.length, this.projectsNumber);
+            }
+        }
+    };
+}
+
+export default ProjectsController;

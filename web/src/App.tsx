@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import Routes from "./router/routes";
 import themeController from "./utils/themeController";
 
 const App = () => {
     const theme = useSelector((state: any) => state.themeReducer.theme);
-    const dispatch = useDispatch();
     const location = useLocation();
-    const [windowWidth, setWindowWidth] = useState<any>(null);
+    const [windowWidth, setWindowWidth] = useState<unknown>(null);
 
     window.addEventListener("mousemove", (e) => {
         setTimeout(() => {

@@ -145,7 +145,7 @@ const MakeOrderFirstPart = ({ control }: any) => {
                         ))}
                 </form>
                 <p className="error">
-                    {errors.project_services?.message as any}
+                    {errors.project_services?.message as string}
                 </p>
             </div>
 
@@ -186,7 +186,7 @@ const MakeOrderFirstPart = ({ control }: any) => {
                             </div>
                         ))}
                 </div>
-                <p className="error">{errors.budget_id?.message as any}</p>
+                <p className="error">{errors.budget_id?.message as string}</p>
             </div>
 
             <div className="make-order-category">

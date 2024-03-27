@@ -3,12 +3,35 @@ import Offer from "../../../components/UI/OfferTemplate";
 import "../../../styles/components/pages/main/WCOC.scss";
 import Button from "../../UI/Button";
 
-import javascript from "../../../assets/javascript.png";
-import python from "../../../assets/python.png";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { offersData } from "../../../data/offersData";
 import { paths } from "../../../router/routes";
+
+export type OfferType = {
+    id: number;
+    name: string;
+    description: string;
+    image: string;
+};
 
 const WCOC = () => {
     const navigate = useNavigate();
+    const [offers, setOffers] = useState<OfferType[]>([]);
+    const staticData = useSelector(
+        (state: any) => state.staticReducer.staticData
+    );
+
+    const getOffers = async () => {
+        if (!staticData) {
+        } else {
+            setOffers(offersData);
+        }
+    };
+
+    useEffect(() => {
+        getOffers();
+    }, []);
 
     return (
         <div id="why-us" className="we-can-offer-block">
@@ -31,51 +54,15 @@ const WCOC = () => {
             </div>
 
             <div className="we-can-offer-content">
-                <Offer
-                    name="dsadasdsa"
-                    description="dsadasdas"
-                    image={python}
-                />
-                <Offer
-                    name="dsada"
-                    description="ffffffffff"
-                    image={javascript}
-                />
-                <Offer
-                    name="dsadasdsa"
-                    description="dsadasdas"
-                    image={python}
-                />
-                <Offer
-                    name="dsada"
-                    description="ffffffffff"
-                    image={javascript}
-                />
-                <Offer
-                    name="dsadasdsa"
-                    description="dsadasdas"
-                    image={python}
-                />
-                <Offer
-                    name="dsada"
-                    description="ffffffffff"
-                    image={javascript}
-                />
-                <Offer
-                    name="dsadasdsa"
-                    description="dsadasdas"
-                    image={python}
-                />
-                <Offer
-                    name="dsada"
-                    description="ffffffffff"
-                    image={javascript}
-                />
-                <Offer
-                    name="dsada"
-                    description="ffffffffff"
-                    image={javascript}
-                />
+                {offers &&
+                    offers.map((offer: OfferType) => (
+                        <Offer
+                            key={offer.id}
+                            name={offer.name}
+                            description={offer.description}
+                            image={offer.image}
+                        />
+                    ))}
             </div>
         </div>
     );

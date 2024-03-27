@@ -1,19 +1,41 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Project from "../../../components/UI/ProjectTemplate";
-import { setPage } from "../../../redux/actions";
+import { useNavigate } from "react-router-dom";
+import Project, { Tag } from "../../../components/UI/ProjectTemplate";
+import { filterTypes } from "../../../data/filterTypes";
 import "../../../styles/components/pages/main/PortfolioBlock.scss";
 import { initParallaxEffect } from "../../../utils/parallax_effect";
+import ProjectsController from "../../../utils/projectsControllet";
 import Button from "../../UI/Button";
 
+export type ProjectType = {
+    id: number;
+    name: string;
+    tags: Tag[];
+    preview_image: string;
+    source_link: string;
+};
+
+export type FilterType = {
+    id: number;
+    name: string;
+};
+
 const PortfolioBlock = () => {
-    const [projects, setProjects] = useState([]);
-    const [filters, setFilters] = useState([]);
+    const [projects, setProjects] = useState<ProjectType[]>([]);
+    const [filters, setFilters] = useState<FilterType[]>([]);
     const [choosedFilters, setChoosedFilters] = useState<number[]>([]);
     const [projectUrl, setProjectUrl] = useState("/api/v1/projects/all/");
-    const page = useSelector((state: any) => state.pageReducer.page);
+
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const page = useSelector((state: any) => state.pageReducer.page);
+    const staticData = useSelector(
+        (state: any) => state.staticReducer.staticData
+    );
+
+    const projectsNumber = 10;
 
     const parallaxOptions = initParallaxEffect(
         ".side-text",
@@ -21,139 +43,25 @@ const PortfolioBlock = () => {
         "rotate(-90deg)"
     );
 
-    useEffect(() => {
-        document
-            .querySelector(".main-page")
-            ?.addEventListener("scroll", parallaxOptions);
-    }, []);
+    const projectsController = new ProjectsController(
+        projects,
+        projectUrl,
+        setProjects,
+        setProjectUrl,
+        page,
+        projectsNumber,
+        choosedFilters
+    );
 
-    useEffect(() => {
-        if (choosedFilters.length > 0) {
-            dispatch(setPage(0));
-            setProjectUrl("/api/v1/projects/filter_by_filter_types/");
-
-            axios
-                .post(
-                    process.env.REACT_APP_BACKEND_DOMAIN +
-                        "/api/v1/projects/filter_by_filter_types/?page=0&size=10",
-                    {
-                        filter_types: choosedFilters,
-                    }
-                )
-                .then((res) => {
-                    setProjects(res.data);
-                    const showMore = document.getElementById("show_more");
-
-                    if (res.data.length < 1) {
-                        if (showMore) {
-                            showMore.style.display = "none";
-                        }
-                    } else {
-                        if (showMore) {
-                            showMore.style.display = "flex";
-                        }
-                    }
-                });
-        } else {
-            dispatch(setPage(0));
-            setProjectUrl("/api/v1/projects/all/");
-
-            axios
-                .get(
-                    process.env.REACT_APP_BACKEND_DOMAIN +
-                        "/api/v1/projects/all/?page=0&size=10"
-                )
-                .then((res) => {
-                    setProjects(res.data);
-                    const showMore = document.getElementById("show_more");
-
-                    if (res.data.length < 1) {
-                        if (showMore) {
-                            showMore.style.display = "none";
-                        }
-                    } else {
-                        if (showMore) {
-                            showMore.style.display = "flex";
-                        }
-                    }
-                });
-        }
-    }, [choosedFilters]);
-
-    useEffect(() => {
-        axios
-            .get(
-                process.env.REACT_APP_BACKEND_DOMAIN +
-                    projectUrl +
-                    `?page=${page}&size=10`
-            )
-            .then((res) => {
-                setProjects(res.data);
-            });
-
-        axios
-            .get(
-                `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/filter_types`
-            )
-            .then((res) => {
+    const getFilterTypes = async () => {
+        if (!staticData) {
+            const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/filter_types`;
+            await axios.get(getUrl).then((res) => {
                 setFilters(res.data);
             });
-    }, []);
-
-    const loadMoreProjects = async (e: any) => {
-        const newPage = page + 1;
-        dispatch(setPage(newPage));
-
-        const showMore = e.target;
-
-        if (choosedFilters.length > 0) {
-            await axios
-                .post(
-                    process.env.REACT_APP_BACKEND_DOMAIN +
-                        projectUrl +
-                        `?page=${newPage}&size=10`,
-                    {
-                        filter_types: choosedFilters,
-                    }
-                )
-                .then((res) => {
-                    if (res.data.length > 0) {
-                        const newArray: any[any] = [...projects, ...res.data];
-                        setProjects(newArray);
-                        if (res.data.length < 10) {
-                            showMore.style.display = "none";
-                        }
-                    } else {
-                        showMore.style.display = "none";
-                    }
-                });
         } else {
-            await axios
-                .get(
-                    process.env.REACT_APP_BACKEND_DOMAIN +
-                        projectUrl +
-                        `?page=${newPage}&size=10`
-                )
-                .then((res) => {
-                    if (res.data.length > 0) {
-                        const newArray: any[any] = [...projects, ...res.data];
-                        setProjects(newArray);
-                        if (res.data.length < 10) {
-                            showMore.style.display = "none";
-                        }
-                    } else {
-                        showMore.style.display = "none";
-                    }
-                });
+            setFilters(filterTypes);
         }
-    };
-
-    type ProjectType = {
-        id: number;
-        name: string;
-        tags: string[];
-        preview_image: string;
-        source_link: string;
     };
 
     const dropDownToggle = (e: any) => {
@@ -194,6 +102,17 @@ const PortfolioBlock = () => {
         }
     };
 
+    useEffect(() => {
+        projectsController.getProjectsByChoosedFilters();
+    }, [choosedFilters]);
+
+    useEffect(() => {
+        projectsController.getProjectsInitial();
+        getFilterTypes();
+
+        window.addEventListener("scroll", parallaxOptions);
+    }, []);
+
     return (
         <div id="portfolio" className="projects-container-header">
             <div className="projects-text">
@@ -227,9 +146,9 @@ const PortfolioBlock = () => {
                     className="drop-down-list"
                 >
                     {filters &&
-                        filters.map((filter: any) => (
+                        filters.map((filter: FilterType) => (
                             <div
-                                id={filter.id}
+                                id={filter.id.toString()}
                                 onClick={changeChoosedFiltersList}
                                 className="drop-down-item"
                                 key={filter.id}
@@ -263,8 +182,8 @@ const PortfolioBlock = () => {
             <Button
                 text="SHOW MORE"
                 id="show_more"
-                callback={(e: any) => {
-                    loadMoreProjects(e);
+                callback={() => {
+                    projectsController.loadMoreProjects();
                 }}
             />
         </div>
