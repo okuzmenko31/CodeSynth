@@ -5,7 +5,6 @@ import { Tag } from "../components/UI/ProjectTemplate";
 import { ProjectType } from "../components/pages/main/PortfolioBlock";
 import { projectsData } from "../data/projects";
 import { setPage } from "../redux/actions";
-import { paths } from "../router/routes";
 
 class ProjectsController {
     private dispatch = useDispatch();
@@ -13,8 +12,6 @@ class ProjectsController {
     private staticData = useSelector(
         (state: any) => state.staticReducer.staticData
     );
-
-    private navigate = useNavigate();
 
     constructor(
         private projects: ProjectType[],
@@ -26,23 +23,12 @@ class ProjectsController {
         private choosedFilters: number[]
     ) {}
 
-    private hideLoadButton = (
-        length: number,
-        threshold: number,
-        elementIdToScrollTo: string = "portfolio"
-    ) => {
+    private hideLoadButton = (length: number, threshold: number) => {
         const showMore = document.getElementById("show_more");
 
         if (showMore) {
             if (length > 0 && length < threshold) {
                 showMore.style.display = "none";
-                if (elementIdToScrollTo) {
-                    const elementToScroll =
-                        document.getElementById(elementIdToScrollTo);
-                    if (elementToScroll) {
-                        elementToScroll.scrollIntoView({ behavior: "smooth" });
-                    }
-                }
             } else if (length === 0) {
                 showMore.style.display = "none";
             } else {
@@ -186,6 +172,7 @@ class ProjectsController {
         } else {
             const sliceFrom = newPage * this.projectsNumber;
             const sliceTo = newPage * this.projectsNumber + this.projectsNumber;
+
             if (this.choosedFilters.length > 0) {
                 const filteredProjects = projectsData.filter(
                     (item: ProjectType) =>
@@ -193,15 +180,22 @@ class ProjectsController {
                             this.choosedFilters.includes(tag.id)
                         )
                 );
-                const newProjects = filteredProjects.slice(sliceFrom, sliceTo);
+                const counter = filteredProjects.slice(
+                    sliceFrom,
+                    sliceTo
+                ).length;
+
+                const newProjects = filteredProjects.slice(0, sliceTo);
 
                 this.setProjects(newProjects);
-                this.hideLoadButton(newProjects.length, this.projectsNumber);
+                this.hideLoadButton(counter, this.projectsNumber);
             } else {
-                const newProjects = projectsData.slice(sliceFrom, sliceTo);
+                const newProjects = projectsData.slice(0, sliceTo);
+
+                const counter = projectsData.slice(sliceFrom, sliceTo).length;
 
                 this.setProjects(newProjects);
-                this.hideLoadButton(newProjects.length, this.projectsNumber);
+                this.hideLoadButton(counter, this.projectsNumber);
             }
         }
     };

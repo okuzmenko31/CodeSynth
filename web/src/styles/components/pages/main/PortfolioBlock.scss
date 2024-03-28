@@ -36,6 +36,7 @@
     border-bottom: 2px solid transparent;
     padding: 0.7rem 1.25rem 0.75rem;
     opacity: 0.5;
+    user-select: none;
     cursor: pointer;
     transition: 0.3s;
 
@@ -52,49 +53,50 @@
         opacity: 1;
         border-bottom: 2px solid var(--white);
     }
-}
 
-.drop-down-list {
-    position: absolute;
-    width: 200px;
-    max-height: 200px;
-    display: flex;
-    overflow-y: auto;
-    overflow-y: hidden;
-    font-size: 20px;
-    flex-direction: column;
-    opacity: 0;
-    top: 110%;
-    right: 0;
-    background-color: var(--white);
-    z-index: 2;
-    border-radius: 6px;
-    padding: 5px 0;
-    box-shadow: 0 0 5px var(--black);
-    transform: scale(0%);
-    transition: 0.3s;
+    &-list {
+        position: absolute;
+        width: 200px;
+        max-height: 200px;
+        display: flex;
+        overflow-y: auto;
+        overflow-y: hidden;
+        font-size: 20px;
+        flex-direction: column;
+        opacity: 0;
+        top: 110%;
+        right: 0;
+        background-color: var(--white);
+        z-index: 2;
+        border-radius: 6px;
+        padding: 5px 0;
+        box-shadow: 0 0 5px var(--black);
+        transform: scale(0%);
+        transition: 0.3s;
 
-    &.active {
-        transform: scale(100%);
-        opacity: 1;
+        &.active {
+            transform: scale(100%);
+            opacity: 1;
+        }
     }
-}
 
-.drop-down-item {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    color: var(--black);
-    padding: 0 35px;
-    box-sizing: border-box;
-    overflow-wrap: anywhere;
-    cursor: pointer;
-    transition: 0.3s;
+    &-item {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        color: var(--black);
+        padding: 0 35px;
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+        user-select: none;
+        cursor: pointer;
+        transition: 0.3s;
 
-    &:hover {
-        background-color: var(--black) 1e;
+        &:hover {
+            background-color: var(--black) 1e;
+        }
     }
 }
 
@@ -137,6 +139,7 @@
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: var(--additional-color-3);
     text-transform: uppercase;
+    user-select: none;
 }
 
 @media (max-width: 991px) {

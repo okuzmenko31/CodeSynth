@@ -13,10 +13,10 @@ export const paths = {
 };
 
 const routerRoutes = [
-    { path: paths.main, element: Main },
-    { path: paths.makeOrder, element: MakeOrder },
-    { path: paths.project, element: MakeOrder },
-    { path: "*", element: PageNotFound },
+    { path: paths.main, element: <Main /> },
+    { path: paths.makeOrder, element: <MakeOrder /> },
+    { path: paths.project, element: <MakeOrder /> },
+    { path: "*", element: <PageNotFound /> },
 ];
 
 const InitRoutes = () => (
@@ -24,11 +24,7 @@ const InitRoutes = () => (
         <Routes>
             {routerRoutes &&
                 routerRoutes.map((el: any, index: number) => (
-                    <Route
-                        key={index}
-                        path={el.path}
-                        element={<el.element />}
-                    />
+                    <Route key={index} path={el.path} element={el.element} />
                 ))}
         </Routes>
     </RouterWrapper>

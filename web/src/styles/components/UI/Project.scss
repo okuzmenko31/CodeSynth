@@ -3,11 +3,11 @@
     flex-direction: column;
     gap: 20px;
     width: 100%;
-}
 
-.project-container p {
-    margin: 0;
-    overflow-wrap: anywhere;
+    & p {
+        margin: 0;
+        overflow-wrap: anywhere;
+    }
 }
 
 .inner-container {
@@ -47,6 +47,7 @@
     flex-shrink: 0;
     flex: 1;
     overflow: hidden;
+    cursor: pointer;
     transition: 0.3s;
 }
 
@@ -74,33 +75,37 @@
     transition: 0.3s;
 }
 
-.project-link-button-icon {
-    width: 31px;
-    fill: var(--white);
-    transition: 0.3s;
-}
+.project-link {
+    &-button-icon {
+        width: 31px;
+        fill: var(--white);
+        transition: 0.3s;
+    }
 
-.project-link:hover {
-    background-color: var(--white);
-    border: 1px solid var(--additional-color-3);
+    &:hover {
+        background-color: var(--white);
+        border: 1px solid var(--additional-color-3);
 
-    & .project-link-button-icon {
-        fill: var(--black);
+        & .project-link-button-icon {
+            fill: var(--black);
+        }
     }
 }
 
-.project-checkout-button-icon {
-    width: 20px;
-    fill: var(--white);
-    transition: 0.3s;
-}
+.project-checkout {
+    &-button-icon {
+        width: 20px;
+        fill: var(--white);
+        transition: 0.3s;
+    }
 
-.project-checkout:hover {
-    background-color: var(--white);
-    border: 1px solid var(--additional-color-3);
+    &:hover {
+        background-color: var(--white);
+        border: 1px solid var(--additional-color-3);
 
-    & .project-checkout-button-icon {
-        fill: var(--black);
+        & .project-checkout-button-icon {
+            fill: var(--black);
+        }
     }
 }
 
@@ -140,6 +145,7 @@
     & img {
         max-width: 30px;
         max-height: 30px;
+        user-select: none;
     }
 
     &:hover {
@@ -161,7 +167,7 @@
 
 @media (max-width: 480px) {
     .project-container {
-        width: 70%;
+        width: 100%;
     }
 
     .project__btn {

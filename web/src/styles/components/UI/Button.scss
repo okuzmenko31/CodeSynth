@@ -8,6 +8,7 @@
     justify-content: center;
     margin: 0;
     flex-shrink: 0;
+    user-select: none;
     cursor: pointer;
     background: none;
     border: none;
@@ -44,8 +45,22 @@
         transform: translate(10px, 10px);
         transition: 0.3s;
     }
+}
 
-    &:hover {
+@media (min-width: 1199px) {
+    .button:hover {
+        & .button-foreground {
+            transform: translate(-2px, -2px);
+        }
+
+        & .button-background {
+            transform: translate(12px, 12px);
+        }
+    }
+}
+
+@media (max-width: 1198px) {
+    .button:active {
         & .button-foreground {
             transform: translate(-2px, -2px);
         }

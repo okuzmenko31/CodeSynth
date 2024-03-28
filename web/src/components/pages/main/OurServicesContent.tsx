@@ -1,11 +1,29 @@
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Service from "../../../components/UI/ServicesTemplate";
+import { ServiceType, servicesData } from "../../../data/servicesData";
 import { paths } from "../../../router/routes";
 import "../../../styles/components/pages/main/OurServicesContent.scss";
 import Button from "../../UI/Button";
 
 const OurServicesContent = () => {
     const navigate = useNavigate();
+    const [services, setServices] = useState<ServiceType[]>([]);
+    const staticData = useSelector(
+        (state: any) => state.staticReducer.staticData
+    );
+
+    const getServices = async () => {
+        if (!staticData) {
+        } else {
+            setServices(servicesData);
+        }
+    };
+
+    useEffect(() => {
+        getServices();
+    }, []);
     return (
         <div id="services" className="our-services">
             <div className="our-services-text">
@@ -33,26 +51,14 @@ const OurServicesContent = () => {
                 </div>
 
                 <div className="services-items-wrapper">
-                    <Service
-                        name="service"
-                        description="lol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xd"
-                    />
-                    <Service name="service" description="lol test xd" />
-                    <Service
-                        name="service"
-                        description="lol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xd"
-                    />
-                    <Service name="service" description="lol test xd" />
-                    <Service
-                        name="service"
-                        description="lol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xd"
-                    />
-                    <Service name="service" description="lol test xd" />
-                    <Service
-                        name="service"
-                        description="lol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xdlol test xd"
-                    />
-                    <Service name="service" description="lol test xd" />
+                    {services &&
+                        services.map((service: ServiceType) => (
+                            <Service
+                                key={service.id}
+                                name={service.name}
+                                description={service.description}
+                            />
+                        ))}
                 </div>
             </div>
         </div>
