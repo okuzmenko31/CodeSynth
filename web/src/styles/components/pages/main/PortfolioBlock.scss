@@ -44,7 +44,7 @@
         width: 25px;
     }
 
-    &:hover {
+    &:active {
         opacity: 1;
         border-bottom: 2px solid var(--white);
     }
@@ -94,7 +94,7 @@
         cursor: pointer;
         transition: 0.3s;
 
-        &:hover {
+        &:active {
             background-color: var(--black) 1e;
         }
     }
@@ -240,6 +240,19 @@
 
         & p {
             max-width: 100%;
+        }
+    }
+}
+
+@media (hover: hover) {
+    .drop-down {
+        &:hover {
+            opacity: 1;
+            border-bottom: 2px solid var(--white);
+        }
+
+        &-item:hover {
+            background-color: var(--black) 1e;
         }
     }
 }

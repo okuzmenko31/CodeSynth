@@ -1,4 +1,5 @@
 import { CSSProperties } from "react";
+import { useSelector } from "react-redux";
 import buttonHover from "../../sounds/button-hover.mp3";
 import buttonLeave from "../../sounds/button-leave.mp3";
 import "../../styles/components/UI/Button.scss";
@@ -12,23 +13,28 @@ type ButtonProps = {
 
 const Button = ({ text, callback, id, style }: ButtonProps) => {
     const volume = 0.4;
+    const touchDevice = useSelector(
+        (state: any) => state.pageReducer.touchDevice
+    );
+
+    const startEvent = touchDevice ? "onTouchStart" : "onMouseEnter";
+    const endEvent = touchDevice ? "onTouchEnd" : "onMouseLeave";
+
+    const playSound = (leave: boolean = false) => {
+        const audio = document.createElement("audio");
+        audio.src = leave ? buttonLeave : buttonHover;
+        audio.volume = volume;
+        audio.play();
+        audio.remove();
+    };
+
     return (
         <button
             style={style ? style : undefined}
-            id={id ? id : ""}
-            onMouseLeave={() => {
-                const audio = document.createElement("audio");
-                audio.src = buttonHover;
-                audio.volume = volume;
-                audio.play();
-                audio.remove();
-            }}
-            onMouseEnter={() => {
-                const audio = document.createElement("audio");
-                audio.src = buttonLeave;
-                audio.volume = volume;
-                audio.play();
-                audio.remove();
+            id={id ?? ""}
+            {...{
+                [startEvent]: playSound,
+                [endEvent]: playSound(true),
             }}
             className="button"
             onClick={callback}
