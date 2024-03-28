@@ -145,10 +145,7 @@ body,
     &::before {
         position: absolute;
         content: attr(data-text);
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        top: 50%;
         background: linear-gradient(
             90deg,
             var(--secondary-color) 0%,
@@ -156,10 +153,11 @@ body,
             var(--transparent-color) 100%
         );
         background-clip: text;
+        transform: translateY(-50%);
+        opacity: 0;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         transition: opacity 0.3s ease-in-out;
-        opacity: 0;
     }
 
     &::after {
@@ -191,16 +189,6 @@ body,
         opacity: 0;
         content: "";
         user-select: none;
-    }
-
-    &:hover {
-        &::before {
-            opacity: 1;
-        }
-
-        &::after {
-            opacity: 1;
-        }
     }
 }
 
@@ -331,6 +319,30 @@ textarea {
         height: 0;
         filter: none;
         -webkit-filter: none;
+    }
+}
+
+@media (min-width: 1199px) {
+    .codesynth-text:hover {
+        &::before {
+            opacity: 1;
+        }
+
+        &::after {
+            opacity: 1;
+        }
+    }
+}
+
+@media (max-width: 1198px) {
+    .codesynth-text:active {
+        &::before {
+            opacity: 1;
+        }
+
+        &::after {
+            opacity: 1;
+        }
     }
 }
 

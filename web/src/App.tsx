@@ -25,9 +25,9 @@ const App = () => {
 
     useEffect(() => {
         if (theme === "light") {
-            document.body.classList.add("light");
+            document.documentElement.classList.add("light");
         } else {
-            document.body.classList.remove("light");
+            document.documentElement.classList.remove("light");
         }
 
         themeController.setLocalStorageTheme(theme);

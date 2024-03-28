@@ -93,6 +93,26 @@ export const stackData: Stack[] = [
                 name: "Less",
                 image: "https://lesscss.org/public/img/less_logo.png",
             },
+            {
+                name: "Ajax",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/AJAX_logo_by_gengns.svg/1200px-AJAX_logo_by_gengns.svg.png",
+            },
+            {
+                name: "JQuery",
+                image: "https://store.shopware.com/media/image/8b/8f/e3/file646cb188c7fb8.png",
+            },
+            {
+                name: "Bootstrap",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/800px-Bootstrap_logo.svg.png",
+            },
+            {
+                name: "Tailwind CSS",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/320px-Tailwind_CSS_Logo.svg.png",
+            },
+            {
+                name: "Figma",
+                image: "https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg",
+            },
         ],
     },
 ];

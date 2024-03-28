@@ -4,14 +4,14 @@ import { stackData } from "../../../data/stack";
 import "../../../styles/components/pages/main/OurStackBlock.scss";
 import Language from "../../UI/LanguageTemplate";
 
-export type StackTechnologies = {
+export type StackTechnology = {
     name: string;
     image: string;
 };
 
 export type Stack = {
     name: string;
-    technologies: StackTechnologies[];
+    technologies: StackTechnology[];
 };
 
 const OurStackBlock = () => {
@@ -36,12 +36,12 @@ const OurStackBlock = () => {
         <div className="our-stack-block">
             <div className="our-stack-title">
                 <p className="big-text">OUR STACK</p>
-                <p className="small-text">Programming languages which we use</p>
+                <p className="small-text">Technologies which we use</p>
             </div>
 
             <div className="our-stack-content">
                 {stack &&
-                    stack.map((tech, index) => (
+                    stack.map((tech: Stack, index: number) => (
                         <Language
                             key={index}
                             name={tech.name}
