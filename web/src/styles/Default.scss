@@ -182,6 +182,16 @@ body,
         pointer-events: none;
     }
 
+    &:active {
+        &::before {
+            opacity: 1;
+        }
+
+        &::after {
+            opacity: 1;
+        }
+    }
+
     &.no-table::after {
         display: none;
         width: 0;
@@ -264,11 +274,11 @@ textarea {
         }
 
         & svg,
-        p {
+        & p {
             pointer-events: none;
         }
 
-        &:hover {
+        &:active {
             fill: var(--primary-color);
 
             & p {
@@ -301,9 +311,6 @@ textarea {
     z-index: 0;
 }
 
-@media (min-width: 1200px) and (max-width: 1399px) {
-}
-
 @media (max-width: 1199px) {
     .codesynth-text::after {
         position: absolute;
@@ -319,30 +326,6 @@ textarea {
         height: 0;
         filter: none;
         -webkit-filter: none;
-    }
-}
-
-@media (min-width: 1199px) {
-    .codesynth-text:hover {
-        &::before {
-            opacity: 1;
-        }
-
-        &::after {
-            opacity: 1;
-        }
-    }
-}
-
-@media (max-width: 1198px) {
-    .codesynth-text:active {
-        &::before {
-            opacity: 1;
-        }
-
-        &::after {
-            opacity: 1;
-        }
     }
 }
 
@@ -407,5 +390,25 @@ textarea {
 
     .small-text {
         font-size: 20px;
+    }
+}
+
+@media (hover: hover) {
+    .codesynth-text:hover {
+        &::before {
+            opacity: 1;
+        }
+
+        &::after {
+            opacity: 1;
+        }
+    }
+
+    .file-type .upload:hover {
+        fill: var(--primary-color);
+
+        & p {
+            color: var(--primary-color);
+        }
     }
 }

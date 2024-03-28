@@ -16,7 +16,7 @@
     width: 100%;
     transition: 0.3s;
 
-    &:hover {
+    &:active {
         & .project-image-preview {
             transform: rotate(-5deg);
         }
@@ -82,7 +82,7 @@
         transition: 0.3s;
     }
 
-    &:hover {
+    &:active {
         background-color: var(--white);
         border: 1px solid var(--additional-color-3);
 
@@ -99,7 +99,7 @@
         transition: 0.3s;
     }
 
-    &:hover {
+    &:active {
         background-color: var(--white);
         border: 1px solid var(--additional-color-3);
 
@@ -148,7 +148,7 @@
         user-select: none;
     }
 
-    &:hover {
+    &:active {
         background-color: var(--additional-color-4);
     }
 }
@@ -181,5 +181,35 @@
 
     .project-link-button-icon {
         width: 21px;
+    }
+}
+
+@media (hover: hover) {
+    .project-tag:hover {
+        background-color: var(--additional-color-4);
+    }
+
+    .project-checkout:hover {
+        background-color: var(--white);
+        border: 1px solid var(--additional-color-3);
+
+        & .project-checkout-button-icon {
+            fill: var(--black);
+        }
+    }
+
+    .project-link :hover {
+        background-color: var(--white);
+        border: 1px solid var(--additional-color-3);
+
+        & .project-link-button-icon {
+            fill: var(--black);
+        }
+    }
+
+    .inner-container:hover {
+        & .project-image-preview {
+            transform: rotate(-5deg);
+        }
     }
 }
