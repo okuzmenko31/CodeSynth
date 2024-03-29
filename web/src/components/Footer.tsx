@@ -25,48 +25,25 @@ const Footer = () => {
 
             <div className="categories">
                 <ul className="category">
-                    <p className="mid-text">LOS ANGELEAS</p>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                </ul>
-
-                <ul className="category">
-                    <p className="mid-text">LOS ANGELEAS</p>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                </ul>
-
-                <ul className="category">
-                    <p className="mid-text">LOS ANGELEAS</p>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                </ul>
-
-                <ul className="category">
-                    <p className="mid-text">LOS ANGELEAS</p>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                </ul>
-
-                <ul className="category">
-                    <p className="mid-text">LOS ANGELEAS</p>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
-                    <li className="small-text">Fsadasas</li>
+                    <p className="mid-text">CONTACTS</p>
+                    <li className="small-text">
+                        <Link
+                            to={"mailto:olegkuzmenko2005@gmail.com"}
+                            target="_blank"
+                        >
+                            olegkuzmenko2005@gmail.com
+                        </Link>
+                    </li>
+                    <li className="small-text">
+                        <Link to={"https://t.me/venrute_xx"} target="_blank">
+                            @venrute_xx
+                        </Link>
+                    </li>
+                    <li className="small-text">
+                        <Link to={"https://t.me/las_venturos"} target="_blank">
+                            @las_venturos
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </footer>

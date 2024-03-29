@@ -18,8 +18,8 @@ export const projectsData: ProjectType[] = [
                 img: "https://pbs.twimg.com/profile_images/1498641868397191170/6qW2XkuI_400x400.png",
             },
         ],
-        preview_image: "string",
-        source_link: "string",
+        preview_image: "https://string.com",
+        source_link: "https://string.com",
     },
     {
         id: 3,

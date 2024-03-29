@@ -37,7 +37,7 @@ const Project = ({
             <div className="inner-container">
                 <div
                     className="project-block"
-                    onClick={() => navigate("checkout_link")}
+                    onClick={() => navigate(`${checkout_link}`)}
                 >
                     <img
                         alt={name}
