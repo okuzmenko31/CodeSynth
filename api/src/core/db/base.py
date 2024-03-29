@@ -1,7 +1,6 @@
 import uuid
 
-from sqlalchemy.orm import as_declarative
-from sqlalchemy.orm import declared_attr
+from sqlalchemy.orm import as_declarative, declared_attr
 
 
 @as_declarative()

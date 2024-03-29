@@ -4,9 +4,12 @@ from abc import abstractmethod
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..db.session import create_async_session_maker
+from ...repositories.user_repo import UserRepository
 
 
 class AbstractUnitOfWork(ABC):
+    user: UserRepository
+
     @abstractmethod
     async def __aenter__(self):
         raise NotImplementedError()
@@ -38,6 +41,8 @@ class UnitOfWork(AbstractUnitOfWork):
 
     async def __aenter__(self):
         self.session: AsyncSession = self.session_factory()
+
+        self.user = UserRepository(self.session)
 
     async def __aexit__(self, *args):
         await self.rollback()
