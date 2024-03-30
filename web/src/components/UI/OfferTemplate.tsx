@@ -16,7 +16,7 @@ const Service = ({
             </div>
 
             <div className="offer-block-text">
-                <p className="big-text">{name}</p>
+                <p className="mid-text">{name}</p>
                 <p className="small-text">{description}</p>
             </div>
         </div>
