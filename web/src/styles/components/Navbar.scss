@@ -23,19 +23,6 @@
     overflow-x: hidden;
     transition: 0.3s;
 
-    &.active {
-        display: flex;
-        height: 100%;
-        top: 0 !important;
-        flex-direction: column;
-
-        & .navbar-first-part,
-        .navbar-buttons-last,
-        .navbar-buttons {
-            flex-direction: column;
-        }
-    }
-
     & .logo {
         display: flex;
         gap: 10px;
@@ -171,9 +158,14 @@
 
     #navbar {
         display: none;
+        padding: 0;
+        gap: 20px;
+        flex-direction: column;
 
         &.active {
             display: flex;
+            height: 100vh;
+            bottom: 0;
             justify-content: center;
 
             & .logo {
@@ -188,16 +180,12 @@
         }
     }
 
-    #navbar {
-        padding: 0;
-        gap: 20px;
-    }
-
     .navbar-first-part,
     .navbar-buttons-last,
     .navbar-buttons {
         width: 100%;
         gap: 20px;
+        flex-direction: column;
 
         & p {
             width: 100%;
@@ -244,15 +232,6 @@
         width: 35px;
         height: 35px;
     }
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-}
-
-@media (min-width: 651px) and (max-width: 767px) {
-}
-
-@media (min-width: 481px) and (max-width: 650px) {
 }
 
 @media (max-width: 480px) {

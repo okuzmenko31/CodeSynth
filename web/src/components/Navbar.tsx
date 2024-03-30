@@ -8,6 +8,7 @@ import { paths } from "../router/routes";
 import switchOff from "../sounds/switch-off.mp3";
 import switchOn from "../sounds/switch-on.mp3";
 import "../styles/components/Navbar.scss";
+import { playSound } from "../utils/playSound";
 import NavbarButton from "./UI/NavbarButton";
 
 const Navbar = () => {
@@ -15,6 +16,32 @@ const Navbar = () => {
     const navigate = useNavigate();
     const theme = useSelector((state: any) => state.themeReducer.theme);
     const dispatch = useDispatch();
+    const touchDevice = useSelector(
+        (state: any) => state.pageReducer.touchDevice
+    );
+
+    const addEventListenerOnScroll = () => {
+        if (!touchDevice) {
+            let prevScrollpos = window.scrollY || window.pageYOffset;
+
+            window.addEventListener("scroll", () => {
+                const currentScrollPos = window.scrollY || window.pageYOffset;
+                const navbar = document.getElementById("navbar");
+
+                if (prevScrollpos > currentScrollPos) {
+                    if (navbar) {
+                        navbar.style.top = "0";
+                    }
+                } else {
+                    if (navbar && !navbar.classList.contains("active")) {
+                        navbar.style.top = "-25%";
+                    }
+                }
+
+                prevScrollpos = currentScrollPos;
+            });
+        }
+    };
 
     useEffect(() => {
         const elementId = location.hash.replace("#", "");
@@ -25,24 +52,9 @@ const Navbar = () => {
         }
     }, [location.pathname]);
 
-    let prevScrollpos = window.scrollY || window.pageYOffset;
-
-    window.addEventListener("scroll", function () {
-        const currentScrollPos = window.scrollY || window.pageYOffset;
-        const navbar = document.getElementById("navbar");
-
-        if (prevScrollpos > currentScrollPos) {
-            if (navbar) {
-                navbar.style.top = "0";
-            }
-        } else {
-            if (navbar && !navbar.classList.contains("active")) {
-                navbar.style.top = "-25%";
-            }
-        }
-
-        prevScrollpos = currentScrollPos;
-    });
+    useEffect(() => {
+        addEventListenerOnScroll();
+    }, [touchDevice, location.pathname]);
 
     const toggleNavbar = () => {
         const mobileButton = document.querySelector(".navbar-mobile-button");
@@ -126,13 +138,9 @@ const Navbar = () => {
                                 theme === "light" ? "dark" : "light";
                             dispatch(setTheme(newTheme));
 
-                            const audio = new Audio(
+                            playSound(
                                 newTheme === "light" ? switchOn : switchOff
                             );
-                            audio.volume = 0.5;
-                            audio.play();
-
-                            audio.remove();
                         }}
                     >
                         <svg
