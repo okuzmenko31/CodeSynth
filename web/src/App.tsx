@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setTouchDevice } from "./redux/actions";
 import Routes from "./router/routes";
 import themeController from "./utils/themeController";
 
 const App = () => {
     const theme = useSelector((state: any) => state.themeReducer.theme);
-    const location = useLocation();
-    const [windowWidth, setWindowWidth] = useState<unknown>(null);
+    const touchDevice = useSelector(
+        (state: any) => state.pageReducer.touchDevice
+    );
+    const dispatch = useDispatch();
 
     const moveCursor = (e: any) => {
         setTimeout(() => {
@@ -34,13 +36,27 @@ const App = () => {
     }, [theme]);
 
     useEffect(() => {
-        setWindowWidth(window.innerWidth);
-    }, [location.pathname]);
+        window.addEventListener("resize", () => {
+            dispatch(
+                setTouchDevice(window.matchMedia("(pointer: coarse)").matches)
+            );
+        });
+    }, []);
 
     return (
         <>
-            {(windowWidth as number) > 1199 && <div id="cursor-seeker"></div>}
+            {!touchDevice && <div id="cursor-seeker"></div>}
             <div className="App">
+                <div
+                    onClick={(e: any) => {
+                        e.currentTarget.remove();
+                    }}
+                    className="initial-screen"
+                >
+                    <p className="big-text">
+                        {touchDevice ? "Tap here" : "Click here"}
+                    </p>
+                </div>
                 <Routes />
             </div>
         </>

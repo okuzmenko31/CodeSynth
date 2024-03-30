@@ -33,8 +33,8 @@ const Button = ({ text, callback, id, style }: ButtonProps) => {
             style={style ? style : undefined}
             id={id ?? ""}
             {...{
-                [startEvent]: playSound,
-                [endEvent]: playSound(true),
+                [startEvent]: () => playSound(),
+                [endEvent]: () => playSound(true),
             }}
             className="button"
             onClick={callback}

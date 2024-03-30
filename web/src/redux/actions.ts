@@ -15,7 +15,7 @@ export const setPage = (value: number) => ({
     payload: value,
 });
 
-export const setTouchDevice = (value: number) => ({
+export const setTouchDevice = (value: boolean) => ({
     type: SET_TOUCH_DEVICE,
     payload: value,
 });
