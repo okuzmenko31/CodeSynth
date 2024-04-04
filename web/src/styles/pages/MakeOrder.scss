@@ -56,6 +56,11 @@
         margin: 0;
     }
 
+    & .small-text {
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+
     & p {
         max-width: 90%;
         overflow-wrap: anywhere;

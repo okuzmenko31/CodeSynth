@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { Tag } from "../components/UI/ProjectTemplate";
 import { ProjectType } from "../components/pages/main/PortfolioBlock";
 import { projectsData } from "../data/projects";
@@ -12,15 +11,15 @@ class ProjectsController {
     private staticData = useSelector(
         (state: any) => state.staticReducer.staticData
     );
+    private page = useSelector((state: any) => state.pageReducer.page);
 
     constructor(
         private projects: ProjectType[],
         private projectUrl: string,
         private setProjects: any,
         private setProjectUrl: any,
-        private page: number,
         private projectsNumber: number,
-        private choosedFilters: number[]
+        private chosenFilters: number[]
     ) {}
 
     private hideLoadButton = (length: number, threshold: number) => {
@@ -56,7 +55,7 @@ class ProjectsController {
 
     public getProjectsByChoosedFilters = async () => {
         if (!this.staticData) {
-            if (this.choosedFilters.length > 0) {
+            if (this.chosenFilters.length > 0) {
                 this.dispatch(setPage(0));
                 this.setProjectUrl("/api/v1/projects/filter_by_filter_types/");
 
@@ -64,7 +63,7 @@ class ProjectsController {
 
                 await axios
                     .post(postUrl, {
-                        filter_types: this.choosedFilters,
+                        filter_types: this.chosenFilters,
                     })
                     .then((res) => {
                         this.setProjects(res.data);
@@ -89,11 +88,11 @@ class ProjectsController {
         } else {
             this.dispatch(setPage(0));
 
-            if (this.choosedFilters.length > 0) {
+            if (this.chosenFilters.length > 0) {
                 const filteredProjects = projectsData.filter(
                     (item: ProjectType) =>
                         item.tags.some((tag: Tag) =>
-                            this.choosedFilters.includes(tag.id)
+                            this.chosenFilters.includes(tag.id)
                         )
                 );
                 const newProjects = filteredProjects.slice(
@@ -124,12 +123,12 @@ class ProjectsController {
         const showMore = document.getElementById("show_more");
 
         if (!this.staticData) {
-            if (this.choosedFilters.length > 0) {
+            if (this.chosenFilters.length > 0) {
                 const postUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}${this.projectUrl}?page=${newPage}&size=${this.projectsNumber}`;
 
                 await axios
                     .post(postUrl, {
-                        filter_types: this.choosedFilters,
+                        filter_types: this.chosenFilters,
                     })
                     .then((res) => {
                         if (showMore) {
@@ -173,11 +172,11 @@ class ProjectsController {
             const sliceFrom = newPage * this.projectsNumber;
             const sliceTo = newPage * this.projectsNumber + this.projectsNumber;
 
-            if (this.choosedFilters.length > 0) {
+            if (this.chosenFilters.length > 0) {
                 const filteredProjects = projectsData.filter(
                     (item: ProjectType) =>
                         item.tags.some((tag: Tag) =>
-                            this.choosedFilters.includes(tag.id)
+                            this.chosenFilters.includes(tag.id)
                         )
                 );
                 const counter = filteredProjects.slice(
