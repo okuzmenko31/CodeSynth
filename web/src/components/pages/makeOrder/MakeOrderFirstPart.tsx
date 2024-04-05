@@ -1,23 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-
-type Service = {
-    id: number;
-    name: string;
-};
-
-type Ref = {
-    id: number;
-    name: string;
-};
-
-type Budget = {
-    start_amount: number;
-    secondary_amount: number;
-    id: number;
-    budget: string;
-};
+import { Controller } from "react-hook-form";
+import { addEventListenerOnInputChange } from "../../../utils/addEventListenerOnInputChange";
+import { generateMinDate } from "../../../utils/generateMinDate";
+import MakeOrderFieldSection from "../../UI/MakeOrderFieldSection";
 
 const MakeOrderFirstPart = ({ control }: any) => {
     const [services, setServices] = useState([]);
@@ -30,65 +16,12 @@ const MakeOrderFirstPart = ({ control }: any) => {
     const getBudgetsUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/project_requests/all_budgets/`;
     const getRefSourcesUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/project_requests/ref_sources/`;
 
-    const {
-        formState: { errors },
-    } = useForm();
-
-    const addClassOnChangeState = (e: any) => {
-        if (e.target.type === "checkbox") {
-            if (e.target.checked) {
-                e.target.parentNode.classList.add("active");
-            } else {
-                e.target.parentNode.classList.remove("active");
-            }
-        } else {
-            if (e.target.checked) {
-                document
-                    .querySelectorAll('input[name="' + e.target.name + '"]')
-                    .forEach((el: any) => {
-                        el.parentNode.classList.remove("active");
-                    });
-                e.target.parentNode.classList.add("active");
-            }
-        }
-    };
-
     const openInput = (e: any) => {
         const input = e.target.parentNode.querySelector("input[type=file]");
         if (input) {
             input.click();
         }
     };
-
-    const generateMinDate = () => {
-        const dateInputs = document.querySelectorAll("input[type=date]");
-        dateInputs.forEach((input: any) => {
-            input.min = new Date().toISOString().split("T")[0];
-        });
-    };
-
-    useEffect(() => {
-        const input: any = document.querySelector("input[type=file]");
-
-        if (input) {
-            input.addEventListener("change", () => {
-                const files = input.files;
-                const file = files[0];
-
-                if (file) {
-                    setSelectedFile(file);
-                } else {
-                    setSelectedFile(undefined);
-                }
-            });
-        }
-
-        return () => {
-            if (input) {
-                input.removeEventListener("change", () => {});
-            }
-        };
-    }, []);
 
     useEffect(() => {
         axios.get(getServicesUrl).then((res) => {
@@ -104,156 +37,58 @@ const MakeOrderFirstPart = ({ control }: any) => {
         });
 
         generateMinDate();
+
+        addEventListenerOnInputChange(setSelectedFile);
     }, []);
 
     return (
         <div className="make-order-first-part">
             <p className="mid-text">Project Details</p>
-            <div className="make-order-category">
-                <p className="small-text required">
-                    What services are you interested in?
-                </p>
-                <form className="category-list">
-                    {services &&
-                        services.map((service: Service) => (
-                            <div key={service.id} className="list-item">
-                                <Controller
-                                    name={`project_services[${service.id}]`}
-                                    control={control}
-                                    rules={{
-                                        required:
-                                            "You must choose at least one service!",
-                                    }}
-                                    render={({
-                                        field: { onChange, value },
-                                    }) => (
-                                        <label className="form_checkbox">
-                                            <input
-                                                type="checkbox"
-                                                className="checkbox-make-order"
-                                                checked={value || false}
-                                                onChange={(e) => {
-                                                    onChange(e.target.checked);
-                                                    addClassOnChangeState(e);
-                                                }}
-                                            />
-                                            {service.name}
-                                        </label>
-                                    )}
-                                />
-                            </div>
-                        ))}
-                </form>
-                <p className="error">
-                    {errors.project_services?.message as string}
-                </p>
-            </div>
-
-            <div className="make-order-category">
-                <p className="small-text required">
-                    Estimated budget for the project?
-                </p>
-                <div className="category-list">
-                    {budgets &&
-                        budgets.map((budget: Budget) => (
-                            <div key={budget.id} className="list-item">
-                                <Controller
-                                    name="budget_id"
-                                    control={control}
-                                    rules={{
-                                        required:
-                                            "You must select a project budget!",
-                                    }}
-                                    render={({
-                                        field: { onChange, value },
-                                    }) => (
-                                        <label className="form_checkbox">
-                                            <input
-                                                type="radio"
-                                                name="budget_id"
-                                                className="radio-make-order"
-                                                value={budget.id}
-                                                checked={value === budget.id}
-                                                onChange={(e) => {
-                                                    onChange(e.target.value);
-                                                    addClassOnChangeState(e);
-                                                }}
-                                            />
-                                            {budget.budget}
-                                        </label>
-                                    )}
-                                />
-                            </div>
-                        ))}
-                </div>
-                <p className="error">{errors.budget_id?.message as string}</p>
-            </div>
+            <MakeOrderFieldSection
+                control={control}
+                sources={services}
+                fieldName="project_services"
+                fieldType="checkbox"
+                fieldLabel="What services are you interested in?"
+                fieldContainerCustomClass="category-list"
+                fieldRules={{
+                    required: "You must choose at least one service!",
+                }}
+            />
+            <MakeOrderFieldSection
+                control={control}
+                sources={budgets}
+                fieldName="budget_id"
+                fieldType="radio"
+                fieldLabel="Estimated budget for the project?"
+                fieldContainerCustomClass="category-list"
+                fieldRules={{ required: "You must select a project budget!" }}
+            />
 
             <div className="make-order-category">
                 <div className="category-list-date">
                     <div className="list-item-dates">
-                        <div className="list-item-date">
-                            <p className="small-text">Start date</p>
-                            <Controller
-                                name="start_date"
-                                control={control}
-                                defaultValue=""
-                                render={({ field }) => (
-                                    <input type="date" {...field} />
-                                )}
-                            />
-                        </div>
-
-                        <div className="list-item-date">
-                            <p className="small-text">Deadline</p>
-                            <Controller
-                                name="deadline_date"
-                                control={control}
-                                defaultValue=""
-                                render={({ field }) => (
-                                    <input type="date" {...field} />
-                                )}
-                            />
-                        </div>
-                    </div>
-                    <label className="form_checkbox">
-                        <Controller
-                            name="hard_deadline"
+                        <MakeOrderFieldSection
                             control={control}
-                            defaultValue={false}
-                            render={({ field }) => (
-                                <input
-                                    type="checkbox"
-                                    className="checkbox-make-order"
-                                    checked={field.value}
-                                    onChange={(e) => {
-                                        field.onChange(e.target.checked);
-                                        addClassOnChangeState(e);
-                                    }}
-                                />
-                            )}
+                            fieldLabel="Start date"
+                            fieldName="start_date"
+                            fieldType="date"
+                            fieldContainerWrapperCustomClass={"list-item-date"}
                         />
-                        This is hard deadline
-                    </label>
-                </div>
-            </div>
 
-            <div className="make-order-category">
-                <p className="small-text">
-                    Please tell us more about the project.
-                </p>
-                <div className="category-list-area">
-                    <Controller
-                        name="project_info"
+                        <MakeOrderFieldSection
+                            control={control}
+                            fieldLabel="Deadline"
+                            fieldName="deadline_date"
+                            fieldType="date"
+                            fieldContainerWrapperCustomClass={"list-item-date"}
+                        />
+                    </div>
+
+                    <MakeOrderFieldSection
                         control={control}
-                        defaultValue=""
-                        render={({ field }) => (
-                            <textarea
-                                id="additional-project-info"
-                                placeholder="Message here..."
-                                {...field}
-                            />
-                        )}
+                        fieldName="hard_deadline"
+                        fieldType="boolean"
                     />
                 </div>
             </div>
@@ -300,39 +135,24 @@ const MakeOrderFirstPart = ({ control }: any) => {
                 </div>
             </div>
 
-            <div className="make-order-category">
-                <p className="small-text">How did you hear about us?</p>
-                <div className="category-list">
-                    {refSources &&
-                        refSources.map((ref: Ref) => (
-                            <div key={ref.id} className="list-item">
-                                <Controller
-                                    name="ref_source_id"
-                                    control={control}
-                                    defaultValue=""
-                                    rules={{
-                                        required: "Please select a ref source",
-                                    }}
-                                    render={({ field }) => (
-                                        <label className="form_checkbox">
-                                            <input
-                                                {...field}
-                                                value={ref.id}
-                                                type="radio"
-                                                className="radio-make-order"
-                                                onChange={(e) => {
-                                                    field.onChange(e);
-                                                    addClassOnChangeState(e);
-                                                }}
-                                            />
-                                            {ref.name}
-                                        </label>
-                                    )}
-                                />
-                            </div>
-                        ))}
-                </div>
-            </div>
+            <MakeOrderFieldSection
+                control={control}
+                fieldName="project_info"
+                fieldType="textarea"
+                fieldLabel="Please tell us more about the project."
+                fieldId="additional-project-info"
+                fieldPlaceholder="Message here..."
+            />
+
+            <MakeOrderFieldSection
+                control={control}
+                sources={refSources}
+                fieldName="ref_source_id"
+                fieldType="radio"
+                fieldLabel="How did you hear about us?"
+                fieldContainerCustomClass="category-list"
+                fieldRules={{ required: "Please select a ref source" }}
+            />
         </div>
     );
 };
