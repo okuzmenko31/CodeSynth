@@ -25,7 +25,7 @@ const PortfolioBlock = () => {
     const [projects, setProjects] = useState<ProjectType[]>([]);
     const [filters, setFilters] = useState<FilterType[]>([]);
     const [chosenFilters, setChosenFilters] = useState<number[]>([]);
-    const [projectUrl, setProjectUrl] = useState("/api/v1/projects/all/");
+    const [projectUrl, setProjectUrl] = useState("/projects/all/");
 
     const projectsNumber = 10;
 

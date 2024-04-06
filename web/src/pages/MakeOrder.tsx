@@ -22,7 +22,7 @@ const MakeOrder = () => {
     const { handleSubmit, control } = useForm({ mode: "all" });
 
     // API Endpoints
-    const createProjectRequest = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/project_requests/create/`;
+    const createProjectRequest = `${process.env.REACT_APP_BACKEND_DOMAIN}/project_requests/create/`;
 
     const sendApplication = (data: ApplicationData) => {
         processData(data);

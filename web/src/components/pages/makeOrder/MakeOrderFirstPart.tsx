@@ -12,9 +12,9 @@ const MakeOrderFirstPart = ({ control }: any) => {
     const [selectedFile, setSelectedFile]: any = useState(undefined);
 
     // API Endpoints
-    const getServicesUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/project_requests/all_services/`;
-    const getBudgetsUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/project_requests/all_budgets/`;
-    const getRefSourcesUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/project_requests/ref_sources/`;
+    const getServicesUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/project_requests/all_services/`;
+    const getBudgetsUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/project_requests/all_budgets/`;
+    const getRefSourcesUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/project_requests/ref_sources/`;
 
     const openInput = (e: any) => {
         const input = e.target.parentNode.querySelector("input[type=file]");

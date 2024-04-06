@@ -15,7 +15,7 @@ class FiltersController {
 
     public getFilterTypes = async () => {
         if (!this.staticData) {
-            const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/filter_types`;
+            const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/projects/filter_types`;
             await axios.get(getUrl).then((res) => {
                 this.setFilters(res.data);
             });

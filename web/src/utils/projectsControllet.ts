@@ -57,9 +57,9 @@ class ProjectsController {
         if (!this.staticData) {
             if (this.chosenFilters.length > 0) {
                 this.dispatch(setPage(0));
-                this.setProjectUrl("/api/v1/projects/filter_by_filter_types/");
+                this.setProjectUrl("/projects/filter_by_filter_types/");
 
-                const postUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/filter_by_filter_types/?page=0&size=${this.projectsNumber}`;
+                const postUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/projects/filter_by_filter_types/?page=0&size=${this.projectsNumber}`;
 
                 await axios
                     .post(postUrl, {
@@ -72,8 +72,8 @@ class ProjectsController {
                     });
             } else {
                 this.dispatch(setPage(0));
-                this.setProjectUrl("/api/v1/projects/all/");
-                const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/all/?page=0&size=${this.projectsNumber}`;
+                this.setProjectUrl("/projects/all/");
+                const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/projects/all/?page=0&size=${this.projectsNumber}`;
 
                 await axios.get(getUrl).then((res) => {
                     this.setProjects(res.data);
