@@ -9,19 +9,34 @@ import Button from "../components/UI/Button";
 import MakeOrderFirstPart from "../components/pages/makeOrder/MakeOrderFirstPart";
 import MakeOrderSecondPart from "../components/pages/makeOrder/MakeOrderSecondPart";
 
+interface ApplicationData {
+    technical_task?: any[];
+    project_services?: any[];
+    budget_id?: string | number;
+    ref_source_id?: number | string | null;
+    start_date?: string | number;
+    deadline_date?: string | number;
+}
+
 const MakeOrder = () => {
     const { handleSubmit, control } = useForm({ mode: "all" });
 
     // API Endpoints
     const createProjectRequest = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/project_requests/create/`;
 
-    const sendApplication = (data: any) => {
+    const sendApplication = (data: ApplicationData) => {
+        processData(data);
+
+        const fd = createFormData(data);
+
+        axios.post(createProjectRequest, fd);
+    };
+
+    const processData = (data: ApplicationData) => {
         const currentDate = new Date().toISOString().split("T")[0];
 
-        if (data.technical_task && data.technical_task[0]) {
-            data.technical_task = data.technical_task[0];
-        } else if (data.technical_task && !data.technical_task[0]) {
-            data.technical_task = "";
+        if (data.technical_task) {
+            data.technical_task = data.technical_task[0] ?? "";
         }
 
         if (data.project_services && data.project_services[0]) {
@@ -38,33 +53,38 @@ const MakeOrder = () => {
             data.ref_source_id = Number(data.ref_source_id);
         }
 
-        if (data.start_date < currentDate && data.start_date !== "") {
-            data.start_date = currentDate;
-        }
-
-        if (data.deadline_date < currentDate && data.deadline_date !== "") {
-            data.deadline_date = currentDate;
-        } else if (data.deadline_date < data.start_date) {
-            data.deadline_date = data.start_date;
-        }
-
-        if (data.ref_source_id === null) {
-            data.ref_source_id = "";
-        } else {
-            data.ref_source_id = Number(data.ref_source_id);
-        }
-
-        const fd = new FormData();
-
-        for (const key in data) {
-            if (Array.isArray(data[key])) {
-                fd.append(key, JSON.stringify(data[key]));
-            } else {
-                fd.append(key, data[key]);
+        if (data.start_date) {
+            if (data.start_date < currentDate && data.start_date !== "") {
+                data.start_date = currentDate;
             }
         }
 
-        axios.post(createProjectRequest, fd);
+        if (data.deadline_date) {
+            if (data.deadline_date < currentDate && data.deadline_date !== "") {
+                data.deadline_date = currentDate;
+            } else if (
+                data.start_date &&
+                data.deadline_date < data.start_date
+            ) {
+                data.deadline_date = data.start_date;
+            }
+        }
+
+        data.ref_source_id =
+            data.ref_source_id === null ? "" : Number(data.ref_source_id);
+    };
+
+    const createFormData = (data: ApplicationData): FormData => {
+        const formData = new FormData();
+
+        Object.entries(data).forEach(([key, value]) => {
+            formData.append(
+                key,
+                Array.isArray(value) ? JSON.stringify(value) : value
+            );
+        });
+
+        return formData;
     };
 
     return (
