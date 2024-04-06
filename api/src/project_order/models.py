@@ -2,8 +2,7 @@ import datetime
 
 from typing import Optional, Union
 
-from sqlalchemy import sql
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, sql
 from sqlalchemy.orm import (
     Mapped,
     mapped_column,
@@ -16,6 +15,17 @@ from ..core.db.mixins import BaseModelMixin
 from ..customer.models import Customer
 
 from .utils import BudgetConverter
+
+
+class ProjectOrderServiceAssociation(Base):
+    __tablename__ = "project_order_service_association"
+
+    project_order_id: Mapped[int] = mapped_column(
+        ForeignKey("project_order.id"), primary_key=True
+    )
+    service_id: Mapped[int] = mapped_column(
+        ForeignKey("project_order_service.id"), primary_key=True
+    )
 
 
 class ProjectOrder(BaseModelMixin, Base):
@@ -41,6 +51,7 @@ class ProjectOrder(BaseModelMixin, Base):
         doc="Customer",
     )
     services: Mapped[list["ProjectOrderService"]] = relationship(
+        secondary="project_order_service_association",
         doc="Services"
     )
     budget_id: Mapped[int] = mapped_column(
@@ -53,7 +64,9 @@ class ProjectOrder(BaseModelMixin, Base):
         index=True,
         doc="Budget ID",
     )
-    budget: Mapped[Union["ProjectOrderBudget", None]] = relationship(doc="Budget")
+    budget: Mapped[Union["ProjectOrderBudget", None]] = relationship(
+        doc="Budget"
+    )
     referral_source_id: Mapped[int] = mapped_column(
         ForeignKey(
             "project_order_referral_source.id",
