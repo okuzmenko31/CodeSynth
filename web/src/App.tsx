@@ -44,8 +44,6 @@ const App = () => {
         window.addEventListener("mousemove", moveCursor);
     }, []);
 
-    console.log(document.location.host);
-
     return (
         <>
             {!touchDevice && <div id="cursor-seeker"></div>}
