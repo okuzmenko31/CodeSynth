@@ -23,7 +23,6 @@ const App = () => {
             }
         }, 30);
     };
-    window.addEventListener("mousemove", moveCursor);
 
     useEffect(() => {
         if (theme === "light") {
@@ -41,7 +40,11 @@ const App = () => {
                 setTouchDevice(window.matchMedia("(pointer: coarse)").matches)
             );
         });
+
+        window.addEventListener("mousemove", moveCursor);
     }, []);
+
+    console.log(document.location.host);
 
     return (
         <>

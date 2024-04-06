@@ -31,7 +31,7 @@ class FiltersController {
 
         if (index !== -1) {
             const updatedFilters: string[] | number[] =
-                this.chosenFilters.filter((item) => item != parentId);
+                this.chosenFilters.filter((item: number) => item !== +parentId);
             this.setChosenFilters(updatedFilters);
             chechbox.checked = false;
         } else {

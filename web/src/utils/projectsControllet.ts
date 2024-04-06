@@ -73,17 +73,13 @@ class ProjectsController {
             } else {
                 this.dispatch(setPage(0));
                 this.setProjectUrl("/api/v1/projects/all/");
+                const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/api/v1/projects/all/?page=0&size=${this.projectsNumber}`;
 
-                await axios
-                    .get(
-                        process.env.REACT_APP_BACKEND_DOMAIN +
-                            "/api/v1/projects/all/?page=0&size=${projectsNumber}"
-                    )
-                    .then((res) => {
-                        this.setProjects(res.data);
+                await axios.get(getUrl).then((res) => {
+                    this.setProjects(res.data);
 
-                        this.hideLoadButton(res.data.length, 1);
-                    });
+                    this.hideLoadButton(res.data.length, 1);
+                });
             }
         } else {
             this.dispatch(setPage(0));

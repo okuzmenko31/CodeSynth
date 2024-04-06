@@ -9,14 +9,14 @@ import Button from "../components/UI/Button";
 import MakeOrderFirstPart from "../components/pages/makeOrder/MakeOrderFirstPart";
 import MakeOrderSecondPart from "../components/pages/makeOrder/MakeOrderSecondPart";
 
-interface ApplicationData {
+type ApplicationData = {
     technical_task?: any[];
     project_services?: any[];
     budget_id?: string | number;
     ref_source_id?: number | string | null;
     start_date?: string | number;
     deadline_date?: string | number;
-}
+};
 
 const MakeOrder = () => {
     const { handleSubmit, control } = useForm({ mode: "all" });
@@ -53,10 +53,12 @@ const MakeOrder = () => {
             data.ref_source_id = Number(data.ref_source_id);
         }
 
-        if (data.start_date) {
-            if (data.start_date < currentDate && data.start_date !== "") {
-                data.start_date = currentDate;
-            }
+        if (
+            data.start_date &&
+            data.start_date < currentDate &&
+            data.start_date !== ""
+        ) {
+            data.start_date = currentDate;
         }
 
         if (data.deadline_date) {
@@ -77,12 +79,18 @@ const MakeOrder = () => {
     const createFormData = (data: ApplicationData): FormData => {
         const formData = new FormData();
 
-        Object.entries(data).forEach(([key, value]) => {
-            formData.append(
-                key,
-                Array.isArray(value) ? JSON.stringify(value) : value
-            );
-        });
+        for (const key in data) {
+            const element = data[key as keyof typeof data];
+
+            if (element !== undefined && element !== null) {
+                formData.append(
+                    key,
+                    Array.isArray(element) || typeof element === "number"
+                        ? JSON.stringify(element)
+                        : element
+                );
+            }
+        }
 
         return formData;
     };
