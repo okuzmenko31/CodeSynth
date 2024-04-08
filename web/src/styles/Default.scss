@@ -274,10 +274,16 @@ input[type="file"] {
     display: none;
 }
 
-input,
+.order-input,
+input[type="date"],
 textarea {
+    transition: 0.3s;
+
     &:focus {
-        outline-color: var(--primary-color);
+        box-shadow: 0 0 10px var(--primary-color),
+            inset 0 0 10px var(--primary-color);
+        border-color: var(--primary-color) !important;
+        outline: none;
     }
 }
 
