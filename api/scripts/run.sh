@@ -16,9 +16,23 @@ else
 fi
 set +a
 
+# Determine the environment file to use
+if [ "$DEBUG" = "True" ]; then
+    ENV_FILE="$APP_DIR/.env.dev"
+else
+    ENV_FILE="$APP_DIR/.env.prod"
+fi
 
 # Navigate to the application directory
 cd "$APP_DIR" || { echo "Failed to change directory to $APP_DIR. Exiting."; exit 1; }
+
+# Check and create STATIC_DIR if necessary
+if [ ! -d "$STATIC_DIR" ]; then
+    echo "Creating directory $STATIC_DIR..."
+    mkdir -p "$STATIC_DIR"
+else
+    echo "Directory `$STATIC_DIR` already exists."
+fi
 
 # Database migration
 if grep -qi '^RUN_MIGRATIONS=True' .env; then

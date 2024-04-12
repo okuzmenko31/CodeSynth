@@ -11,7 +11,10 @@ from .core.db.session import (
     get_async_engine,
     create_async_session_maker,
 )
+
 from .admin.model_views import get_model_views
+
+from .project_order.router import router as project_order_router
 
 
 # Lifespan events
@@ -36,7 +39,9 @@ app.add_middleware(
 )
 
 # Include routers
-ROUTERS: list[APIRouter] = []
+ROUTERS: list[APIRouter] = [
+    project_order_router,
+]
 for router in ROUTERS:
     app.include_router(router, prefix=f"/api/v{settings.app_version}")
 
