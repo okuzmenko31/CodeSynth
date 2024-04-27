@@ -240,25 +240,6 @@ body,
     }
 }
 
-.initial-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--background-color);
-    cursor: pointer;
-    user-select: none;
-    z-index: 101;
-
-    & p {
-        animation: scalingAnimation 3s infinite;
-    }
-}
-
 input[type="date"] {
     min-height: 35px;
     color: var(--white);

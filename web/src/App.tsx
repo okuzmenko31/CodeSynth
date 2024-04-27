@@ -48,16 +48,6 @@ const App = () => {
         <>
             {!touchDevice && <div id="cursor-seeker"></div>}
             <div className="App">
-                <div
-                    onClick={(e: any) => {
-                        e.currentTarget.remove();
-                    }}
-                    className="initial-screen"
-                >
-                    <p className="big-text">
-                        {touchDevice ? "Tap here" : "Click here"}
-                    </p>
-                </div>
                 <Routes />
             </div>
         </>

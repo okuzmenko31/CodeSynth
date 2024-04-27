@@ -1,3 +1,4 @@
+import DetailedProjectInformation from "../pages/DetailedProjectInformation";
 import Main from "../pages/Main";
 import MakeOrder from "../pages/MakeOrder";
 import PageNotFound from "../pages/PageNotFound";
@@ -9,13 +10,13 @@ import { Route, Routes } from "react-router-dom";
 export const paths = {
     main: "/",
     makeOrder: "/make-order",
-    project: "/project/:project?",
+    project: "/project/:project",
 };
 
 const routerRoutes = [
     { path: paths.main, element: <Main /> },
     { path: paths.makeOrder, element: <MakeOrder /> },
-    { path: paths.project, element: <MakeOrder /> },
+    { path: paths.project, element: <DetailedProjectInformation /> },
     { path: "*", element: <PageNotFound /> },
 ];
 
