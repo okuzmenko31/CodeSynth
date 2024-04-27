@@ -3,9 +3,11 @@ import { useForm } from "react-hook-form";
 import "../styles/pages/MakeOrder.scss";
 
 import axios from "axios";
+import { useState } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Button from "../components/UI/Button";
+import ModalWindow from "../components/UI/ModalWindow";
 import MakeOrderFirstPart from "../components/pages/makeOrder/MakeOrderFirstPart";
 import MakeOrderSecondPart from "../components/pages/makeOrder/MakeOrderSecondPart";
 
@@ -20,16 +22,32 @@ type ApplicationData = {
 
 const MakeOrder = () => {
     const { handleSubmit, control } = useForm({ mode: "all" });
+    const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+    const [modalText, setModalText] = useState<string>("");
 
     // API Endpoints
     const createProjectRequest = `${process.env.REACT_APP_BACKEND_DOMAIN}/project_requests/create/`;
 
-    const sendApplication = (data: ApplicationData) => {
+    const sendApplication = (data: ApplicationData, e: any) => {
         processData(data);
+
+        const button = (e.target ?? e.currentTarget).parentNode;
+        button.disabled = true;
 
         const fd = createFormData(data);
 
-        axios.post(createProjectRequest, fd);
+        axios
+            .post(createProjectRequest, fd)
+            .then((res) => {
+                setIsModalOpened(true);
+                setModalText("Your application was sent successfully!");
+                button.disabled = false;
+            })
+            .catch((err) => {
+                setIsModalOpened(true);
+                setModalText("Something went wrong...");
+                button.disabled = false;
+            });
     };
 
     const processData = (data: ApplicationData) => {
@@ -98,6 +116,12 @@ const MakeOrder = () => {
     return (
         <>
             <Navbar />
+            {isModalOpened && (
+                <ModalWindow
+                    text={modalText}
+                    closeModal={() => setIsModalOpened(false)}
+                />
+            )}
             <div className="make-order">
                 <div className="make-order-text">
                     <p className="big-text">MAKE ORDER</p>

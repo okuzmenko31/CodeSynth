@@ -1,0 +1,9 @@
+.markdown-body {
+    width: 100%;
+}
+
+@media (max-width: 350px) {
+    .markdown-body img {
+        width: 100%;
+    }
+}

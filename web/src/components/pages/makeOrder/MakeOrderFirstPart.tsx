@@ -44,26 +44,32 @@ const MakeOrderFirstPart = ({ control }: any) => {
     return (
         <div className="make-order-first-part">
             <p className="mid-text">Project Details</p>
-            <MakeOrderFieldSection
-                control={control}
-                sources={services}
-                fieldName="project_services"
-                fieldType="checkbox"
-                fieldLabel="What services are you interested in?"
-                fieldContainerCustomClass="category-list"
-                fieldRules={{
-                    required: "You must choose at least one service!",
-                }}
-            />
-            <MakeOrderFieldSection
-                control={control}
-                sources={budgets}
-                fieldName="budget_id"
-                fieldType="radio"
-                fieldLabel="Estimated budget for the project?"
-                fieldContainerCustomClass="category-list"
-                fieldRules={{ required: "You must select a project budget!" }}
-            />
+            {services.length > 0 && (
+                <MakeOrderFieldSection
+                    control={control}
+                    sources={services}
+                    fieldName="project_services"
+                    fieldType="checkbox"
+                    fieldLabel="What services are you interested in?"
+                    fieldContainerCustomClass="category-list"
+                    fieldRules={{
+                        required: "You must choose at least one service!",
+                    }}
+                />
+            )}
+            {budgets.length > 0 && (
+                <MakeOrderFieldSection
+                    control={control}
+                    sources={budgets}
+                    fieldName="budget_id"
+                    fieldType="radio"
+                    fieldLabel="Estimated budget for the project?"
+                    fieldContainerCustomClass="category-list"
+                    fieldRules={{
+                        required: "You must select a project budget!",
+                    }}
+                />
+            )}
 
             <div className="make-order-category">
                 <div className="category-list-date">
@@ -144,15 +150,17 @@ const MakeOrderFirstPart = ({ control }: any) => {
                 fieldPlaceholder="Message here..."
             />
 
-            <MakeOrderFieldSection
-                control={control}
-                sources={refSources}
-                fieldName="ref_source_id"
-                fieldType="radio"
-                fieldLabel="How did you hear about us?"
-                fieldContainerCustomClass="category-list"
-                fieldRules={{ required: "Please select a ref source" }}
-            />
+            {refSources.length > 0 && (
+                <MakeOrderFieldSection
+                    control={control}
+                    sources={refSources}
+                    fieldName="ref_source_id"
+                    fieldType="radio"
+                    fieldLabel="How did you hear about us?"
+                    fieldContainerCustomClass="category-list"
+                    fieldRules={{ required: "Please select a ref source" }}
+                />
+            )}
         </div>
     );
 };

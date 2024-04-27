@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../../styles/components/UI/Project.scss";
 
 import { addClassOnScroll } from "../../utils/add_class_on_scroll";
@@ -27,8 +27,6 @@ const Project = ({
         Math.floor(window.innerHeight / 4)
     );
 
-    const navigate = useNavigate();
-
     window.addEventListener("scroll", handleScrollFunction);
     document.addEventListener("DOMContentLoaded", handleScrollFunction);
 
@@ -37,7 +35,7 @@ const Project = ({
             <div className="inner-container">
                 <div
                     className="project-block"
-                    onClick={() => navigate(`${checkout_link}`)}
+                    onClick={() => window.open(`${checkout_link}`, "_blank")}
                 >
                     <img
                         alt={name}

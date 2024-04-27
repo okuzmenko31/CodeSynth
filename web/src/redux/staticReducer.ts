@@ -3,7 +3,7 @@ import { SET_STATIC_DATA } from "./types";
 const isStaticData = process.env.REACT_APP_STATIC_DATA;
 
 const initialState = {
-    staticData: isStaticData == "true" ? true : false,
+    staticData: isStaticData === "true" ? true : false,
 };
 
 export const staticReducer = (state = initialState, action: any) => {
