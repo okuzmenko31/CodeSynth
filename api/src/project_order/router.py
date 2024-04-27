@@ -5,8 +5,8 @@ from fastapi import APIRouter, UploadFile, File, Request, status
 from sqlalchemy.exc import SQLAlchemyError
 
 from .dependecies import project_order_create_dep
-from .schemas import ProjectOrderCreateShow
-from .services import ProjectOrderService
+from .schemas import ProjectOrderCreateShow, ProjectOrderServiceShow
+from .services import ProjectOrderService, ProjectOrderServicesService
 from ..core.db.dependencies import uowDEP
 from ..utils.processors.static_files_processor import StaticFilesProcessor
 from ..utils.exceptions.http.base import ContentNoChangeException
@@ -52,26 +52,10 @@ async def create_project_order(
         )
 
 
-@router.post("/{project_order_id}/upload_technical_assignment")
-async def upload_technical_assignment(
-    request: Request,
-    uow: uowDEP,
-    project_order_id: int,
-    technical_assignment: UploadFile = File(...),
-):
-    try:
-        file_processor = StaticFilesProcessor(
-            request.base_url, technical_assignment
-        )
-        file_data = await file_processor.process()
-        await ProjectOrderService(uow).upload_technical_assignment(
-            project_order_id, file_data.link
-        )
-    except StaticFilesProcessException as e:
-        log.error(e)
-        raise ContentNoChangeException(
-            (
-                "Error processing the file with the technical assignment. Please,"
-                " check that the file is in the correct format and try again."
-            )
-        )
+@router.get(
+    "/services",
+    status_code=status.HTTP_200_OK,
+    response_model=list[ProjectOrderServiceShow],
+)
+async def project_order_services(uow: uowDEP) -> list[ProjectOrderServiceShow]:
+    return await ProjectOrderServicesService(uow).get_all_services()

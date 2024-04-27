@@ -1,12 +1,6 @@
-from .models import (
-    ProjectOrder,
-    ProjectOrderBudget,
-    ProjectOrderReferralSource,
-)
-from .schemas import ProjectOrderCreate, ProjectOrderCreateShow
+from .schemas import ProjectOrderCreate, ProjectOrderCreateShow, ProjectOrderServiceShow
 from ..service.base import BaseService
 from ..utils.exceptions.http.base import IdNotFoundException
-from ..utils.processors.static_files_processor import StaticFilesProcessor
 
 import logging
 
@@ -67,3 +61,26 @@ class ProjectOrderService(BaseService):
                 project_order_id, technical_assignment_link
             )
             await self.uow.commit()
+
+
+class ProjectOrderServicesService(BaseService):
+    async def get_all_services(self) -> list[ProjectOrderServiceShow]:
+        async with self.uow:
+            model = self.uow.project_order_service.model
+
+            services = await self.uow.project_order_service.get_all_with_ordering(
+                order_by_fields=[
+                    model.position,
+                    model.name,
+                ]
+            )
+            services_show = []
+
+            for service in services:
+                services_show.append(ProjectOrderServiceShow(
+                    name=service.name,
+                    position=service.position,
+                    active=service.active,
+                    id=service.id,
+                ))
+            return services_show
