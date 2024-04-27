@@ -2,6 +2,7 @@ from sqlalchemy import (
     exists,
     or_,
 )
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from .generic import GenericRepository
 
@@ -11,6 +12,9 @@ from ..utils.hashing import Hashing
 
 
 class UserRepository(GenericRepository[User, UserCreate, UserUpdate]):
+    def __init__(self, session: AsyncSession) -> None:
+        super().__init__(session, User)
+
     async def get_by_id_active(self, *, id: int) -> User | None:
         return await self.get_by_attr_active(attr=self.model.id, value=id)
 

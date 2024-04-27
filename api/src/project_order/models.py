@@ -7,11 +7,11 @@ from sqlalchemy.orm import (
     Mapped,
     mapped_column,
     relationship,
-    backref,
 )
 
 from ..core.db.base import Base
 from ..core.db.mixins import BaseModelMixin
+
 from ..customer.models import Customer
 
 from .utils import BudgetConverter
@@ -30,6 +30,7 @@ class ProjectOrderServiceAssociation(Base):
 
 class ProjectOrder(BaseModelMixin, Base):
     __tablename__ = "project_order"
+    __label__ = "Project Order"
 
     customer_id: Mapped[int] = mapped_column(
         ForeignKey(
@@ -41,18 +42,10 @@ class ProjectOrder(BaseModelMixin, Base):
         index=True,
         doc="Customer ID",
     )
-    customer: Mapped[Customer | None] = relationship(
-        backref=backref(
-            "project_orders",
-            cascade="all, delete-orphan",
-            passive_deletes=True,
-            doc="Customer Project Orders",
-        ),
-        doc="Customer",
-    )
+    customer: Mapped[Customer | None] = relationship(doc="Customer")
     services: Mapped[list["ProjectOrderService"]] = relationship(
         secondary="project_order_service_association",
-        doc="Services"
+        doc="Services",
     )
     budget_id: Mapped[int] = mapped_column(
         ForeignKey(
@@ -147,6 +140,7 @@ class ProjectOrderReferralSource(
 
 class ProjectOrderBudget(BaseModelMixin, Base):
     __tablename__ = "project_order_budget"
+    __label__ = "Project Order Budget"
 
     value_from: Mapped[int] = mapped_column(
         nullable=False,
@@ -169,4 +163,4 @@ class ProjectOrderBudget(BaseModelMixin, Base):
         return BudgetConverter.convert_budget(self.value_from, self.value_to)
 
     def __str__(self) -> str:
-        return f"Project Order Budget - {self.value_from} - {self.value_to}"
+        return f"Project Order Budget - {self.amount}"

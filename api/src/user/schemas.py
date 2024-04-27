@@ -24,7 +24,7 @@ class PasswordValidator:
         except PasswordValidationException as e:
             raise HTTPException(detail=e, status_code=400)
 
-    @field_validator("password_confirmation")
+    @field_validator("password_confirm")
     def validate_password_confirm(cls, value, values):
         if value != values.data.get("password"):
             raise HTTPException(status_code=400, detail="Password mismatch!")

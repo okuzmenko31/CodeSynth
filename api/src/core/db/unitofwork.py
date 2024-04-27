@@ -5,10 +5,22 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..db.session import create_async_session_maker
 from ...repositories.user_repo import UserRepository
+from ...repositories.project_order_repo import (
+    ProjectOrderRepository,
+    ProjectOrderServiceRepository,
+    ProjectOrderBudgetRepository,
+    ProjectOrderReferralSourceRepository,
+)
+from ...repositories.customer_repo import CustomerRepository
 
 
 class AbstractUnitOfWork(ABC):
     user: UserRepository
+    customer: CustomerRepository
+    project_order: ProjectOrderRepository
+    project_order_service: ProjectOrderServiceRepository
+    project_order_budget: ProjectOrderBudgetRepository
+    project_order_referral_source: ProjectOrderReferralSourceRepository
 
     @abstractmethod
     async def __aenter__(self):
@@ -43,6 +55,17 @@ class UnitOfWork(AbstractUnitOfWork):
         self.session: AsyncSession = self.session_factory()
 
         self.user = UserRepository(self.session)
+
+        self.customer = CustomerRepository(self.session)
+
+        self.project_order = ProjectOrderRepository(self.session)
+        self.project_order_service = ProjectOrderServiceRepository(
+            self.session
+        )
+        self.project_order_budget = ProjectOrderBudgetRepository(self.session)
+        self.project_order_referral_source = (
+            ProjectOrderReferralSourceRepository(self.session)
+        )
 
     async def __aexit__(self, *args):
         await self.rollback()

@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
-from fastapi import APIRouter
+from fastapi import FastAPI, APIRouter
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from sqladmin import Admin
@@ -36,6 +36,12 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+# Mount static directory
+app.mount(
+    f"/{settings.static.directory}",
+    StaticFiles(directory=settings.static.directory),
 )
 
 # Include routers
