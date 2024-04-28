@@ -1,26 +1,56 @@
-FROM python:3.11
+# Use Ubuntu 22.04 LTS as base image
+FROM ubuntu:22.04
 
+# Environment settings to avoid Python generating .pyc files
 ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONBUFFERED 1
+ENV PYTHONUNBUFFERED 1
 ENV POETRY_VIRTUALENVS_CREATE 0
 
+# Set the working directory in the container
 WORKDIR /app/api
-COPY . .
 
+# Install necessary packages, ensuring the system uses Python 3.11
+RUN apt-get update && apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    supervisor \
+    procps \
+    cron \
+    python3.11 \
+    python3.11-venv \
+    python3.11-gdbm \
+    wget \
+    gnupg \
+    unzip \
+    curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install pip for Python 3.11
+RUN curl -sSL https://bootstrap.pypa.io/get-pip.py | python3.11
+
+# Install Poetry
+RUN pip install poetry
+
+# Copy the Python dependencies file and install dependencies with Poetry
 COPY poetry.lock /app/api
-COPY --chmod=765 scripts/run.sh /app/run.sh
-
-RUN pip install "poetry"
-RUN /bin/true\
-    && poetry config virtualenvs.create false \
+COPY pyproject.toml /app/api
+RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction \
     && rm -rf /root/.cache/pypoetry
+
+# Copy the rest of the application
+COPY . .
+
+COPY ./supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Make run script executable
+COPY --chmod=765 scripts/run.sh /app/run.sh
 RUN chmod +x /app/run.sh
 
+# Create a non-root user and change ownership of app directory
 RUN groupadd -r app && useradd -r -g app appuser \
-    && chown -R appuser:app /app \
-    && chmod +x /app/run.sh
+    && chown -R appuser:app /app
 
+# Run the application under non-root user
 USER appuser
-
 CMD ["/app/run.sh"]

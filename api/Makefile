@@ -1,6 +1,5 @@
-dc = docker compose --env-file .env.dev -f
-dc_dev = ${dc} docker-compose.dev.yml
-dc_prod = ${dc} docker-compose.prod.yml
+dc_dev = docker compose --env-file .env.dev -f docker-compose.dev.yml
+dc_prod = docker compose --env-file .env.prod -f docker-compose.prod.yml
 dc-exec-dev = $(dc_dev) exec -T -u $(OPTIONS)
 
 .SILENT:
@@ -18,7 +17,7 @@ run-prod:
 	${dc_prod} up -d --build
 
 build-dev:
-	${dc_dev} build
+	${dc_dev} build --no-cache
 
 build-prod:
 	${dc_prod} build
@@ -81,3 +80,7 @@ migration-current:
 
 migration-history:
 	$(dc_dev) exec $(OPTIONS) $(CONTAINER) alembic history
+
+# Requirements
+pip-list:
+	$(dc_dev) exec $(OPTIONS) $(CONTAINER) pip list
