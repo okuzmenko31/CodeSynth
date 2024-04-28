@@ -1,4 +1,10 @@
-from .schemas import ProjectOrderCreate, ProjectOrderCreateShow, ProjectOrderServiceShow
+from .schemas import (
+    ProjectOrderCreate,
+    ProjectOrderCreateShow,
+    ProjectOrderServiceShow,
+    ProjectOrderBudgetShow,
+    ProjectOrderReferralSourceShow,
+)
 from ..service.base import BaseService
 from ..utils.exceptions.http.base import IdNotFoundException
 
@@ -63,24 +69,73 @@ class ProjectOrderService(BaseService):
             await self.uow.commit()
 
 
-class ProjectOrderServicesService(BaseService):
-    async def get_all_services(self) -> list[ProjectOrderServiceShow]:
+class ProjectRelatedBaseService(BaseService):
+    schema = None
+    entity = None
+
+    def _get_entity(self):
+        if hasattr(self.uow, self.entity):
+            return getattr(self.uow, self.entity)
+        raise ValueError(
+            f"UnitOfWork class does not have an attribute named {self.entity}"
+        )
+
+    async def get_all_related(self) -> list:
         async with self.uow:
-            model = self.uow.project_order_service.model
+            self.entity = self._get_entity()
+            model = self.entity.model
 
-            services = await self.uow.project_order_service.get_all_with_ordering(
-                order_by_fields=[
-                    model.position,
-                    model.name,
-                ]
+            values = await self.entity.get_all_with_ordering(
+                order_by_fields=[model.position, model.name],
+                filters=[model.active],
             )
-            services_show = []
+            values_show = []
 
-            for service in services:
-                services_show.append(ProjectOrderServiceShow(
-                    name=service.name,
-                    position=service.position,
-                    active=service.active,
-                    id=service.id,
-                ))
-            return services_show
+            for value in values:
+                values_show.append(
+                    self.schema(
+                        name=value.name,
+                        position=value.position,
+                        active=value.active,
+                        id=value.id,
+                    )
+                )
+            return values_show
+
+
+class ProjectOrderServicesService(ProjectRelatedBaseService):
+    schema = ProjectOrderServiceShow
+    entity = "project_order_service"
+
+
+class ProjectOrderReferralSourceService(ProjectRelatedBaseService):
+    schema = ProjectOrderReferralSourceShow
+    entity = "project_order_referral_source"
+
+
+class ProjectOrderBudgetService(BaseService):
+    async def get_all_budgets(self) -> list[ProjectOrderBudgetShow]:
+        async with self.uow:
+            model = self.uow.project_order_budget.model
+
+            budgets = (
+                await self.uow.project_order_budget.get_all_with_ordering(
+                    order_by_fields=[
+                        model.value_from,
+                        model.value_to,
+                    ],
+                    filters=[model.active],
+                )
+            )
+            budgets_show = []
+            for budget in budgets:
+                budgets_show.append(
+                    ProjectOrderBudgetShow(
+                        value_from=budget.value_from,
+                        value_to=budget.value_to,
+                        active=budget.active,
+                        amount=budget.amount,
+                        id=budget.id,
+                    )
+                )
+            return budgets_show

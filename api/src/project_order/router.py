@@ -1,12 +1,22 @@
 import logging
 
-from fastapi import APIRouter, UploadFile, File, Request, status
+from fastapi import APIRouter, Request, status
 
 from sqlalchemy.exc import SQLAlchemyError
 
 from .dependecies import project_order_create_dep
-from .schemas import ProjectOrderCreateShow, ProjectOrderServiceShow
-from .services import ProjectOrderService, ProjectOrderServicesService
+from .schemas import (
+    ProjectOrderCreateShow,
+    ProjectOrderServiceShow,
+    ProjectOrderBudgetShow,
+    ProjectOrderReferralSourceShow,
+)
+from .services import (
+    ProjectOrderService,
+    ProjectOrderServicesService,
+    ProjectOrderReferralSourceService,
+    ProjectOrderBudgetService,
+)
 from ..core.db.dependencies import uowDEP
 from ..utils.processors.static_files_processor import StaticFilesProcessor
 from ..utils.exceptions.http.base import ContentNoChangeException
@@ -57,5 +67,25 @@ async def create_project_order(
     status_code=status.HTTP_200_OK,
     response_model=list[ProjectOrderServiceShow],
 )
-async def project_order_services(uow: uowDEP) -> list[ProjectOrderServiceShow]:
-    return await ProjectOrderServicesService(uow).get_all_services()
+async def project_order_service_lits(uow: uowDEP) -> list[ProjectOrderServiceShow]:
+    return await ProjectOrderServicesService(uow).get_all_related()
+
+
+@router.get(
+    "/referral_source",
+    status_code=status.HTTP_200_OK,
+    response_model=list[ProjectOrderReferralSourceShow],
+)
+async def project_order_referral_source_list(
+    uow: uowDEP,
+) -> list[ProjectOrderReferralSourceShow]:
+    return await ProjectOrderReferralSourceService(uow).get_all_related()
+
+
+@router.get(
+    "/budget",
+    status_code=status.HTTP_200_OK,
+    response_model=list[ProjectOrderBudgetShow],
+)
+async def project_order_budget(uow: uowDEP) -> list[ProjectOrderBudgetShow]:
+    return await ProjectOrderBudgetService(uow).get_all_budgets()

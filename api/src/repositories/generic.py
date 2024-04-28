@@ -70,7 +70,14 @@ class GenericRepository(Generic[Model, CreateSchema, UpdateSchema]):
         res = await self.session.execute(exists_ids_query)
         return res.fetchmany()
 
-    async def get_all_with_ordering(self, *, order_by_fields: list):
+    async def get_all_with_ordering(
+        self,
+        *,
+        order_by_fields: list,
+        filters: list = None,
+    ):
         query = select(self.model).order_by(*order_by_fields)
+        if filters:
+            query = query.filter(*filters)
         res = await self.session.execute(query)
         return res.scalars().all()
