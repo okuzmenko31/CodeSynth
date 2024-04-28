@@ -17,6 +17,7 @@ uvicorn = "^0.27.1"
 passlib = "^1.7.4"
 bcrypt = "^4.1.2"
 email-validator = "^2.1.1"
+sqladmin = "^0.16.1"
 
 [tool.poetry.group.dev.dependencies]
 fastapi = "^0.109.2"

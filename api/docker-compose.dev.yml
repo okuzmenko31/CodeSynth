@@ -34,6 +34,8 @@ services:
       - "8000:${API_APP_PORT}"
     volumes:
       - .:/app/api
+      - ./${STATIC_DIR}:/app/api/${STATIC_DIR}
 
 volumes:
   postgres_data:
+  static_data:

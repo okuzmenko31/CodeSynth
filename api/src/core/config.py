@@ -48,6 +48,17 @@ class DBSettings(BaseSettings):
         return str(url)
 
 
+class StaticFilesSettings(BaseSettings):
+    directory: str = Field(alias="static_dir")
+    max_file_size: int = Field(alias="max_file_size")
+    allowed_extensions: str = Field(alias="static_upload_allowed_extensions")
+
+    @field_validator("allowed_extensions")
+    @classmethod
+    def assemble_allowed_extensions(cls, v: str) -> list[str]:
+        return DotenvListHelper.get_list_from_value(v)
+
+
 class Settings(BaseSettings):
     app_name: str = "CodeSynth API"
     app_version: int | float = 1
@@ -63,6 +74,9 @@ class Settings(BaseSettings):
 
     # DATABASE SETTINGS
     db: DBSettings = Field(default_factory=DBSettings)
+
+    # STATIC FILES SETTINGS
+    static: StaticFilesSettings = Field(default_factory=StaticFilesSettings)
 
 
 @lru_cache

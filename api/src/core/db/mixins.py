@@ -11,10 +11,12 @@ class IdColMixin:
 class TimeStampMixin:
     created_at: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now(),
+        doc="Created At",
     )
     updated_at: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now(),
         onupdate=func.now(),
+        doc="Updated At",
     )
 
 

@@ -16,9 +16,23 @@ else
 fi
 set +a
 
-
 # Navigate to the application directory
 cd "$APP_DIR" || { echo "Failed to change directory to $APP_DIR. Exiting."; exit 1; }
+
+# Check if SH_STATIC_DIR is empty and default it to 'static' if it is
+if [ -z "$SH_STATIC_DIR" ]; then
+    SH_STATIC_DIR="static"
+fi
+
+echo "SH_STATIC_DIR is set to: $SH_STATIC_DIR"
+
+# Check and create SH_STATIC_DIR if necessary
+if [ ! -d "$SH_STATIC_DIR" ]; then
+    echo "Creating directory $SH_STATIC_DIR..."
+    mkdir -p "$SH_STATIC_DIR" || { echo "Failed to create directory $SH_STATIC_DIR. Exiting."; exit 1; }
+else
+    echo "Directory $SH_STATIC_DIR already exists."
+fi
 
 # Database migration
 if grep -qi '^RUN_MIGRATIONS=True' .env; then
