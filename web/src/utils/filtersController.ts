@@ -24,23 +24,23 @@ class FiltersController {
         }
     };
 
-    public changeChoosedFiltersList = (e: any) => {
+    public changeChosenFiltersList = (e: any) => {
         const parentId: number = +e.currentTarget.id;
-        const chechbox = e.currentTarget.querySelector("input");
+        const checkbox = e.currentTarget.querySelector("input");
         const index: number = this.chosenFilters.indexOf(parentId);
 
         if (index !== -1) {
             const updatedFilters: string[] | number[] =
                 this.chosenFilters.filter((item: number) => item !== +parentId);
             this.setChosenFilters(updatedFilters);
-            chechbox.checked = false;
+            checkbox.checked = false;
         } else {
             const updatedFilters: string[] | number[] = [
                 ...this.chosenFilters,
                 parentId,
             ];
             this.setChosenFilters(updatedFilters);
-            chechbox.checked = true;
+            checkbox.checked = true;
         }
     };
 }

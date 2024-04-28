@@ -1,14 +1,25 @@
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const RouterWrapper = ({ children }: { children: any }) => {
-    const location = useLocation();
+    const { pathname, hash } = useLocation();
 
-    useLayoutEffect(() => {
-        if (location.hash === "") {
+    useEffect(() => {
+        if (hash === "") {
             document.documentElement.scrollTo(0, 0);
+        } else {
+            const elementId = hash.replace("#", "");
+
+            const element: HTMLElement | null =
+                document.getElementById(elementId);
+
+            setTimeout(() => {
+                if (element) {
+                    element.scrollIntoView();
+                }
+            }, 0);
         }
-    }, [location.pathname, location.hash]);
+    }, [pathname, hash]);
 
     return children;
 };

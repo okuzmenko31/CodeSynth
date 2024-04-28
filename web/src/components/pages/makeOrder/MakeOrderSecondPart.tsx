@@ -1,6 +1,11 @@
+import { Control } from "react-hook-form";
 import MakeOrderFieldSection from "../../UI/MakeOrderFieldSection";
 
-const MakeOrderSecondPart = ({ control }: any) => {
+type MakeOrderSecondPartProps = {
+    control: Control;
+};
+
+const MakeOrderSecondPart = ({ control }: MakeOrderSecondPartProps) => {
     return (
         <div className="make-order-second-part">
             <p className="mid-text">Contact Details</p>
@@ -16,7 +21,7 @@ const MakeOrderSecondPart = ({ control }: any) => {
                     }
                     fieldRules={{
                         required: "Please write your full name!",
-                        validate: (value: any) =>
+                        validate: (value: string) =>
                             value.trim() !== "" ||
                             "Please write your full name!",
                     }}
@@ -33,7 +38,7 @@ const MakeOrderSecondPart = ({ control }: any) => {
                     }
                     fieldRules={{
                         required: "Please write your email!",
-                        validate: (value: any) =>
+                        validate: (value: string) =>
                             /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ||
                             "Enter a valid email!",
                     }}
@@ -60,7 +65,7 @@ const MakeOrderSecondPart = ({ control }: any) => {
                         "make-order-input-container"
                     }
                     fieldRules={{
-                        validate: (value: any) => {
+                        validate: (value: string) => {
                             if (!value) {
                                 return true;
                             } else {

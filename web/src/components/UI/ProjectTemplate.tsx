@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import "../../styles/components/UI/Project.scss";
 
+import { useEffect, useRef } from "react";
 import { addClassOnScroll } from "../../utils/add_class_on_scroll";
 
 export type Tag = {
@@ -15,20 +16,31 @@ const Project = ({
     tags,
     project_link,
     checkout_link,
+    colors,
 }: {
     name: string;
     image: string;
     tags?: Tag[];
     project_link?: string;
     checkout_link?: string;
+    colors?: string[];
 }) => {
     const handleScrollFunction = addClassOnScroll(
         [".inner-container", "not_scrolled"],
         Math.floor(window.innerHeight / 4)
     );
 
+    const projectBlock = useRef<HTMLDivElement | null>(null);
+
     window.addEventListener("scroll", handleScrollFunction);
     document.addEventListener("DOMContentLoaded", handleScrollFunction);
+
+    useEffect(() => {
+        if (projectBlock.current && colors) {
+            projectBlock.current.style.setProperty("--first-color", colors[0]);
+            projectBlock.current.style.setProperty("--second-color", colors[1]);
+        }
+    }, []);
 
     return (
         <div className="project-container">
@@ -36,6 +48,7 @@ const Project = ({
                 <div
                     className="project-block"
                     onClick={() => window.open(`${checkout_link}`, "_blank")}
+                    ref={projectBlock}
                 >
                     <img
                         alt={name}

@@ -4,13 +4,13 @@ import { FilterType } from "../pages/main/PortfolioBlock";
 type FiltersBlockProps = {
     filters: FilterType[];
     dropDownToggle: (e: any) => any;
-    changeChoosedFiltersList: (e: any) => any;
+    changeChosenFiltersList: (e: any) => any;
 };
 
 const FiltersBlock = ({
     filters,
     dropDownToggle,
-    changeChoosedFiltersList,
+    changeChosenFiltersList,
 }: FiltersBlockProps) => {
     return (
         <>
@@ -36,7 +36,7 @@ const FiltersBlock = ({
                         {filters.map((filter: FilterType) => (
                             <div
                                 id={filter.id.toString()}
-                                onClick={changeChoosedFiltersList}
+                                onClick={changeChosenFiltersList}
                                 className="drop-down-item"
                                 key={filter.id}
                             >

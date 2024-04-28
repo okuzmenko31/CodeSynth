@@ -1,5 +1,70 @@
 .markdown-body {
+    --color-canvas-default: transparent;
+    --color-canvas-subtle: var(--additional-color-1);
+    --color-neutral-muted: var(--additional-color-1);
+    --color-success-fg: var(--primary-color);
+    --color-success-emphasis: var(--primary-color);
+    --color-copied-active-bg: var(--primary-color);
+    --color-prettylights-syntax-entity-tag: var(--primary-color);
+    --color-border-default: var(--additional-color-1);
     width: 100%;
+    white-space: "pre-wrap";
+
+    a:not(.anchor) {
+        position: relative;
+        background: linear-gradient(
+            90deg,
+            var(--secondary-color) 0%,
+            var(--primary-color) 100%,
+            var(--transparent-color) 100%
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        &::after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            height: 1px;
+            width: 100%;
+            background: linear-gradient(
+                90deg,
+                var(--secondary-color) 0%,
+                var(--primary-color) 100%,
+                var(--transparent-color) 100%
+            );
+            transition: 0.3s;
+        }
+    }
+
+    blockquote {
+        position: relative;
+        border-color: var(--primary-color);
+        background-color: var(--color-canvas-subtle);
+        margin-top: 40px;
+        border-radius: 4px;
+
+        .blockquote-info {
+            position: absolute;
+            left: -14px;
+            top: -26px;
+            width: 24px;
+            height: 24px;
+            box-sizing: border-box;
+
+            svg {
+                width: 100%;
+                height: 100%;
+
+                circle,
+                line {
+                    color: var(--primary-color);
+                }
+            }
+        }
+    }
 }
 
 @media (max-width: 350px) {

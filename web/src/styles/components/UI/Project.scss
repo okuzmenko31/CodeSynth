@@ -29,6 +29,11 @@
 }
 
 .project-block {
+    --project-background: linear-gradient(
+        135deg,
+        var(--first-color),
+        var(--second-color)
+    );
     position: absolute;
     top: 0;
     bottom: 0;
@@ -36,7 +41,10 @@
     right: 0;
     display: flex;
     justify-content: center;
-    background: url("../../../assets/project_background_1.png");
+    background: var(
+        --project-background,
+        url("../../../assets/project_background_1.png")
+    );
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 50%;

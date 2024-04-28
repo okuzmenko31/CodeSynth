@@ -23,6 +23,7 @@ const ProjectsBlock = ({ projects, loadFunction }: ProjectsBlockProps) => {
                             tags={el.tags}
                             project_link={el.source_link}
                             checkout_link={`project/${el.id}`}
+                            colors={el.colors}
                         />
                     ))}
             </div>
