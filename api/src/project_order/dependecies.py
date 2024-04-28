@@ -12,7 +12,7 @@ from ..customer.schemas import CustomerCreateOrUpdate
 def project_order_create_data(
     full_name: str = Form(...),
     email: str = Form(...),
-    company: str = Form(...),
+    company: Optional[str] = Form(default=None),
     company_website: Optional[str] = Form(default=None),
     services: str = Form(...),
     budget: int = Form(...),

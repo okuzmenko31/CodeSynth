@@ -21,9 +21,9 @@ class ProjectOrderService(BaseService):
                 is_active=True,
             ),
         )
-        services_exists_ids = [
-            service[0].id for service in services_exists_ids if service
-        ]
+
+        # list of services ids from a row
+        services_exists_ids = services_exists_ids[0]
         for service_id in services_ids:
             if service_id not in services_exists_ids:
                 raise IdNotFoundException(
