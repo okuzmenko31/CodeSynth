@@ -6,7 +6,7 @@ from pydantic import BaseModel, EmailStr, AnyHttpUrl
 class CustomerCreate(BaseModel):
     full_name: str
     email: EmailStr
-    company: str
+    company: Optional[str] = None
     company_website: Optional[AnyHttpUrl] = None
 
 

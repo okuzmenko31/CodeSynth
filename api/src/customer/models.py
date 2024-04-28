@@ -14,7 +14,7 @@ class Customer(BaseModelMixin, Base):
         nullable=False, unique=True, index=True, doc="Email"
     )
     company: Mapped[str] = mapped_column(
-        nullable=False, index=True, doc="Company"
+        nullable=True, index=True, doc="Company"
     )
     company_website: Mapped[Optional[str]] = mapped_column(
         nullable=True, doc="Company Website"

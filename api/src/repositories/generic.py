@@ -68,7 +68,7 @@ class GenericRepository(Generic[Model, CreateSchema, UpdateSchema]):
         if is_active and hasattr(self.model, "active"):
             exists_ids_query = exists_ids_query.where(self.model.active)
         res = await self.session.execute(exists_ids_query)
-        return res.fetchmany()
+        return res.scalars().all()
 
     async def get_all_with_ordering(
         self,
