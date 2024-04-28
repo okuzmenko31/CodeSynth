@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +12,7 @@ import { playSound } from "../utils/playSound";
 import NavbarButton from "./UI/NavbarButton";
 
 const Navbar = () => {
-    const location = useLocation();
+    const { pathname } = useLocation();
     const navigate = useNavigate();
     const theme = useSelector((state: any) => state.themeReducer.theme);
     const dispatch = useDispatch();
@@ -20,15 +20,21 @@ const Navbar = () => {
         (state: any) => state.pageReducer.touchDevice
     );
 
+    const navbarMobileButtonRef = useRef<HTMLDivElement | null>(null);
+    const navbarRef = useRef<HTMLElement | null>(null);
+
     const addEventListenerOnScroll = () => {
         if (!touchDevice) {
-            let prevScrollpos = window.scrollY || window.pageYOffset;
+            let prevScrollPos = window.scrollY || window.pageYOffset;
 
             window.addEventListener("scroll", () => {
                 const currentScrollPos = window.scrollY || window.pageYOffset;
-                const navbar = document.getElementById("navbar");
+                const navbar = navbarRef.current;
 
-                if (prevScrollpos > currentScrollPos) {
+                if (
+                    prevScrollPos > currentScrollPos ||
+                    currentScrollPos === 0
+                ) {
                     if (navbar) {
                         navbar.style.top = "0";
                     }
@@ -38,27 +44,18 @@ const Navbar = () => {
                     }
                 }
 
-                prevScrollpos = currentScrollPos;
+                prevScrollPos = currentScrollPos;
             });
         }
     };
 
     useEffect(() => {
-        const elementId = location.hash.replace("#", "");
-        const element: HTMLElement | null = document.getElementById(elementId);
-
-        if (element) {
-            element.scrollIntoView();
-        }
-    }, [location.pathname]);
-
-    useEffect(() => {
         addEventListenerOnScroll();
-    }, [touchDevice, location.pathname]);
+    }, [touchDevice, pathname]);
 
     const toggleNavbar = () => {
-        const mobileButton = document.querySelector(".navbar-mobile-button");
-        const navbar = document.getElementById("navbar");
+        const mobileButton = navbarMobileButtonRef.current;
+        const navbar = navbarRef.current;
         if (mobileButton && navbar) {
             mobileButton.classList.toggle("active");
             navbar.classList.toggle("active");
@@ -83,6 +80,7 @@ const Navbar = () => {
                     <div
                         onClick={toggleNavbar}
                         className="navbar-mobile-button"
+                        ref={navbarMobileButtonRef}
                     >
                         <svg
                             height="32px"
@@ -97,7 +95,7 @@ const Navbar = () => {
                     </div>
                 </div>
             )}
-            <nav id="navbar" className="navbar">
+            <nav id="navbar" className="navbar" ref={navbarRef}>
                 <div className="navbar-first-part">
                     {window.innerWidth >= 1200 && (
                         <div className="logo">

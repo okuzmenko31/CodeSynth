@@ -13,7 +13,8 @@ export type ProjectType = {
     name: string;
     tags: Tag[];
     preview_image: string;
-    source_link: string;
+    source_link?: string;
+    colors?: string[];
 };
 
 export type FilterType = {
@@ -75,8 +76,8 @@ const PortfolioBlock = () => {
             <FiltersBlock
                 filters={filters}
                 dropDownToggle={dropDownToggle}
-                changeChoosedFiltersList={
-                    filtersController.changeChoosedFiltersList
+                changeChosenFiltersList={
+                    filtersController.changeChosenFiltersList
                 }
             />
 

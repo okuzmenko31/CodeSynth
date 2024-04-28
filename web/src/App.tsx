@@ -11,7 +11,7 @@ const App = () => {
     );
     const dispatch = useDispatch();
 
-    const moveCursor = (e: any) => {
+    const moveCursor = (e: MouseEvent) => {
         setTimeout(() => {
             const x = e.clientX;
             const y = e.clientY;

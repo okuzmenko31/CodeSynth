@@ -1,44 +1,62 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Controller } from "react-hook-form";
-import { addEventListenerOnInputChange } from "../../../utils/addEventListenerOnInputChange";
+import { LegacyRef, useContext, useEffect, useState } from "react";
+import { Control } from "react-hook-form";
+import { TechnicalAssignmentRefContext } from "../../../pages/MakeOrder";
 import { generateMinDate } from "../../../utils/generateMinDate";
 import MakeOrderFieldSection from "../../UI/MakeOrderFieldSection";
 
-const MakeOrderFirstPart = ({ control }: any) => {
+type MakeOrderFirstPartProps = {
+    control: Control;
+};
+
+const MakeOrderFirstPart = ({ control }: MakeOrderFirstPartProps) => {
     const [services, setServices] = useState([]);
     const [budgets, setBudgets] = useState([]);
     const [refSources, setRefSources] = useState([]);
-    const [selectedFile, setSelectedFile]: any = useState(undefined);
+    const [selectedFile, setSelectedFile] = useState<File | undefined>(
+        undefined
+    );
+    const techTaskInputRef = useContext<React.MutableRefObject<
+        HTMLInputElement | undefined
+    > | null>(TechnicalAssignmentRefContext);
 
     // API Endpoints
-    const getServicesUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/project_requests/all_services/`;
-    const getBudgetsUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/project_requests/all_budgets/`;
-    const getRefSourcesUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/project_requests/ref_sources/`;
+    const getServicesUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/project_order/services/`;
+    const getBudgetsUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/project_order/budget/`;
+    const getRefSourcesUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/project_order/referral_source/`;
 
-    const openInput = (e: any) => {
-        const input = e.target.parentNode.querySelector("input[type=file]");
-        if (input) {
-            input.click();
+    const openInput = () => {
+        if (techTaskInputRef && techTaskInputRef.current) {
+            techTaskInputRef.current.click();
         }
     };
 
-    useEffect(() => {
-        axios.get(getServicesUrl).then((res) => {
+    const getData = async () => {
+        await axios.get(getServicesUrl).then((res) => {
             setServices(res.data);
         });
 
-        axios.get(getBudgetsUrl).then((res) => {
+        await axios.get(getBudgetsUrl).then((res) => {
             setBudgets(res.data);
         });
 
-        axios.get(getRefSourcesUrl).then((res) => {
+        await axios.get(getRefSourcesUrl).then((res) => {
             setRefSources(res.data);
         });
+    };
+
+    useEffect(() => {
+        getData();
+        if (techTaskInputRef && techTaskInputRef.current) {
+            techTaskInputRef.current.addEventListener("change", (e: Event) => {
+                const target = e.target as HTMLInputElement;
+                const file: File = (target.files as FileList)[0];
+
+                setSelectedFile(file);
+            });
+        }
 
         generateMinDate();
-
-        addEventListenerOnInputChange(setSelectedFile);
     }, []);
 
     return (
@@ -48,7 +66,7 @@ const MakeOrderFirstPart = ({ control }: any) => {
                 <MakeOrderFieldSection
                     control={control}
                     sources={services}
-                    fieldName="project_services"
+                    fieldName="services"
                     fieldType="checkbox"
                     fieldLabel="What services are you interested in?"
                     fieldContainerCustomClass="category-list"
@@ -61,7 +79,7 @@ const MakeOrderFirstPart = ({ control }: any) => {
                 <MakeOrderFieldSection
                     control={control}
                     sources={budgets}
-                    fieldName="budget_id"
+                    fieldName="budget"
                     fieldType="radio"
                     fieldLabel="Estimated budget for the project?"
                     fieldContainerCustomClass="category-list"
@@ -102,11 +120,13 @@ const MakeOrderFirstPart = ({ control }: any) => {
             <div className="make-order-category">
                 <p className="small-text">Attach your technical assignment.</p>
                 <div className="category-list-area file-type">
-                    <Controller
-                        name="technical_task"
-                        control={control}
-                        defaultValue=""
-                        render={({ field }) => <input type="file" {...field} />}
+                    <input
+                        type="file"
+                        ref={
+                            techTaskInputRef as
+                                | LegacyRef<HTMLInputElement>
+                                | undefined
+                        }
                     />
                     <div onClick={openInput} className="upload">
                         {selectedFile === undefined && (
@@ -143,7 +163,7 @@ const MakeOrderFirstPart = ({ control }: any) => {
 
             <MakeOrderFieldSection
                 control={control}
-                fieldName="project_info"
+                fieldName="details"
                 fieldType="textarea"
                 fieldLabel="Please tell us more about the project."
                 fieldId="additional-project-info"
@@ -154,7 +174,7 @@ const MakeOrderFirstPart = ({ control }: any) => {
                 <MakeOrderFieldSection
                     control={control}
                     sources={refSources}
-                    fieldName="ref_source_id"
+                    fieldName="referral_source"
                     fieldType="radio"
                     fieldLabel="How did you hear about us?"
                     fieldContainerCustomClass="category-list"

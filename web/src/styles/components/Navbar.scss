@@ -165,6 +165,7 @@
         &.active {
             display: flex;
             height: 100vh;
+            top: 0 !important;
             bottom: 0;
             justify-content: center;
 

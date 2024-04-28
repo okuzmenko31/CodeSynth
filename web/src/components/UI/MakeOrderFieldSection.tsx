@@ -1,5 +1,4 @@
-import { Controller, InputValidationRules } from "react-hook-form";
-import { addClassOnChangeState } from "../../utils/addClassOnChangeState";
+import { Controller } from "react-hook-form";
 
 type MakeOrderFieldSectionProps = {
     control: any;
@@ -10,9 +9,9 @@ type MakeOrderFieldSectionProps = {
     fieldPlaceholder?: string;
     fieldType: string;
     defaultValue?: string;
-    fieldRules?: object;
-    fieldContainerCustomClass?: any;
-    fieldContainerWrapperCustomClass?: any;
+    fieldRules?: any;
+    fieldContainerCustomClass?: string;
+    fieldContainerWrapperCustomClass?: string;
 };
 
 const MakeOrderFieldSection = ({
@@ -44,9 +43,9 @@ const MakeOrderFieldSection = ({
 
     const fieldContainerClass =
         fieldContainerCustomClass ??
-        (fieldType === "radio" || fieldType === "checkbox")
+        (fieldType === "radio" || fieldType === "checkbox"
             ? "category-list"
-            : "category-list-area";
+            : "category-list-area");
 
     const renderField = (field: any) => {
         switch (effectiveFieldType) {
@@ -58,63 +57,75 @@ const MakeOrderFieldSection = ({
                         placeholder={fieldPlaceholder}
                     />
                 );
-            case "file":
-                return <input {...field} type="file" />;
             case "radio":
                 return sources.map((source) => (
                     <div key={source.id} className="list-item">
-                        <label className="form_checkbox">
+                        <label
+                            className={`form_checkbox ${
+                                field.value === source.id ? "active" : ""
+                            }`}
+                        >
                             <input
                                 {...field}
                                 name={fieldName}
                                 value={source.id}
                                 type="radio"
                                 className="radio-make-order"
-                                onChange={addClassOnChangeState}
+                                checked={field.value === source.id}
+                                onChange={() => field.onChange(source.id)}
                             />
-                            {source.name}
+                            {source.amount ?? source.name}
                         </label>
                     </div>
                 ));
             case "checkbox":
                 return sources.map((item) => (
                     <div key={item.id} className="list-item">
-                        <Controller
-                            name={`project_services[${item.id}]`}
-                            control={control}
-                            rules={{
-                                required:
-                                    "You must choose at least one service!",
-                            }}
-                            render={({ field: { onChange, value } }) => (
-                                <label className="form_checkbox">
-                                    <input
-                                        type="checkbox"
-                                        className="checkbox-make-order"
-                                        checked={value || false}
-                                        onChange={(e) => {
-                                            onChange(e.target.checked);
-                                            addClassOnChangeState(e);
-                                        }}
-                                    />
-                                    {item.name}
-                                </label>
-                            )}
-                        />
+                        <label
+                            className={`form_checkbox ${
+                                field.value.includes(item.id) ? "active" : ""
+                            }`}
+                        >
+                            <input
+                                type="checkbox"
+                                className="checkbox-make-order"
+                                checked={field.value.includes(item.id)}
+                                onChange={(e) => {
+                                    const isChecked = e.target.checked;
+                                    if (isChecked) {
+                                        field.onChange([
+                                            ...field.value,
+                                            item.id,
+                                        ]);
+                                    } else {
+                                        field.onChange(
+                                            field.value.filter(
+                                                (id: number | string) =>
+                                                    id !== item.id
+                                            )
+                                        );
+                                    }
+                                }}
+                            />
+                            {item.name}
+                        </label>
                     </div>
                 ));
             case "date":
                 return <input type="date" {...field} />;
             case "boolean":
                 return (
-                    <label className="form_checkbox">
+                    <label
+                        className={`form_checkbox ${
+                            field.value ? "active" : ""
+                        }`}
+                    >
                         <input
                             type="checkbox"
                             className="checkbox-make-order"
                             checked={field.value}
                             onChange={(e) => {
                                 field.onChange(e.target.checked);
-                                addClassOnChangeState(e);
                             }}
                         />
                         This is hard deadline
@@ -141,9 +152,7 @@ const MakeOrderFieldSection = ({
                 {fieldLabel && (
                     <p
                         className={`small-text ${
-                            (fieldRules as InputValidationRules).required
-                                ? "required"
-                                : ""
+                            fieldRules && fieldRules.required ? "required" : ""
                         }`}
                     >
                         {fieldLabel}

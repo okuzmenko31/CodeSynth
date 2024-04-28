@@ -1,26 +1,29 @@
+import CryptoWallet from "../assets/projects/Crypto_wallet_main.png";
+import EslWeb from "../assets/projects/ESL_esports_main.png";
+import FlexFiUpscale from "../assets/projects/FlexFi_upscale_main.png";
 import { DetailedProjectInfoType } from "../pages/DetailedProjectInformation";
+import FlexFiUpscaleMd from "./FlexFiUpscale.md";
 
 export const detailedProjectsData: DetailedProjectInfoType[] = [
     {
         id: 1,
-        name: "Test",
+        name: "FlexFi Upscale",
         tags: [],
-        preview_image: "string",
-        source_link: "string",
-        text: "[Testing video](https://youtube.com) \n\n # Hello guises \n\n ### Here is numero synco pa blo escabares del mundo \n\n Numero Synco: Normala del pabla escabares \n\n [![](https://markdown-videos-api.jorgenkh.no/youtube/IJ_sPvbqR6w)](https://youtu.be/IJ_sPvbqR6w)",
+        preview_image: FlexFiUpscale,
+        text: fetch(FlexFiUpscaleMd).then((res: any) => res.text()),
     },
     {
         id: 2,
-        name: "Test 2",
-        tags: [
-            {
-                id: 1,
-                name: "testTag",
-                img: "https://pbs.twimg.com/profile_images/1498641868397191170/6qW2XkuI_400x400.png",
-            },
-        ],
-        preview_image: "https://string.com",
-        source_link: "https://string.com",
+        name: "ESL Esports",
+        tags: [],
+        preview_image: EslWeb,
         text: "# Hello gasdadasdasdasas",
+    },
+    {
+        id: 3,
+        name: "NeoNest Wallet",
+        tags: [],
+        preview_image: CryptoWallet,
+        text: "[Testing video](https://youtube.com) \n\n # Hello guises \n\n ### Here is numero synco pa blo escabares del mundo \n\n Numero Synco: Normala del pabla escabares \n\n [![](https://markdown-videos-api.jorgenkh.no/youtube/IJ_sPvbqR6w)](https://youtu.be/IJ_sPvbqR6w)",
     },
 ];
