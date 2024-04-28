@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  postgresql:
+    image: "postgres:15"
+    restart: always
+    container_name: "postgresql"
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_HOST: ${DB_HOST}
+      POSTGRES_PORT: ${DB_PORT}
+    env_file:
+      - .env.prod
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+    container_name: "app"
+    hostname: "codesynth"
+    depends_on:
+      - postgresql
+    environment:
+      MODE: "PROD"
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_HOST: ${DB_HOST}
+      POSTGRES_PORT: ${DB_PORT}
+    env_file:
+      - .env.prod
+    ports:
+      - "8000:${API_APP_PORT}"
+    volumes:
+      - .:/app/api
+      - ./${STATIC_DIR}:/app/api/${STATIC_DIR}
+
+  nginx:
+    image: nginx:latest
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    env_file:
+      - .env.prod
+
+volumes:
+  postgres_data:
+  static_data:

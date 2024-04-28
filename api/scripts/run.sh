@@ -39,12 +39,28 @@ if grep -qi '^RUN_MIGRATIONS=True' .env; then
     alembic upgrade head || { echo "Alembic upgrade failed. Exiting."; exit 1; }
 fi
 
-# Check for debug mode and start the server accordingly
+# Set the default message format for app mode
 APP_MODE_MESSAGE="Starting the application in %s mode..."
-if grep -qi '^DEBUG=True' .env; then
-    printf "$APP_MODE_MESSAGE\n" "debug"
-    uvicorn src.main:app --reload --host 0.0.0.0 --port "$API_APP_PORT"
+
+# Check the MODE environment variable
+if [ "$MODE" = "PROD" ]; then
+    # Production mode: start Supervisor
+    echo "Starting the application in production mode..."
+    /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+
+elif [ "$MODE" = "DEV" ]; then
+    # Development or debug mode
+    # Check for debug mode in .env file
+    if grep -qi '^DEBUG=True' .env; then
+        printf "$APP_MODE_MESSAGE" "debug"
+        # Start FastAPI application with Uvicorn in development mode
+        uvicorn src.main:app --reload --host 0.0.0.0 --port "$API_APP_PORT"
+    else
+        printf "$APP_MODE_MESSAGE" "production"
+        # Start FastAPI application with Gunicorn in more stable development mode
+        gunicorn src.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind "0.0.0.0:$API_APP_PORT"
+    fi
 else
-    printf "$APP_MODE_MESSAGE\n" "production"
-    gunicorn src.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind "0.0.0.0:$API_APP_PORT"
+    echo "No valid MODE set. Exiting..."
+    exit 1
 fi
