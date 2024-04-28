@@ -162,3 +162,6 @@ pg_hba.conf
 venv/
 ENV/
 env/
+
+# supervisor
+*.pid
