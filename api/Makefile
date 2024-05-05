@@ -6,7 +6,7 @@ dc-exec-dev = $(dc_dev) exec -T -u $(OPTIONS)
 
 CONTAINER ?= app
 SHELL_CMD ?= bash
-OPTIONS ?= -u appuser
+OPTIONS ?= -u root
 
 # Docker
 

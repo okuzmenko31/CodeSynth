@@ -47,10 +47,7 @@ COPY ./supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY --chmod=765 scripts/run.sh /app/run.sh
 RUN chmod +x /app/run.sh
 
-# Create a non-root user and change ownership of app directory
-RUN groupadd -r app && useradd -r -g app appuser \
-    && chown -R appuser:app /app
+# Run application as root user
+USER root
 
-# Run the application under non-root user
-USER appuser
 CMD ["/app/run.sh"]
