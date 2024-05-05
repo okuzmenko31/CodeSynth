@@ -42,6 +42,9 @@ services:
     image: nginx:latest
     build:
       context: ./nginx
+    ports:
+    - "8080:80"
+    - "8443:443"
     volumes:
       - ./nginx:/etc/nginx/conf.d
     env_file:
