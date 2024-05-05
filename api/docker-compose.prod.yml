@@ -32,8 +32,8 @@ services:
       POSTGRES_PORT: ${DB_PORT}
     env_file:
       - .env.prod
-    ports:
-      - "8000:${API_APP_PORT}"
+    expose:
+      - 8000
     volumes:
       - .:/app/api
       - ./${STATIC_DIR}:/app/api/${STATIC_DIR}
