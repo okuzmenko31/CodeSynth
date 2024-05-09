@@ -36,24 +36,7 @@ class ProjectsController {
         }
     };
 
-    public getProjectsInitial = async () => {
-        if (!this.staticData) {
-            const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}${this.projectUrl}?page=${this.page}&size=${this.projectsNumber}`;
-
-            await axios.get(getUrl).then((res) => {
-                this.setProjects(res.data);
-            });
-        } else {
-            const sliceFrom = this.page * this.projectsNumber;
-            const sliceTo =
-                this.page * this.projectsNumber + this.projectsNumber;
-            const newProjects = projectsData.slice(sliceFrom, sliceTo);
-
-            this.setProjects(newProjects);
-        }
-    };
-
-    public getProjectsByChoosedFilters = async () => {
+    public getCurrentProjects = async () => {
         if (!this.staticData) {
             if (this.chosenFilters.length > 0) {
                 this.dispatch(setPage(0));
