@@ -6,6 +6,7 @@ import FiltersController from "../../../utils/filtersController";
 import { initParallaxEffect } from "../../../utils/parallax_effect";
 import ProjectsController from "../../../utils/projectsControllet";
 import FiltersBlock from "../../UI/FiltersBlock";
+import Loader from "../../UI/Loader";
 import ProjectsBlock from "../../UI/ProjectsBlock";
 
 export type ProjectType = {
@@ -27,6 +28,8 @@ const PortfolioBlock = () => {
     const [filters, setFilters] = useState<FilterType[]>([]);
     const [chosenFilters, setChosenFilters] = useState<number[]>([]);
     const [projectUrl, setProjectUrl] = useState("/projects/all/");
+    const [isProjectsLoaded, setIsProjectsLoaded] = useState(false);
+    const [isFilterTypesLoaded, setIsFilterTypesLoaded] = useState(false);
 
     const projectsNumber = 10;
 
@@ -46,12 +49,19 @@ const PortfolioBlock = () => {
     );
 
     useEffect(() => {
-        projectsController.getProjectsByChoosedFilters();
+        setIsProjectsLoaded(false);
+
+        projectsController
+            .getCurrentProjects()
+            .then(() => setIsProjectsLoaded(true));
     }, [chosenFilters]);
 
     useEffect(() => {
-        projectsController.getProjectsInitial();
-        filtersController.getFilterTypes();
+        setIsFilterTypesLoaded(false);
+
+        filtersController
+            .getFilterTypes()
+            .then(() => setIsFilterTypesLoaded(true));
 
         window.addEventListener(
             "scroll",
@@ -73,18 +83,29 @@ const PortfolioBlock = () => {
                 </p>
             </div>
 
-            <FiltersBlock
-                filters={filters}
-                dropDownToggle={dropDownToggle}
-                changeChosenFiltersList={
-                    filtersController.changeChosenFiltersList
-                }
-            />
+            {isFilterTypesLoaded && filters.length > 0 && (
+                <FiltersBlock
+                    filters={filters}
+                    dropDownToggle={dropDownToggle}
+                    changeChosenFiltersList={
+                        filtersController.changeChosenFiltersList
+                    }
+                />
+            )}
 
-            <ProjectsBlock
-                projects={projects}
-                loadFunction={projectsController.loadMoreProjects}
-            />
+            {!isProjectsLoaded ? (
+                <Loader />
+            ) : projects.length > 0 ? (
+                <ProjectsBlock
+                    projects={projects}
+                    loadFunction={projectsController.loadMoreProjects}
+                />
+            ) : (
+                <p>
+                    No projects available at the moment. Please check back
+                    later.
+                </p>
+            )}
         </div>
     );
 };
