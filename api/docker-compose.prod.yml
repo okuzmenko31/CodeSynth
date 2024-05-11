@@ -33,22 +33,22 @@ services:
     env_file:
       - .env.prod
     expose:
-      - 8000
+      - 7616
     volumes:
       - .:/app/api
       - ./${STATIC_DIR}:/app/api/${STATIC_DIR}
 
-  nginx:
-    image: nginx:latest
-    build:
-      context: ./nginx
-    ports:
-    - "8080:80"
-    - "8443:443"
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
-    env_file:
-      - .env.prod
+  # nginx:
+  #   image: nginx:latest
+  #   build:
+  #     context: ./nginx
+  #   ports:
+  #   - "8080:80"
+  #   - "8443:443"
+  #   volumes:
+  #     - ./nginx:/etc/nginx/conf.d
+  #   env_file:
+  #     - .env.prod
 
 volumes:
   postgres_data:
