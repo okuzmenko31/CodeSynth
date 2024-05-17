@@ -12,7 +12,7 @@ const WhatIsBlock = () => {
                     <span className="codesynth-text" data-text="CODESYNTH">
                         CODESYNTH
                     </span>{" "}
-                    - THE COOLETS STARTER WEB STUDIO
+                    - THE COOLEST STARTER WEB STUDIO
                 </p>
                 <p className="small-text">Studio of your dreams and wishes</p>
             </div>
