@@ -4,7 +4,7 @@ import "../../../styles/components/pages/main/PortfolioBlock.scss";
 import { dropDownToggle } from "../../../utils/dropDownToggle";
 import FiltersController from "../../../utils/filtersController";
 import { initParallaxEffect } from "../../../utils/parallax_effect";
-import ProjectsController from "../../../utils/projectsControllet";
+import ProjectsController from "../../../utils/projectsController";
 import FiltersBlock from "../../UI/FiltersBlock";
 import Loader from "../../UI/Loader";
 import ProjectsBlock from "../../UI/ProjectsBlock";
