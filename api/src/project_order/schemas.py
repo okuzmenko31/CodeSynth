@@ -68,7 +68,7 @@ class ProjectOrderReferralSourceShow(ProjectOrderRelatedBase):
 
 class ProjectOrderBudgetBase(MainSchema):
     value_from: int
-    value_to: int
+    value_to: Optional[int] = None
     active: bool
 
 
