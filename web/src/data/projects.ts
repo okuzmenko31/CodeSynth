@@ -1,6 +1,6 @@
-import CryptoWallet from "../assets/projects/Crypto_wallet_main.png";
-import EslWeb from "../assets/projects/ESL_esports_main.png";
-import FlexFiUpscale from "../assets/projects/FlexFi_upscale_main.png";
+import CryptoWallet from "../assets/projects/NeoNestWallet/Icon.png";
+import EslWeb from "../assets/projects/ESLEsports/Icon.png";
+import FlexFiUpscale from "../assets/projects/FlexFiUpscale/Icon.png";
 import { ProjectType } from "../components/pages/main/PortfolioBlock";
 
 export const projectsData: ProjectType[] = [

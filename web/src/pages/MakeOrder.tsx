@@ -49,7 +49,7 @@ const MakeOrder = () => {
 
         const fileInput = technicalAssignmentRef.current as any;
 
-        const file = fileInput !== undefined ? fileInput.files[0] : ""; // Reset fileInput soon
+        const file = fileInput.files[0] || "";
 
         fd.append("technical_assignment", file);
 

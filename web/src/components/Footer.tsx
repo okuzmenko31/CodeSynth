@@ -28,15 +28,15 @@ const Footer = () => {
                     <p className="mid-text">CONTACTS</p>
                     <li className="small-text">
                         <Link
-                            to={"mailto:olegkuzmenko2005@gmail.com"}
+                            to={"mailto:codesynth.pro@gmail.com"}
                             target="_blank"
                         >
-                            olegkuzmenko2005@gmail.com
+                            codesynth.pro@gmail.com
                         </Link>
                     </li>
                     <li className="small-text">
-                        <Link to={"https://t.me/venrute_xx"} target="_blank">
-                            @venrute_xx
+                        <Link to={"https://t.me/venture_xx"} target="_blank">
+                            @venture_xx
                         </Link>
                     </li>
                     <li className="small-text">
