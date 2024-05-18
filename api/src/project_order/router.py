@@ -43,12 +43,13 @@ async def create_project_order(
     uow: uowDEP,
 ) -> ProjectOrderCreateShow:
     try:
-        file_processor = StaticFilesProcessor(
-            request.base_url,
-            data.technical_assignment,
-        )
-        file_data = await file_processor.process()
-        data.technical_assignment = file_data.link
+        if data.technical_assignment:
+            file_processor = StaticFilesProcessor(
+                request.base_url,
+                data.technical_assignment,
+            )
+            file_data = await file_processor.process()
+            data.technical_assignment = file_data.link
         return await ProjectOrderService(uow).create_project_order(data)
     except SQLAlchemyError as e:
         log.error(e)
