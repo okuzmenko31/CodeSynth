@@ -42,7 +42,7 @@ const MakeOrderFieldSection = ({
         : "default";
 
     const fieldContainerClass =
-        fieldContainerCustomClass ??
+        fieldContainerCustomClass ||
         (fieldType === "radio" || fieldType === "checkbox"
             ? "category-list"
             : "category-list-area");
@@ -72,9 +72,15 @@ const MakeOrderFieldSection = ({
                                 type="radio"
                                 className="radio-make-order"
                                 checked={field.value === source.id}
+                                onClick={(e: any) => {
+                                    if (e.target.checked === true) {
+                                        e.target.checked = false;
+                                        field.onChange("");
+                                    }
+                                }}
                                 onChange={() => field.onChange(source.id)}
                             />
-                            {source.amount ?? source.name}
+                            {source.amount || source.name}
                         </label>
                     </div>
                 ));
@@ -146,7 +152,7 @@ const MakeOrderFieldSection = ({
         <>
             <div
                 className={
-                    fieldContainerWrapperCustomClass ?? "make-order-category"
+                    fieldContainerWrapperCustomClass || "make-order-category"
                 }
             >
                 {fieldLabel && (

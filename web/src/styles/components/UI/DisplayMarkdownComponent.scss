@@ -41,6 +41,7 @@
 
     blockquote {
         position: relative;
+        max-width: 500px;
         border-color: var(--primary-color);
         background-color: var(--color-canvas-subtle);
         margin-top: 40px;

@@ -13,7 +13,7 @@ const Button = ({ text, callback, id, style, reference }: ButtonProps) => {
     return (
         <button
             style={style ? style : undefined}
-            id={id ?? ""}
+            id={id || ""}
             className="button"
             onClick={callback}
             ref={reference}

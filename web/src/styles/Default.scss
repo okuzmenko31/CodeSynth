@@ -259,6 +259,7 @@ input[type="file"] {
 .order-input,
 input[type="date"],
 textarea {
+    cursor: pointer;
     transition: 0.3s;
 
     &:focus {
