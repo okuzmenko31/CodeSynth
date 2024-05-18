@@ -1,0 +1,20 @@
+upstream codesynth {
+	server codesynth:${API_APP_PORT};
+}
+
+server {
+	listen 80;
+    listen 443;
+    listen [::]:443;
+
+    server_name ${NGINX_SERVER_NAME};
+
+    location / {
+		proxy_pass http://codesynth;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-Proto ${NGINX_FORWARDED_PROTO};
+		proxy_set_header X-Forwarded-Scheme ${NGINX_FORWARDED_SCHEME};
+    }
+}
