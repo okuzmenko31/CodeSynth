@@ -68,7 +68,7 @@ const MakeOrder = () => {
             .catch((err) => {
                 setIsModalOpened(true);
                 setModalText(
-                    err.response.data.detail ?? "Something went wrong..."
+                    err.response?.data.detail || "Something went wrong..."
                 );
                 button.disabled = false;
             });
