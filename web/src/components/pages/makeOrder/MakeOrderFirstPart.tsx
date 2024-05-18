@@ -178,7 +178,6 @@ const MakeOrderFirstPart = ({ control }: MakeOrderFirstPartProps) => {
                     fieldType="radio"
                     fieldLabel="How did you hear about us?"
                     fieldContainerCustomClass="category-list"
-                    fieldRules={{ required: "Please select a ref source" }}
                 />
             )}
         </div>

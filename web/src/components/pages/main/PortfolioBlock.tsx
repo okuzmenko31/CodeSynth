@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Tag } from "../../../components/UI/ProjectTemplate";
 import "../../../styles/components/pages/main/PortfolioBlock.scss";
 import { dropDownToggle } from "../../../utils/dropDownToggle";
@@ -30,17 +30,21 @@ const PortfolioBlock = () => {
     const [projectUrl, setProjectUrl] = useState("/projects/all/");
     const [isProjectsLoaded, setIsProjectsLoaded] = useState(false);
     const [isFilterTypesLoaded, setIsFilterTypesLoaded] = useState(false);
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
     const projectsNumber = 10;
 
-    const projectsController = new ProjectsController(
+    const options = {
         projects,
         projectUrl,
         setProjects,
         setProjectUrl,
         projectsNumber,
-        chosenFilters
-    );
+        chosenFilters,
+        buttonRef,
+    };
+
+    const projectsController = new ProjectsController(options);
 
     const filtersController = new FiltersController(
         chosenFilters,
@@ -99,6 +103,7 @@ const PortfolioBlock = () => {
                 <ProjectsBlock
                     projects={projects}
                     loadFunction={projectsController.loadMoreProjects}
+                    buttonRef={buttonRef}
                 />
             ) : (
                 <p>

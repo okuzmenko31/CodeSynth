@@ -83,8 +83,7 @@ const DetailedProjectInformation = () => {
                                         <p className="big-text">
                                             {project.name}
                                         </p>
-
-                                        <img src={project.preview_image} />
+                                        
                                         <div className="detailed-project-page-header-right">
                                             {project.source_link && (
                                                 <div className="detailed-project-page-header-right-button">

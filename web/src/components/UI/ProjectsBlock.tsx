@@ -5,9 +5,10 @@ import Project from "./ProjectTemplate";
 type ProjectsBlockProps = {
     projects: ProjectType[];
     loadFunction: () => any;
+    buttonRef?: any;
 };
 
-const ProjectsBlock = ({ projects, loadFunction }: ProjectsBlockProps) => {
+const ProjectsBlock = ({ projects, loadFunction, buttonRef }: ProjectsBlockProps) => {
     return (
         <>
             <div className="projects-container">
@@ -27,7 +28,7 @@ const ProjectsBlock = ({ projects, loadFunction }: ProjectsBlockProps) => {
                         />
                     ))}
             </div>
-            <div onClick={loadFunction} className="drop-down" id="show_more">
+            <div onClick={loadFunction} ref={buttonRef} className="drop-down" id="show_more">
                 Show More
                 <svg
                     viewBox="0 0 16 16"

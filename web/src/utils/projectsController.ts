@@ -5,6 +5,16 @@ import { ProjectType } from "../components/pages/main/PortfolioBlock";
 import { projectsData } from "../data/projects";
 import { setPage } from "../redux/actions";
 
+type ProjectsControllerOptions = {
+    projects: ProjectType[];
+    projectUrl: string;
+    setProjects: any;
+    setProjectUrl: any;
+    projectsNumber: number;
+    chosenFilters: number[];
+    buttonRef?: any;
+};
+
 class ProjectsController {
     private dispatch = useDispatch();
 
@@ -13,53 +23,48 @@ class ProjectsController {
     );
     private page = useSelector((state: any) => state.pageReducer.page);
 
-    constructor(
-        private projects: ProjectType[],
-        private projectUrl: string,
-        private setProjects: any,
-        private setProjectUrl: any,
-        private projectsNumber: number,
-        private chosenFilters: number[]
-    ) {}
+    constructor(private options: ProjectsControllerOptions) {}
 
     private hideLoadButton = (length: number, threshold: number) => {
-        const showMore = document.getElementById("show_more");
+        setTimeout(() => {
+            const showMore =
+                this.options.buttonRef.current ||
+                document.getElementById("show_more");
 
-        if (showMore) {
-            if (length > 0 && length < threshold) {
-                showMore.style.display = "none";
-            } else if (length === 0) {
-                showMore.style.display = "none";
-            } else {
-                showMore.style.display = "flex";
+            if (showMore) {
+                if (length < threshold || length === 0) {
+                    showMore.style.display = "none";
+                } else {
+                    showMore.style.display = "flex";
+                }
             }
-        }
+        }, 0);
     };
 
     public getCurrentProjects = async () => {
         if (!this.staticData) {
-            if (this.chosenFilters.length > 0) {
+            if (this.options.chosenFilters.length > 0) {
                 this.dispatch(setPage(0));
-                this.setProjectUrl("/projects/filter_by_filter_types/");
+                this.options.setProjectUrl("/projects/filter_by_filter_types/");
 
-                const postUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/projects/filter_by_filter_types/?page=0&size=${this.projectsNumber}`;
+                const postUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/projects/filter_by_filter_types/?page=0&size=${this.options.projectsNumber}`;
 
                 await axios
                     .post(postUrl, {
-                        filter_types: this.chosenFilters,
+                        filter_types: this.options.chosenFilters,
                     })
                     .then((res) => {
-                        this.setProjects(res.data);
+                        this.options.setProjects(res.data);
 
                         this.hideLoadButton(res.data.length, 1);
                     });
             } else {
                 this.dispatch(setPage(0));
-                this.setProjectUrl("/projects/all/");
-                const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/projects/all/?page=0&size=${this.projectsNumber}`;
+                this.options.setProjectUrl("/projects/all/");
+                const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}/projects/all/?page=0&size=${this.options.projectsNumber}`;
 
                 await axios.get(getUrl).then((res) => {
-                    this.setProjects(res.data);
+                    this.options.setProjects(res.data);
 
                     this.hideLoadButton(res.data.length, 1);
                 });
@@ -67,30 +72,36 @@ class ProjectsController {
         } else {
             this.dispatch(setPage(0));
 
-            if (this.chosenFilters.length > 0) {
+            if (this.options.chosenFilters.length > 0) {
                 const filteredProjects = projectsData.filter(
                     (item: ProjectType) =>
                         item.tags.some((tag: Tag) =>
-                            this.chosenFilters.includes(tag.id)
+                            this.options.chosenFilters.includes(tag.id)
                         )
                 );
                 const newProjects = filteredProjects.slice(
                     0,
-                    this.projectsNumber
+                    this.options.projectsNumber
                 );
 
-                this.setProjects(newProjects);
+                this.options.setProjects(newProjects);
 
                 this.hideLoadButton(
                     filteredProjects.length,
-                    this.projectsNumber
+                    this.options.projectsNumber
                 );
             } else {
-                const newProjects = projectsData.slice(0, this.projectsNumber);
+                const newProjects = projectsData.slice(
+                    0,
+                    this.options.projectsNumber
+                );
 
-                this.setProjects(newProjects);
+                this.options.setProjects(newProjects);
 
-                this.hideLoadButton(projectsData.length, this.projectsNumber);
+                this.hideLoadButton(
+                    projectsData.length,
+                    this.options.projectsNumber
+                );
             }
         }
     };
@@ -99,27 +110,29 @@ class ProjectsController {
         const newPage = this.page + 1;
         this.dispatch(setPage(newPage));
 
-        const showMore = document.getElementById("show_more");
+        const showMore =
+            this.options.buttonRef.current ||
+            document.getElementById("show_more");
 
         if (!this.staticData) {
-            if (this.chosenFilters.length > 0) {
-                const postUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}${this.projectUrl}?page=${newPage}&size=${this.projectsNumber}`;
+            if (this.options.chosenFilters.length > 0) {
+                const postUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}${this.options.projectUrl}?page=${newPage}&size=${this.options.projectsNumber}`;
 
                 await axios
                     .post(postUrl, {
-                        filter_types: this.chosenFilters,
+                        filter_types: this.options.chosenFilters,
                     })
                     .then((res) => {
                         if (showMore) {
                             if (res.data.length > 0) {
                                 const newArray: any[any] = [
-                                    ...this.projects,
+                                    ...this.options.projects,
                                     ...res.data,
                                 ];
-                                this.setProjects(newArray);
+                                this.options.setProjects(newArray);
                                 this.hideLoadButton(
                                     res.data.length,
-                                    this.projectsNumber
+                                    this.options.projectsNumber
                                 );
                             } else {
                                 showMore.style.display = "none";
@@ -127,19 +140,19 @@ class ProjectsController {
                         }
                     });
             } else {
-                const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}${this.projectUrl}?page=${newPage}&size=${this.projectsNumber}`;
+                const getUrl = `${process.env.REACT_APP_BACKEND_DOMAIN}${this.options.projectUrl}?page=${newPage}&size=${this.options.projectsNumber}`;
 
                 await axios.get(getUrl).then((res) => {
                     if (showMore) {
                         if (res.data.length > 0) {
                             const newArray: any[any] = [
-                                ...this.projects,
+                                ...this.options.projects,
                                 ...res.data,
                             ];
-                            this.setProjects(newArray);
+                            this.options.setProjects(newArray);
                             this.hideLoadButton(
                                 res.data.length,
-                                this.projectsNumber
+                                this.options.projectsNumber
                             );
                         } else {
                             showMore.style.display = "none";
@@ -148,14 +161,16 @@ class ProjectsController {
                 });
             }
         } else {
-            const sliceFrom = newPage * this.projectsNumber;
-            const sliceTo = newPage * this.projectsNumber + this.projectsNumber;
+            const sliceFrom = newPage * this.options.projectsNumber;
+            const sliceTo =
+                newPage * this.options.projectsNumber +
+                this.options.projectsNumber;
 
-            if (this.chosenFilters.length > 0) {
+            if (this.options.chosenFilters.length > 0) {
                 const filteredProjects = projectsData.filter(
                     (item: ProjectType) =>
                         item.tags.some((tag: Tag) =>
-                            this.chosenFilters.includes(tag.id)
+                            this.options.chosenFilters.includes(tag.id)
                         )
                 );
                 const counter = filteredProjects.slice(
@@ -165,15 +180,15 @@ class ProjectsController {
 
                 const newProjects = filteredProjects.slice(0, sliceTo);
 
-                this.setProjects(newProjects);
-                this.hideLoadButton(counter, this.projectsNumber);
+                this.options.setProjects(newProjects);
+                this.hideLoadButton(counter, this.options.projectsNumber);
             } else {
                 const newProjects = projectsData.slice(0, sliceTo);
 
                 const counter = projectsData.slice(sliceFrom, sliceTo).length;
 
-                this.setProjects(newProjects);
-                this.hideLoadButton(counter, this.projectsNumber);
+                this.options.setProjects(newProjects);
+                this.hideLoadButton(counter, this.options.projectsNumber);
             }
         }
     };
