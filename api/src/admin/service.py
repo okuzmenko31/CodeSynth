@@ -14,6 +14,10 @@ class AdminAuthService(BaseService):
             user: User = await self.uow.user.get_by_username(
                 username=data.username,
             )
-            if not user or not user.check_password(data.password):
+            if (
+                not user
+                or not user.check_password(data.password)
+                or not user.is_active
+            ):
                 return False
             return True
