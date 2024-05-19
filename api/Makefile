@@ -81,6 +81,13 @@ migration-current:
 migration-history:
 	$(dc_dev) exec $(OPTIONS) $(CONTAINER) alembic history
 
+# Sh scripts calling
+create-admin:
+	@read -p "Enter username: " username; \
+	read -p "Enter email: " email; \
+	read -p "Enter password: " password; \
+	$(dc_dev) exec $(OPTIONS) $(CONTAINER) ../create_admin.sh -u $$username -e $$email -p $$password
+
 # Requirements
 pip-list:
 	$(dc_dev) exec $(OPTIONS) $(CONTAINER) pip list

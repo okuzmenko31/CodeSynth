@@ -18,6 +18,9 @@ class UserRepository(GenericRepository[User, UserCreate, UserUpdate]):
     async def get_by_id_active(self, *, id: int) -> User | None:
         return await self.get_by_attr_active(attr=self.model.id, value=id)
 
+    async def get_by_username(self, *, username: str) -> User | None:
+        return await self.get_by_attr(attr=self.model.username, value=username)
+
     async def get_by_email(self, *, email: str) -> User | None:
         return await self.get_by_attr(attr=self.model.email, value=email)
 

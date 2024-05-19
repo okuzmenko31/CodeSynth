@@ -7,6 +7,7 @@ from .project_order.model_view import (
     ProjectOrderBudgetModelView,
     ProjectOrderReferralSourceModelView,
 )
+from .user.model_views import UserModelView
 
 
 def get_model_views() -> list[ModelView]:
@@ -16,4 +17,5 @@ def get_model_views() -> list[ModelView]:
         ProjectOrderServiceModelView,
         ProjectOrderBudgetModelView,
         ProjectOrderReferralSourceModelView,
+        UserModelView,
     ]

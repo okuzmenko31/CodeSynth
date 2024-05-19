@@ -38,5 +38,11 @@ class UserCreate(MainSchema, PasswordValidator):
     password_confirm: str
 
 
+class AdminCreate(MainSchema):
+    username: str
+    email: EmailStr
+    password: str
+
+
 class UserUpdate(MainSchema):
     pass

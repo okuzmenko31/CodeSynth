@@ -47,6 +47,10 @@ COPY ./supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY --chmod=765 scripts/run.sh /app/run.sh
 RUN chmod +x /app/run.sh
 
+# Make create admin script executable
+COPY --chmod=765 scripts/admin_create.sh /app/create_admin.sh
+RUN chmod +x /app/create_admin.sh
+
 # Run application as root user
 USER root
 
