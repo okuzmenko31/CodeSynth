@@ -20,6 +20,7 @@ email-validator = "^2.1.1"
 sqladmin = "^0.16.1"
 gunicorn = "^22.0.0"
 pydantic = "^2.7.1"
+itsdangerous = "^2.2.0"
 
 [tool.poetry.group.dev.dependencies]
 fastapi = "^0.109.2"

@@ -38,7 +38,7 @@ class GenericRepository(Generic[Model, CreateSchema, UpdateSchema]):
     async def get_by_attr(self, *, attr: Any, value: Any) -> Model | None:
         query = select(self.model).where(attr == value)
         res = await self.session.execute(query)
-        return res.scalar_one_or_none()
+        return res.scalar_one()
 
     async def exists_by_id(
         self, *, id: UUID | int, is_active: bool = False
@@ -46,6 +46,11 @@ class GenericRepository(Generic[Model, CreateSchema, UpdateSchema]):
         query = exists(self.model).where(self.model.id == id)
         if is_active and hasattr(self.model, "active"):
             query = query.where(self.model.active)
+        res = await self.session.execute(query.select())
+        return res.scalar_one()
+
+    async def exists_by_attr(self, attr: Any, value: Any) -> bool:
+        query = exists(self.model).where(attr == value)
         res = await self.session.execute(query.select())
         return res.scalar_one()
 

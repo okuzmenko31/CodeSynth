@@ -13,6 +13,7 @@ from .core.db.session import (
 )
 
 from .admin.model_views import get_model_views
+from .admin.auth import authentication_backend
 
 from .project_order.router import router as project_order_router
 
@@ -56,6 +57,7 @@ admin = Admin(
     app,
     engine=get_async_engine(),
     session_maker=create_async_session_maker(),
+    authentication_backend=authentication_backend,
     title=settings.app_name,
 )
 for model_view in get_model_views():
