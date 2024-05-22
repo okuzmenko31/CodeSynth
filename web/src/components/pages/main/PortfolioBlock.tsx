@@ -99,17 +99,12 @@ const PortfolioBlock = () => {
 
             {!isProjectsLoaded ? (
                 <Loader />
-            ) : projects.length > 0 ? (
+            ) : (
                 <ProjectsBlock
                     projects={projects}
                     loadFunction={projectsController.loadMoreProjects}
                     buttonRef={buttonRef}
                 />
-            ) : (
-                <p>
-                    No projects available at the moment. Please check back
-                    later.
-                </p>
             )}
         </div>
     );
