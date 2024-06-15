@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import Particle1 from "../../../assets/particle1.png";
+import Particle2 from "../../../assets/particle2.png";
 import { paths } from "../../../router/routes";
 import "../../../styles/components/pages/main/WhatIsBlock.scss";
 import Button from "../../UI/Button";
@@ -8,27 +10,40 @@ const WhatIsBlock = () => {
     return (
         <div className="what-is">
             <div className="what-is-text">
-                <p className="big-text">
-                    <span className="codesynth-text" data-text="CODESYNTH">
-                        CODESYNTH
-                    </span>{" "}
-                    - THE COOLEST STARTER WEB STUDIO
+                <p className="big-text capitalize bold">
+                    We are not just another web agency - We are future
                 </p>
-                <p className="small-text">Studio of your dreams and wishes</p>
             </div>
 
-            <div className="what-is-buttons">
-                <Button
-                    text="MAKE ORDER"
-                    callback={() => navigate(paths.makeOrder)}
-                />
-                <Button
-                    text="PORTFOLIO"
-                    callback={() => {
+            <div className="what-is-actions">
+                <div className="what-is-input">
+                    <input
+                        type="text"
+                        placeholder="Describe website which you want"
+                    />
+                    <Button
+                        text="Contact us"
+                        callback={() => navigate(paths.makeOrder)}
+                    />
+                </div>
+
+                <p
+                    className="link"
+                    onClick={() => {
                         window.location.hash = "";
                         window.location.hash = "#portfolio";
                     }}
-                />
+                >
+                    See our portfolio
+                </p>
+            </div>
+
+            <div className="particle">
+                <img src={Particle1} alt="" />
+            </div>
+
+            <div className="particle">
+                <img src={Particle2} alt="" />
             </div>
         </div>
     );

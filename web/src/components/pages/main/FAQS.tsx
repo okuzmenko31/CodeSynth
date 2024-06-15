@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import Cone from "../../../assets/cone.png";
 import { faqsData } from "../../../data/faqs";
 import "../../../styles/components/pages/main/FAQS.scss";
 import Question from "../../UI/QuestionTemplate";
@@ -28,7 +29,10 @@ const FAQS = () => {
     return (
         <div id="faqs" className="questions-container">
             <div className="questions-header">
-                <p className="big-text">FAQs</p>
+                <div className="particle">
+                    <img src={Cone} alt="cone" />
+                </div>
+                <p className="big-text capitalize bold">FAQs</p>
             </div>
 
             <div className="questions-block">

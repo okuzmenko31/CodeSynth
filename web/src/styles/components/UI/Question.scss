@@ -22,28 +22,33 @@
         transition: 0.3s;
     }
 
+    .answer {
+        padding: 0;
+        overflow: auto;
+        max-height: 0;
+        box-sizing: border-box;
+    }
+
     &.active {
         .question-caret {
             transform: translate(0, -50%) rotate(45deg);
         }
 
         & ~ .answer {
-            padding: 20px;
-            overflow: auto;
+            padding: 50px 20px 20px 20px;
             max-height: 150px;
         }
     }
 
     &-block {
-        width: 50%;
+        width: 100%;
         height: auto;
         display: flex;
         flex-direction: column;
         margin: 0;
         padding: 0;
-        border-radius: 16px;
-        border: 1px solid var(--white);
-        background: rgba(97, 97, 97, 0.41);
+        border-radius: 33px;
+        background: #242228;
     }
 }
 

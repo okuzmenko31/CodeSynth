@@ -2,10 +2,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setTouchDevice } from "./redux/actions";
 import Routes from "./router/routes";
-import themeController from "./utils/themeController";
 
 const App = () => {
-    const theme = useSelector((state: any) => state.themeReducer.theme);
     const touchDevice = useSelector(
         (state: any) => state.pageReducer.touchDevice
     );
@@ -23,16 +21,6 @@ const App = () => {
             }
         }, 30);
     };
-
-    useEffect(() => {
-        if (theme === "light") {
-            document.documentElement.classList.add("light");
-        } else {
-            document.documentElement.classList.remove("light");
-        }
-
-        themeController.setLocalStorageTheme(theme);
-    }, [theme]);
 
     useEffect(() => {
         window.addEventListener("resize", () => {

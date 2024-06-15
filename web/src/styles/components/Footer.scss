@@ -5,33 +5,26 @@
     align-items: flex-start;
     width: 100%;
     padding: 50px 50px 200px 50px;
-    border-width: 1px;
-    border-style: solid;
-    border-image: linear-gradient(
-            90deg,
-            transparent 0%,
-            var(--white) 50%,
-            transparent 100%
-        )
-        1 0 0 0;
-    background-color: var(--background-color);
+    background-color: #100e12;
     gap: 100px;
     bottom: 0;
     box-sizing: border-box;
 
-    & .logo-container {
+    .logo-container {
         display: flex;
         flex-direction: column;
         gap: 20px;
 
-        & .logo {
+        .logo {
+            width: 100%;
+            max-width: 82px;
+            max-height: 82px;
             display: flex;
-            gap: 10px;
             align-items: center;
 
-            & img {
-                max-width: 82px;
-                max-height: 82px;
+            img {
+                width: 100%;
+                height: 100%;
             }
         }
     }

@@ -1,8 +1,9 @@
 .project-container {
+    width: 100%;
+    max-width: 1200px;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 100%;
 
     & p {
         margin: 0;
@@ -161,23 +162,7 @@
     }
 }
 
-@media (min-width: 992px) {
-    .project-container {
-        width: 40%;
-    }
-}
-
-@media (min-width: 481px) and (max-width: 991px) {
-    .project-container {
-        width: 100%;
-    }
-}
-
 @media (max-width: 480px) {
-    .project-container {
-        width: 100%;
-    }
-
     .project__btn {
         width: 30px;
         height: 30px;

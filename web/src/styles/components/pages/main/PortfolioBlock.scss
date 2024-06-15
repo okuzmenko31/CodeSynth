@@ -1,13 +1,15 @@
 .projects {
     &-container {
         position: relative;
-        justify-content: center;
-        width: 90%;
+        width: 100%;
         display: flex;
-        flex-wrap: wrap;
-        gap: 100px;
+        align-items: center;
+        flex-direction: column;
+        gap: 150px;
 
         &-header {
+            width: 100%;
+            max-width: var(--block-max-width);
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -19,12 +21,12 @@
 
     &-text {
         display: flex;
-        width: 80%;
-        justify-content: space-between;
-        align-items: center;
+        width: 100%;
+        flex-direction: column;
 
-        & p {
-            max-width: 40%;
+        .big-text {
+            width: 100%;
+            text-align: end;
         }
     }
 
@@ -36,7 +38,7 @@
 
 .project-filters-block {
     position: relative;
-    width: 75%;
+    width: 100%;
     display: flex;
     justify-content: flex-end;
 }
@@ -133,20 +135,6 @@
     &:checked {
         background-color: var(--primary-color);
     }
-}
-
-.side-text {
-    will-change: transform;
-    position: absolute;
-    left: -470px;
-    top: 10%;
-    white-space: nowrap;
-    font-size: 102px;
-    color: var(--additional-color-1);
-    -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: var(--additional-color-3);
-    text-transform: uppercase;
-    user-select: none;
 }
 
 @media (max-width: 991px) {

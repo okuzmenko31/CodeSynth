@@ -4,8 +4,9 @@ import Navbar from "../components/Navbar";
 import "../styles/pages/Main.scss";
 
 import FAQS from "../components/pages/main/FAQS";
-import OurServicesContent from "../components/pages/main/OurServicesContent";
-import OurStackBlock from "../components/pages/main/OurStackBlock";
+import OurCompany from "../components/pages/main/OurCompany";
+import OurCreations from "../components/pages/main/OurCreations";
+import OurServices from "../components/pages/main/OurServices";
 import OurStatistics from "../components/pages/main/OurStatistics";
 import PortfolioBlock from "../components/pages/main/PortfolioBlock";
 import UserOfferBlock from "../components/pages/main/UserOfferBlock";
@@ -19,15 +20,17 @@ const Main = () => {
             <div className="main-page">
                 <WhatIsBlock />
 
-                <PortfolioBlock />
-
-                <OurServicesContent />
-
-                <OurStackBlock />
-
-                <WCOC />
+                <OurCompany />
 
                 <OurStatistics />
+
+                <OurServices />
+
+                <PortfolioBlock />
+
+                <OurCreations />
+
+                <WCOC />
 
                 <FAQS />
 

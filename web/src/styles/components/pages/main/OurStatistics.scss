@@ -1,106 +1,86 @@
 .our-statistic {
     width: 100%;
+    max-width: var(--block-max-width);
     padding: 100px 0;
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    gap: 100px;
-    border-width: 1px;
-    border-style: solid;
-    border-image: linear-gradient(
-            90deg,
-            var(--transparent-color) 0%,
-            var(--white) 50%,
-            var(--transparent-color) 100%
-        )
-        1 0 1 0;
+    align-items: flex-start;
+    flex-direction: column;
+    box-sizing: border-box;
+    gap: 25px;
+
+    &-text {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+
+        .big-text {
+            max-width: 800px;
+        }
+    }
+
+    &-blocks {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 100px;
+    }
 
     &-block {
         position: relative;
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         flex-direction: column;
 
-        & .biggest-text::before {
-            position: absolute;
-            top: -50%;
-            right: -100px;
-            content: "+";
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 160px;
-            font-weight: 500;
-        }
-
-        &.red .biggest-text::before {
-            background: url("../../../../assets/red_conic_gradient.jpg");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        &.green .biggest-text::before {
-            background: url("../../../../assets/green_conic_gradient.jpg");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        &.blue .biggest-text::before {
-            background: url("../../../../assets/purple_conic_gradient.jpg");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        & p {
+        p {
             margin: 0;
             text-align: center;
         }
+
+        &-number {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            span {
+                background-size: 94% 70%;
+                background-repeat: no-repeat;
+                background-position: top left;
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            &.purple span {
+                background-image: linear-gradient(
+                    107.93deg,
+                    #b500e9 50%,
+                    #ee00d9 86.44%
+                );
+            }
+
+            &.orange span {
+                background-image: linear-gradient(
+                    107.93deg,
+                    #feda09 50%,
+                    #ee00d9 86.44%
+                );
+            }
+
+            &.blue span {
+                background-image: linear-gradient(
+                    107.93deg,
+                    #8074ff 50%,
+                    #2100ee 86.44%
+                );
+            }
+        }
     }
 }
 
-@media (max-width: 1199px) {
-    .our-statistic-block .biggest-text::before {
-        right: -50px;
-        font-size: 85px;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-    .our-statistic {
-        width: 90%;
-        padding: 100px 20px;
-    }
-}
-
-@media (min-width: 651px) and (max-width: 767px) {
-    .our-statistic {
-        width: 90%;
-        padding: 100px 20px;
-    }
-}
-
-@media (min-width: 481px) and (max-width: 650px) {
-    .our-statistic {
-        width: 90%;
-        padding: 100px 20px;
-    }
-}
-
-@media (max-width: 480px) {
+@media (max-width: 991px) {
     .our-statistic {
         width: 90%;
         padding: 100px 20px;

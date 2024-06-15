@@ -1,0 +1,31 @@
+.creation-block {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 50px 0;
+    box-sizing: border-box;
+
+    svg,
+    svg path {
+        color: #c501e5;
+    }
+
+    &-info {
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        overflow-wrap: break-word;
+
+        p {
+            text-align: start !important;
+            margin: 0;
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .creation-block p {
+        text-align: center !important;
+    }
+}

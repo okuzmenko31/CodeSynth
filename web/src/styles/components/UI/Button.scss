@@ -1,8 +1,9 @@
 .button {
     position: relative;
-    height: 63px;
-    width: 250px;
-    max-width: 300px;
+    width: 184px;
+    height: 64px;
+    max-width: 543px;
+    max-height: 72px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -10,50 +11,16 @@
     flex-shrink: 0;
     user-select: none;
     cursor: pointer;
-    background: none;
+    background: linear-gradient(90deg, #b500e9 0%, #ee00d9 25%, #882da2 60%);
+    background-size: 300%;
+    border-radius: 26px;
     border: none;
+    box-sizing: border-box;
+    transition: 0.3s;
+    aspect-ratio: 543/72;
 
     &:active {
-        & .button-foreground {
-            transform: translate(-2px, -2px);
-        }
-
-        & .button-background {
-            transform: translate(12px, 12px);
-        }
-    }
-
-    &-foreground {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: var(--additional-color-2);
-        color: var(--white);
-        border-radius: 16px;
-        backdrop-filter: blur(3px);
-        font-size: 25px;
-        font-weight: 700;
-        z-index: 1;
-        border-bottom: 2px solid var(--additional-color-2);
-        border-right: 2px solid var(--additional-color-2);
-        transition: 0.3s;
-    }
-
-    &-background {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-            98deg,
-            var(--additional-primary-color) 0%,
-            var(--secondary-color) 100%
-        );
-        border-radius: 16px;
-        transform: translate(10px, 10px);
-        transition: 0.3s;
+        background-position: 100%;
     }
 }
 
@@ -61,27 +28,11 @@
     .button {
         width: 100%;
         height: 35px;
-
-        &-foreground {
-            font-size: 20px;
-        }
-    }
-}
-
-@media (max-width: 300px) {
-    .button-foreground {
-        font-size: 15px;
     }
 }
 
 @media (hover: hover) {
     .button:hover {
-        & .button-foreground {
-            transform: translate(-2px, -2px);
-        }
-
-        & .button-background {
-            transform: translate(12px, 12px);
-        }
+        background-position: 100%;
     }
 }

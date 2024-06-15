@@ -1,39 +1,60 @@
 .we-can-offer {
     &-block {
         width: 100%;
+        max-width: var(--block-max-width);
         display: flex;
         flex-direction: column;
         align-items: center;
         padding-top: 125px;
         box-sizing: border-box;
+        gap: 100px;
     }
 
     &-header {
         display: flex;
-        width: 70%;
+        width: 100%;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 30px;
     }
 
     &-content {
-        width: 70%;
+        width: 100%;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        border-radius: 20px;
-        border: 2px solid var(--additional-color-4);
-        overflow: hidden;
+        gap: 35px;
     }
 
     &-title {
+        position: relative;
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 20px;
 
-        & p {
+        p {
             margin: 0;
-            max-width: 50%;
+        }
+
+        p.small-text {
+            max-width: 700px;
+        }
+
+        .particle {
+            position: absolute;
+            top: 50%;
+            right: -150px;
+            width: 100%;
+            max-width: 339px;
+            max-height: 339px;
+            transform: translate(0, -50%);
+            aspect-ratio: 1/1;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
         }
     }
 }

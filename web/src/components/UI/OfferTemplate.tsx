@@ -1,6 +1,6 @@
 import "../../styles/components/UI/Offer.scss";
 
-const Service = ({
+const Offer = ({
     name,
     description,
     image,
@@ -11,16 +11,15 @@ const Service = ({
 }) => {
     return (
         <div className="offer-block">
-            <div className="offer-icon">
-                <img alt={name} src={image} />
+            <img className="offer-icon" alt={name} src={image} />
+
+            <div className="offer-block-title">
+                <p className="small-text upper-case">{name}</p>
             </div>
 
-            <div className="offer-block-text">
-                <p className="mid-text">{name}</p>
-                <p className="small-text">{description}</p>
-            </div>
+            <p className="small-text thin">{description}</p>
         </div>
     );
 };
 
-export default Service;
+export default Offer;

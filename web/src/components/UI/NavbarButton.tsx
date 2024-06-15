@@ -32,11 +32,7 @@ const NavbarButton = ({
     };
 
     return (
-        <p
-            onClick={() => scrollTo(hash)}
-            className="codesynth-text no-table"
-            data-text={text}
-        >
+        <p onClick={() => scrollTo(hash)} data-text={text}>
             {text}
         </p>
     );

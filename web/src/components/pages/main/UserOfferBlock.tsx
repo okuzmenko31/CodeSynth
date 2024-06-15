@@ -7,19 +7,20 @@ const UserOfferBlock = () => {
     const navigate = useNavigate();
     return (
         <div className="user-offer-block">
-            <div className="user-offer-header">
-                <p className="big-text">TIME TO START UP YOUR PROJECT</p>
-                <p className="small-text">
-                    We are ready to realize your dreamed project
-                </p>
-            </div>
+            <p className="pre-big-text capitalize">
+                See if we our best fit for each other. We totally are
+            </p>
 
             <Button
-                text="GET STARTED"
+                text="Let’s work together"
                 callback={() => {
                     navigate(paths.makeOrder);
                 }}
             />
+
+            <div className="circle"></div>
+
+            <div className="circle"></div>
         </div>
     );
 };

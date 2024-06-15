@@ -3,7 +3,6 @@ import { Tag } from "../../../components/UI/ProjectTemplate";
 import "../../../styles/components/pages/main/PortfolioBlock.scss";
 import { dropDownToggle } from "../../../utils/dropDownToggle";
 import FiltersController from "../../../utils/filtersController";
-import { initParallaxEffect } from "../../../utils/parallax_effect";
 import ProjectsController from "../../../utils/projectsController";
 import FiltersBlock from "../../UI/FiltersBlock";
 import Loader from "../../UI/Loader";
@@ -66,25 +65,13 @@ const PortfolioBlock = () => {
         filtersController
             .getFilterTypes()
             .then(() => setIsFilterTypesLoaded(true));
-
-        window.addEventListener(
-            "scroll",
-            initParallaxEffect(".side-text", 0.5, "rotate(-90deg)")
-        );
     }, []);
 
     return (
         <div id="portfolio" className="projects-container-header">
             <div className="projects-text">
-                <p className="big-text">EXPERIENCE IN ACTION</p>
-                <p className="small-text">
-                    With years of experience, we have had the opportunity to
-                    work on a wide range of projects for clients from all over
-                    the world, from building custom websites to developing
-                    complex web applications in Webflow. Explore our portfolio
-                    to see some of our most recent works and learn more about
-                    our experience and capabilities.
-                </p>
+                <p className="small-text capitalize additional">our work</p>
+                <p className="big-text bold capitalize">what we create</p>
             </div>
 
             {isFilterTypesLoaded && filters.length > 0 && (

@@ -1,14 +1,4 @@
-import {
-    SET_PAGE,
-    SET_STATIC_DATA,
-    SET_THEME,
-    SET_TOUCH_DEVICE,
-} from "./types";
-
-export const setTheme = (value: string) => ({
-    type: SET_THEME,
-    payload: value,
-});
+import { SET_PAGE, SET_STATIC_DATA, SET_TOUCH_DEVICE } from "./types";
 
 export const setPage = (value: number) => ({
     type: SET_PAGE,

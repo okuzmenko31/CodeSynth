@@ -1,31 +1,30 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import CodeSynth from "../assets/CodeSynth.png";
 import "../styles/components/Footer.scss";
 
 const Footer = () => {
+    const navigate = useNavigate();
+
     return (
         <footer id="contacts" className="footer">
             <div className="logo-container">
                 <div className="logo">
-                    <img alt="CodeSynth" src={CodeSynth} />
-                    <Link
-                        to="/"
-                        className="codesynth-text no-table mid-text"
-                        data-text="CODESYNTH"
-                    >
-                        CodeSynth
-                    </Link>
+                    <img
+                        onClick={() => navigate("/")}
+                        alt="CodeSynth"
+                        src={CodeSynth}
+                    />
                 </div>
 
-                <p className="small-text">
+                <p className="small-text pre-bold">
                     We cook powerful websites by ourselves
                 </p>
             </div>
 
             <div className="categories">
                 <ul className="category">
-                    <p className="mid-text">CONTACTS</p>
+                    <p className="mid-text capitalize pre-bold">Contacts</p>
                     <li className="small-text">
                         <Link
                             to={"mailto:codesynth.pro@gmail.com"}

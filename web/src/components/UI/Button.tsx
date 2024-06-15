@@ -1,15 +1,23 @@
-import { CSSProperties } from "react";
+import { CSSProperties, Children } from "react";
 import "../../styles/components/UI/Button.scss";
 
 type ButtonProps = {
-    text: string;
+    text?: string;
+    children?: any;
     callback: () => unknown;
     id?: string;
     style?: CSSProperties | undefined;
     reference?: any;
 };
 
-const Button = ({ text, callback, id, style, reference }: ButtonProps) => {
+const Button = ({
+    text,
+    children,
+    callback,
+    id,
+    style,
+    reference,
+}: ButtonProps) => {
     return (
         <button
             style={style ? style : undefined}
@@ -18,8 +26,7 @@ const Button = ({ text, callback, id, style, reference }: ButtonProps) => {
             onClick={callback}
             ref={reference}
         >
-            <div className="button-foreground">{text}</div>
-            <div className="button-background"></div>
+            {Children.map(children, (child) => child) || text}
         </button>
     );
 };

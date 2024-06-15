@@ -44,6 +44,8 @@ const Project = ({
 
     return (
         <div className="project-container">
+            <p className="mid-text transparent">{name}</p>
+
             <div className="inner-container">
                 <div
                     className="project-block"
@@ -101,8 +103,6 @@ const Project = ({
                         </div>
                     ))}
             </div>
-
-            <p className="mid-text">{name}</p>
         </div>
     );
 };

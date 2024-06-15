@@ -30,13 +30,6 @@ export const offersData: OfferType[] = [
     },
     {
         id: 5,
-        name: "Additional edits",
-        description:
-            "Even if we missed something in your technical specifications, we will fix it for free (only what was in the technical specifications, otherwise you will need to pay extra for additional functions, etc.)",
-        image: "https://em-content.zobj.net/source/apple/391/pencil_270f-fe0f.png",
-    },
-    {
-        id: 6,
         name: "It's cozy with us",
         description:
             "We will be as polite, honest and kind as possible when speaking with our clients, including you.",

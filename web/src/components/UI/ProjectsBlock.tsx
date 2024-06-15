@@ -18,9 +18,6 @@ const ProjectsBlock = ({
             {projects.length > 0 ? (
                 <>
                     <div className="projects-container">
-                        <span className="side-text rotated-text">
-                            PORTFOLIO PROJECTS
-                        </span>
                         {projects &&
                             projects.map((el: ProjectType) => (
                                 <Project

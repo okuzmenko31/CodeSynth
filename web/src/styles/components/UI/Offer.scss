@@ -1,59 +1,38 @@
 .offer-block {
     position: relative;
-    width: 30%;
+    width: 100%;
+    max-width: 409px;
     flex: auto;
     flex-shrink: 0;
-    outline: 1px solid var(--additional-color-4);
+    border: 1px solid #c501e5;
+    border-radius: 23px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px 0;
+    padding: 20px;
     overflow: hidden;
+    gap: 25px;
+
+    &-title {
+        width: 100%;
+        max-width: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #242228;
+        padding: 10px 15px;
+        box-sizing: border-box;
+        border-radius: 33px;
+    }
+
+    p {
+        margin: 0;
+        overflow-wrap: anywhere;
+    }
 }
 
 .offer-icon {
-    width: 7rem;
-    height: 7rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-top: 2px solid var(--additional-color-3);
-    border-left: 2px solid var(--additional-color-3);
-    border-radius: 100%;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background-image: linear-gradient(
-        315deg,
-        rgba(255, 255, 255, 0),
-        var(--additional-color-2)
-    );
-    overflow: hidden;
-
-    & img {
-        width: 80%;
-        height: 80%;
-    }
-}
-
-.offer-block-text {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    & .mid-text {
-        margin: 0;
-        max-width: 100%;
-        text-align: center;
-        overflow-wrap: anywhere;
-    }
-
-    & .small-text {
-        margin: 0;
-        max-width: 80%;
-        text-align: center;
-        overflow-wrap: anywhere;
-    }
+    width: 50px;
+    height: 50px;
 }
 
 @media (max-width: 1199px) {
