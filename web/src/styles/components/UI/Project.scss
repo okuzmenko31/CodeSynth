@@ -78,7 +78,7 @@
     height: 50px;
     box-shadow: 0 4px 4px #4f4f4f;
     background-color: rgba(77, 77, 77, 0.33);
-    border: 1px solid var(--additional-color-3);
+    border: 1px solid var(--additional-color-2);
     border-radius: 100%;
     cursor: pointer;
     transition: 0.3s;
@@ -93,7 +93,7 @@
 
     &:active {
         background-color: var(--white);
-        border: 1px solid var(--additional-color-3);
+        border: 1px solid var(--additional-color-2);
 
         & .project-link-button-icon {
             fill: var(--black);
@@ -110,7 +110,7 @@
 
     &:active {
         background-color: var(--white);
-        border: 1px solid var(--additional-color-3);
+        border: 1px solid var(--additional-color-2);
 
         & .project-checkout-button-icon {
             fill: var(--black);
@@ -158,7 +158,7 @@
     }
 
     &:active {
-        background-color: var(--additional-color-4);
+        background-color: var(--additional-color-3);
     }
 }
 
@@ -179,12 +179,12 @@
 
 @media (hover: hover) {
     .project-tag:hover {
-        background-color: var(--additional-color-4);
+        background-color: var(--additional-color-3);
     }
 
     .project-checkout:hover {
         background-color: var(--white);
-        border: 1px solid var(--additional-color-3);
+        border: 1px solid var(--additional-color-2);
 
         & .project-checkout-button-icon {
             fill: var(--black);
@@ -193,7 +193,7 @@
 
     .project-link:hover {
         background-color: var(--white);
-        border: 1px solid var(--additional-color-3);
+        border: 1px solid var(--additional-color-2);
 
         & .project-link-button-icon {
             fill: var(--black);

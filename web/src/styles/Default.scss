@@ -14,7 +14,7 @@
     --block-max-width: 90%;
     --background-color: linear-gradient(90deg, #0f0e11 16.91%, #20142d 39.32%);
     --primary-color: #882efd;
-    --secondary-color: #ff00d6;
+    --secondary-color: #b901e8;
     --additional-primary-color: #8f00ff;
     --required-input: #ff8766;
     --gradient: linear-gradient(
@@ -28,11 +28,9 @@
     --white: #ffffff;
     --black: #000000;
     --transparent-color: transparent;
-    --background-additional-color: rgba(26, 26, 26, 0.9);
     --additional-color-1: rgba(255, 255, 255, 0.05);
-    --additional-color-2: rgba(255, 255, 255, 0.15);
-    --additional-color-3: rgba(255, 255, 255, 0.5);
-    --additional-color-4: rgba(255, 255, 255, 0.2);
+    --additional-color-2: rgba(255, 255, 255, 0.5);
+    --additional-color-3: rgba(255, 255, 255, 0.2);
 }
 
 ::-webkit-scrollbar {
@@ -92,7 +90,7 @@ body,
 }
 
 .additional {
-    color: #c501e5;
+    color: var(--secondary-color);
 }
 
 .transparent {
@@ -217,6 +215,7 @@ body,
     }
 }
 
+.filter-checkbox,
 .radio-make-order,
 .checkbox-make-order {
     position: absolute;
@@ -232,9 +231,27 @@ body,
     left: 5px;
     transition: 0.3s;
 
-    &:checked {
-        background-color: var(--primary-color);
+    &::before {
+        content: "";
+        position: absolute;
+        width: 80%;
+        height: 80%;
+        background-color: transparent;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        aspect-ratio: 1/1;
+        transition: 0.3s;
     }
+
+    &:checked::before {
+        background-color: var(--secondary-color);
+    }
+}
+
+.filter-checkbox {
+    border-color: var(--black);
 }
 
 @keyframes scalingAnimation {
@@ -251,15 +268,59 @@ body,
     }
 }
 
+.form_checkbox,
+#additional-project-info,
+.order-input,
+input[type="date"],
+textarea,
+.file-type .upload {
+    position: relative;
+    font-size: 1rem;
+    color: var(--small-text);
+    font-weight: 400;
+    background-color: #232323;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    cursor: text;
+
+    &::placeholder {
+        color: var(--small-text);
+        font-weight: 400;
+    }
+}
+
+.form_checkbox {
+    max-width: max-content;
+    align-items: center;
+    margin: 0;
+    padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+    margin: 0;
+}
+
+#additional-project-info {
+    width: 100%;
+    height: 200px;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    resize: vertical;
+}
+
+.order-input {
+    width: 100%;
+    min-height: 35px;
+    color: var(--white);
+}
+
 input[type="date"] {
     min-height: 35px;
     color: var(--white);
-    background-color: var(--additional-color-1);
-    border: 2px solid var(--additional-color-2);
-    border-radius: 0.25rem;
     margin-bottom: 1.5rem;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
+    cursor: pointer;
 }
 
 input[type="file"] {
@@ -269,8 +330,8 @@ input[type="file"] {
 .order-input,
 input[type="date"],
 textarea {
-    cursor: pointer;
     transition: 0.3s;
+    transition-property: box-shadow, border-color, outline;
 
     &:focus {
         box-shadow: 0 0 10px var(--primary-color),
@@ -288,32 +349,31 @@ textarea {
         display: flex;
         align-items: center;
         min-height: 35px;
-        fill: var(--white);
-        color: var(--white);
-        background-color: var(--additional-color-1);
-        border: 2px solid var(--additional-color-2);
-        border-radius: 0.25rem;
         margin-bottom: 1.5rem;
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
         cursor: pointer;
         display: flex;
         align-items: center;
         gap: 5px;
 
-        & p {
-            margin: 0;
+        svg,
+        svg path {
+            color: var(--white);
         }
 
-        & svg,
-        & p {
+        p {
+            margin: 0;
+            color: var(--small-text);
+        }
+
+        svg,
+        p {
             pointer-events: none;
         }
 
         &:active {
-            fill: var(--primary-color);
-
-            & p {
+            p,
+            svg,
+            svg path {
                 color: var(--primary-color);
             }
         }
@@ -322,6 +382,7 @@ textarea {
 
 .error {
     color: var(--error-color);
+    font-weight: 400;
 }
 
 #show_more {
@@ -432,9 +493,9 @@ p {
     }
 
     .file-type .upload:hover {
-        fill: var(--primary-color);
-
-        & p {
+        p,
+        svg,
+        svg path {
             color: var(--primary-color);
         }
     }

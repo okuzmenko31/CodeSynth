@@ -118,25 +118,6 @@
     }
 }
 
-.filter-checkbox {
-    position: absolute;
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    margin: 2px;
-    background-color: transparent;
-    border-radius: 100%;
-    border: 1px solid var(--black);
-    cursor: pointer;
-    left: 5px;
-    transition: 0.3s;
-
-    &:checked {
-        background-color: var(--primary-color);
-    }
-}
-
 @media (max-width: 991px) {
     .drop-down-list {
         right: 10px;

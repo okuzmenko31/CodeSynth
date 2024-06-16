@@ -8,7 +8,7 @@ type MakeOrderSecondPartProps = {
 const MakeOrderSecondPart = ({ control }: MakeOrderSecondPartProps) => {
     return (
         <div className="make-order-second-part">
-            <p className="mid-text">Contact Details</p>
+            <p className="pre-big-text bold">Contact Details</p>
             <div className="make-order-category-input">
                 <MakeOrderFieldSection
                     control={control}

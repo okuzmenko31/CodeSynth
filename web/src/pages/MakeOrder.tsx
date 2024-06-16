@@ -85,7 +85,7 @@ const MakeOrder = () => {
             )}
             <div className="make-order">
                 <div className="make-order-text">
-                    <p className="big-text">MAKE ORDER</p>
+                    <p className="big-text capitalize bold">make an order</p>
                     <p className="small-text">
                         Fill out this quick form to help us better understand
                         your needs and make the onboarding process seamless.
@@ -104,7 +104,7 @@ const MakeOrder = () => {
                     <div className="make-order-block-button">
                         <Button
                             reference={sendButtonRef}
-                            text="SUBMIT APPLICATION"
+                            text="Submit application"
                             callback={handleSubmit(sendApplication)}
                             style={{ width: "100%", maxWidth: "100%" }}
                         />

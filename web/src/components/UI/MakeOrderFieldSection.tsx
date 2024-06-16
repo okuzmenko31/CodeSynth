@@ -61,7 +61,7 @@ const MakeOrderFieldSection = ({
                 return sources.map((source) => (
                     <div key={source.id} className="list-item">
                         <label
-                            className={`form_checkbox ${
+                            className={`form_checkbox bold ${
                                 field.value === source.id ? "active" : ""
                             }`}
                         >
@@ -88,7 +88,7 @@ const MakeOrderFieldSection = ({
                 return sources.map((item) => (
                     <div key={item.id} className="list-item">
                         <label
-                            className={`form_checkbox ${
+                            className={`form_checkbox bold ${
                                 field.value.includes(item.id) ? "active" : ""
                             }`}
                         >
@@ -122,7 +122,7 @@ const MakeOrderFieldSection = ({
             case "boolean":
                 return (
                     <label
-                        className={`form_checkbox ${
+                        className={`form_checkbox bold ${
                             field.value ? "active" : ""
                         }`}
                     >
@@ -151,13 +151,13 @@ const MakeOrderFieldSection = ({
     return (
         <>
             <div
-                className={
+                className={`${
                     fieldContainerWrapperCustomClass || "make-order-category"
-                }
+                } bold`}
             >
                 {fieldLabel && (
                     <p
-                        className={`small-text ${
+                        className={`small-text bold ${
                             fieldRules && fieldRules.required ? "required" : ""
                         }`}
                     >
