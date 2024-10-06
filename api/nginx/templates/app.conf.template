@@ -7,7 +7,7 @@ server {
     listen 443;
     listen [::]:443;
 
-    server_name ${NGINX_SERVER_NAME};
+    server_name ${APP_DOMAIN};
 
     location / {
 		proxy_pass http://codesynth;
