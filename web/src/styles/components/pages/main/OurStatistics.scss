@@ -15,60 +15,60 @@
             var(--transparent-color) 100%
         )
         1 0 1 0;
-}
 
-.our-statistic-block {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    & .biggest-text::before {
-        position: absolute;
-        top: -50%;
-        right: -100px;
-        content: "+";
+    &-block {
+        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 160px;
-        font-weight: 500;
-    }
+        flex-direction: column;
 
-    &.red .biggest-text::before {
-        background: url("../../../../assets/red_conic_gradient.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+        & .biggest-text::before {
+            position: absolute;
+            top: -50%;
+            right: -100px;
+            content: "+";
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 160px;
+            font-weight: 500;
+        }
 
-    &.green .biggest-text::before {
-        background: url("../../../../assets/green_conic_gradient.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+        &.red .biggest-text::before {
+            background: url("../../../../assets/red_conic_gradient.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    &.blue .biggest-text::before {
-        background: url("../../../../assets/purple_conic_gradient.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+        &.green .biggest-text::before {
+            background: url("../../../../assets/green_conic_gradient.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    & p {
-        margin: 0;
-        text-align: center;
+        &.blue .biggest-text::before {
+            background: url("../../../../assets/purple_conic_gradient.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        & p {
+            margin: 0;
+            text-align: center;
+        }
     }
 }
 

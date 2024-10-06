@@ -22,13 +22,13 @@
     position: sticky;
     top: 0;
     width: 500px;
-    height: 610px;
+    height: 40%;
     max-height: 40%;
     display: flex;
     flex-direction: column;
     gap: 20px;
     box-sizing: border-box;
-    padding-top: 150px;
+    padding-top: 125px;
 
     & p {
         text-align: start;
@@ -41,7 +41,7 @@
     flex-direction: column;
     width: 40%;
     box-sizing: border-box;
-    padding-top: 150px;
+    padding-top: 75px;
 }
 
 @media (max-width: 1199px) {
