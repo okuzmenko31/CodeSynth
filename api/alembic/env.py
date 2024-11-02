@@ -10,6 +10,7 @@ from src.core.db.base import Base
 
 import src.user.models  # NOQA
 import src.project_order.models  # NOQA
+import src.bot_user.models  # NOQA
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

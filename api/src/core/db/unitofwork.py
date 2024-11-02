@@ -12,6 +12,7 @@ from ...repositories.project_order_repo import (
     ProjectOrderReferralSourceRepository,
 )
 from ...repositories.customer_repo import CustomerRepository
+from ...repositories.bot_user import BotUserRepository
 
 
 class AbstractUnitOfWork(ABC):
@@ -21,6 +22,7 @@ class AbstractUnitOfWork(ABC):
     project_order_service: ProjectOrderServiceRepository
     project_order_budget: ProjectOrderBudgetRepository
     project_order_referral_source: ProjectOrderReferralSourceRepository
+    bot_user: BotUserRepository
 
     @abstractmethod
     async def __aenter__(self):
@@ -66,6 +68,8 @@ class UnitOfWork(AbstractUnitOfWork):
         self.project_order_referral_source = (
             ProjectOrderReferralSourceRepository(self.session)
         )
+
+        self.bot_user = BotUserRepository(self.session)
 
     async def __aexit__(self, *args):
         await self.rollback()

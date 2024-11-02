@@ -16,6 +16,7 @@ from .admin.model_views import get_model_views
 from .admin.auth import authentication_backend
 
 from .project_order.router import router as project_order_router
+from .bot_user.router import router as bot_user_router
 
 
 # Lifespan events
@@ -48,6 +49,7 @@ app.mount(
 # Include routers
 ROUTERS: list[APIRouter] = [
     project_order_router,
+    bot_user_router,
 ]
 for router in ROUTERS:
     app.include_router(router, prefix=f"/api/v{settings.app_version}")
